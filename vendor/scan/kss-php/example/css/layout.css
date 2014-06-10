@@ -1,0 +1,112 @@
+/*----------------------------------------------------------------------------
+  @group Global Reset
+----------------------------------------------------------------------------*/
+* {
+    padding: 0;
+    margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+pre,
+blockquote,
+label,
+ul,
+ol,
+dl,
+fieldset,
+address {
+    margin: 1em 0;
+}
+li,
+dd {
+    margin-left: 5%;
+}
+fieldset {
+    padding: .5em;
+}
+select option {
+    padding: 0 5px;
+}
+
+/* For accessibility related elements */
+.access {
+    display:none;
+}
+.clear {
+    clear: both;
+    height: 0px;
+    font-size: 0px;
+    line-height: 0px;
+    overflow: hidden;
+}
+
+a {
+    outline: none;
+}
+a img {
+    border:none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+* html .clearfix {
+    height: 1%;
+}
+.clearfix {
+    display: inline-block;
+}
+.clearfix {
+    display: block;
+}
+
+/* @end */
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+header {
+  padding: 10px;
+
+  font-size: 16px;
+  color: #666;
+
+  background: #f1f1f1;
+  border-bottom: 1px solid #ddd;
+}
+
+#wrapper {
+  width: 600px;
+  padding-left: 200px;
+}
+
+nav[role=main] {
+  float: left;
+  margin-left: -200px;
+  width: 160px;
+}
+
+nav ul {
+  margin-left: 10px;
+}
+
+nav li {
+  list-style-type: none;
+  margin: 10px 0;
+}
+
+nav li a {
+  text-decoration: none;
+  color: #666;
+}

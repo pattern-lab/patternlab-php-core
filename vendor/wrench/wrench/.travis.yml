@@ -1,0 +1,17 @@
+language: php
+
+script: ./.travis
+
+php:
+  - 5.3
+  - 5.4
+
+branches:
+  only:
+    - master
+    - devel
+    - 2.0
+
+notifications:
+  email:
+    - dominic@varspool.com
