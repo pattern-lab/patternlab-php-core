@@ -25,7 +25,7 @@ require(__DIR__.'/vendor/autoload.php');
  * Console Set-up
  *******************************/
 
-$console = new PatternLab\Console;
+$console = new \PatternLab\Console;
 
 // set-up the generate command and options
 $console->setCommand("g","generate","Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/");
