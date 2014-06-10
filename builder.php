@@ -19,7 +19,7 @@ if (!function_exists("json_decode")) {
 }
 
 // auto-load classes
-require(__DIR__.'/lib/autoload.php');
+require(__DIR__.'/vendor/autoload.php');
 
 /*******************************
  * Console Set-up
