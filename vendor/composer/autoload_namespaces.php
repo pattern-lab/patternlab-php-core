@@ -18,6 +18,7 @@ return array(
     'PatternLab' => array($baseDir . '/core/src'),
     'Mustache' => array($vendorDir . '/mustache/mustache/src'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
+    'KSSPlugin' => array($baseDir . '/source/_plugins/plugin-php-kss/src'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
