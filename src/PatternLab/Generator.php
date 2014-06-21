@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Builder;
 use \PatternLab\Config;
 use \PatternLab\Data;
+use \PatternLab\Dispatcher;
 use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
 use \PatternLab\Util;
@@ -61,6 +62,9 @@ class Generator extends Builder {
 			print "CSS generation enabled. This could take a few seconds...\n";
 			
 		}
+		
+		// initialize the dispatcher
+		Dispatcher::init();
 		
 		// gather up all of the data to be used in patterns
 		Data::gather();
