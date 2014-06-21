@@ -22,5 +22,4 @@ return array(
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
     'Alchemy' => array($vendorDir . '/alchemy/zippy/src'),
-    '' => array($baseDir . '/source/_plugins'),
 );
