@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Dispatcher;
+use \PatternLab\PatternData\Event as PatternDataEvent;
 use \PatternLab\PatternData\Exporters\DataLinkExporter;
 use \PatternLab\PatternData\Exporters\DataMergeExporter;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
@@ -57,12 +58,14 @@ class PatternData {
 	*/
 	public static function gather($options = array()) {
 		
-		Dispatcher::$instance->dispatch("patternData.gatherStart");
+		$event = new PatternDataEvent($options);
+		Dispatcher::$instance->dispatch("patternData.gatherStart",$event);
 		
 		// load up the rules for parsing patterns and the directories
 		self::loadRules($options);
 		
-		Dispatcher::$instance->dispatch("patternData.rulesLoaded");
+		$event = new PatternDataEvent($options);
+		Dispatcher::$instance->dispatch("patternData.rulesLoaded",$event);
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
@@ -91,7 +94,8 @@ class PatternData {
 		
 		}
 		
-		Dispatcher::$instance->dispatch("patternData.dataLoaded");
+		$event = new PatternDataEvent($options);
+		Dispatcher::$instance->dispatch("patternData.dataLoaded",$event);
 		
 		// make sure all of the appropriate pattern data is pumped into $this->d for rendering patterns
 		$dataLinkExporter       = new DataLinkExporter();
@@ -119,7 +123,8 @@ class PatternData {
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
 		
-		Dispatcher::$instance->dispatch("patternData.gatherDone");
+		$event = new PatternDataEvent($options);
+		Dispatcher::$instance->dispatch("patternData.gatherEnd",$event);
 		
 	}
 	
