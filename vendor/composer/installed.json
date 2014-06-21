@@ -1,24 +1,24 @@
 [
     {
-        "name": "symfony/filesystem",
+        "name": "symfony/finder",
         "version": "v2.5.0",
         "version_normalized": "2.5.0.0",
-        "target-dir": "Symfony/Component/Filesystem",
+        "target-dir": "Symfony/Component/Finder",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/Filesystem.git",
-            "reference": "98e831eac836a0a5911626ce82684155f21d0e4d"
+            "url": "https://github.com/symfony/Finder.git",
+            "reference": "307aad2c541bbdf43183043645e186ef2cd6b973"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/98e831eac836a0a5911626ce82684155f21d0e4d",
-            "reference": "98e831eac836a0a5911626ce82684155f21d0e4d",
+            "url": "https://api.github.com/repos/symfony/Finder/zipball/307aad2c541bbdf43183043645e186ef2cd6b973",
+            "reference": "307aad2c541bbdf43183043645e186ef2cd6b973",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2014-04-16 10:36:21",
+        "time": "2014-05-22 13:47:45",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -28,7 +28,7 @@
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "Symfony\\Component\\Filesystem\\": ""
+                "Symfony\\Component\\Finder\\": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -47,8 +47,56 @@
                 "homepage": "http://symfony.com/contributors"
             }
         ],
-        "description": "Symfony Filesystem Component",
+        "description": "Symfony Finder Component",
         "homepage": "http://symfony.com"
+    },
+    {
+        "name": "scan/kss-php",
+        "version": "v0.6.0",
+        "version_normalized": "0.6.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/scaninc/kss-php.git",
+            "reference": "5acddff2758761252d8e6da97680ef1f412457cb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/scaninc/kss-php/zipball/5acddff2758761252d8e6da97680ef1f412457cb",
+            "reference": "5acddff2758761252d8e6da97680ef1f412457cb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/finder": "~2.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2013-11-11 17:49:11",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Scan\\Kss": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Russell Ahlstrom",
+                "email": "russell.ahlstrom@gmail.com",
+                "homepage": "http://russell.ahlstromology.com"
+            }
+        ],
+        "description": "A PHP implementation of KSS: a methodology for documenting CSS and generating styleguides",
+        "keywords": [
+            "css documentation",
+            "kss",
+            "styleguide"
+        ]
     },
     {
         "name": "symfony/process",
@@ -99,6 +147,57 @@
             }
         ],
         "description": "Symfony Process Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/filesystem",
+        "version": "v2.5.0",
+        "version_normalized": "2.5.0.0",
+        "target-dir": "Symfony/Component/Filesystem",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Filesystem.git",
+            "reference": "98e831eac836a0a5911626ce82684155f21d0e4d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/98e831eac836a0a5911626ce82684155f21d0e4d",
+            "reference": "98e831eac836a0a5911626ce82684155f21d0e4d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2014-04-16 10:36:21",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Filesystem\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Filesystem Component",
         "homepage": "http://symfony.com"
     },
     {
@@ -494,84 +593,32 @@
         ]
     },
     {
-        "name": "symfony/finder",
-        "version": "v2.5.0",
-        "version_normalized": "2.5.0.0",
-        "target-dir": "Symfony/Component/Finder",
+        "name": "mustache/mustache",
+        "version": "v2.6.0",
+        "version_normalized": "2.6.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/Finder.git",
-            "reference": "307aad2c541bbdf43183043645e186ef2cd6b973"
+            "url": "https://github.com/bobthecow/mustache.php.git",
+            "reference": "43dc9457a2089cf86c0f7fdb79fcdc516293a4b6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Finder/zipball/307aad2c541bbdf43183043645e186ef2cd6b973",
-            "reference": "307aad2c541bbdf43183043645e186ef2cd6b973",
+            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/43dc9457a2089cf86c0f7fdb79fcdc516293a4b6",
+            "reference": "43dc9457a2089cf86c0f7fdb79fcdc516293a4b6",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2014-05-22 13:47:45",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Finder\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com",
-                "homepage": "http://fabien.potencier.org",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Finder Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "scan/kss-php",
-        "version": "v0.6.0",
-        "version_normalized": "0.6.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/scaninc/kss-php.git",
-            "reference": "5acddff2758761252d8e6da97680ef1f412457cb"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/scaninc/kss-php/zipball/5acddff2758761252d8e6da97680ef1f412457cb",
-            "reference": "5acddff2758761252d8e6da97680ef1f412457cb",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "symfony/finder": "~2.1"
+            "php": ">=5.2.4"
         },
         "require-dev": {
-            "phpunit/phpunit": "3.7.*"
+            "phpunit/phpunit": "*"
         },
-        "time": "2013-11-11 17:49:11",
+        "time": "2014-04-14 01:24:40",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "Scan\\Kss": "lib/"
+                "Mustache": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -580,71 +627,65 @@
         ],
         "authors": [
             {
-                "name": "Russell Ahlstrom",
-                "email": "russell.ahlstrom@gmail.com",
-                "homepage": "http://russell.ahlstromology.com"
+                "name": "Justin Hileman",
+                "email": "justin@justinhileman.info",
+                "homepage": "http://justinhileman.com"
             }
         ],
-        "description": "A PHP implementation of KSS: a methodology for documenting CSS and generating styleguides",
+        "description": "A Mustache implementation in PHP.",
+        "homepage": "https://github.com/bobthecow/mustache.php",
         "keywords": [
-            "css documentation",
-            "kss",
-            "styleguide"
+            "mustache",
+            "templating"
         ]
     },
     {
-        "name": "wrench/wrench",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "seld/jsonlint",
+        "version": "1.1.2",
+        "version_normalized": "1.1.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/varspool/Wrench.git",
-            "reference": "88560c9efba08982abc1d8455ab4f3a5a652e7b2"
+            "url": "https://github.com/Seldaek/jsonlint.git",
+            "reference": "7cd4c4965e17e6e4c07f26d566619a4c76f8c672"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/varspool/Wrench/zipball/88560c9efba08982abc1d8455ab4f3a5a652e7b2",
-            "reference": "88560c9efba08982abc1d8455ab4f3a5a652e7b2",
+            "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/7cd4c4965e17e6e4c07f26d566619a4c76f8c672",
+            "reference": "7cd4c4965e17e6e4c07f26d566619a4c76f8c672",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3"
+            "php": ">=5.3.0"
         },
-        "time": "2014-01-18 10:58:55",
+        "time": "2013-11-04 15:41:11",
+        "bin": [
+            "bin/jsonlint"
+        ],
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "Wrench": "lib/"
+                "Seld\\JsonLint": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "WTFPL"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Dominic Scheirlinck",
-                "email": "dominic@varspool.com",
-                "homepage": "http://www.somethingemporium.com/"
-            },
-            {
-                "name": "Simon Samtleben",
-                "email": "web@lemmingzshadow.net",
-                "homepage": "http://lemmingzshadow.net/"
-            },
-            {
-                "name": "Nico Kaiser",
-                "email": "nico@kaiser.me",
-                "homepage": "http://siriux.net/"
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be",
+                "role": "Developer"
             }
         ],
-        "description": "PHP WebSocket client/server library",
-        "homepage": "http://github.com/varspool/Wrench",
+        "description": "JSON Linter",
         "keywords": [
-            "WebSockets",
-            "hybi",
-            "websocket"
+            "json",
+            "linter",
+            "parser",
+            "validator"
         ]
     },
     {
@@ -699,99 +740,58 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "seld/jsonlint",
-        "version": "1.1.2",
-        "version_normalized": "1.1.2.0",
+        "name": "wrench/wrench",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/Seldaek/jsonlint.git",
-            "reference": "7cd4c4965e17e6e4c07f26d566619a4c76f8c672"
+            "url": "https://github.com/varspool/Wrench.git",
+            "reference": "88560c9efba08982abc1d8455ab4f3a5a652e7b2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/7cd4c4965e17e6e4c07f26d566619a4c76f8c672",
-            "reference": "7cd4c4965e17e6e4c07f26d566619a4c76f8c672",
+            "url": "https://api.github.com/repos/varspool/Wrench/zipball/88560c9efba08982abc1d8455ab4f3a5a652e7b2",
+            "reference": "88560c9efba08982abc1d8455ab4f3a5a652e7b2",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0"
+            "php": ">=5.3"
         },
-        "time": "2013-11-04 15:41:11",
-        "bin": [
-            "bin/jsonlint"
-        ],
+        "time": "2014-01-18 10:58:55",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
-                "Seld\\JsonLint": "src/"
+                "Wrench": "lib/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "MIT"
+            "WTFPL"
         ],
         "authors": [
             {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be",
-                "role": "Developer"
-            }
-        ],
-        "description": "JSON Linter",
-        "keywords": [
-            "json",
-            "linter",
-            "parser",
-            "validator"
-        ]
-    },
-    {
-        "name": "mustache/mustache",
-        "version": "v2.6.0",
-        "version_normalized": "2.6.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/bobthecow/mustache.php.git",
-            "reference": "43dc9457a2089cf86c0f7fdb79fcdc516293a4b6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/43dc9457a2089cf86c0f7fdb79fcdc516293a4b6",
-            "reference": "43dc9457a2089cf86c0f7fdb79fcdc516293a4b6",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.4"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2014-04-14 01:24:40",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Mustache": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
+                "name": "Dominic Scheirlinck",
+                "email": "dominic@varspool.com",
+                "homepage": "http://www.somethingemporium.com/"
+            },
             {
-                "name": "Justin Hileman",
-                "email": "justin@justinhileman.info",
-                "homepage": "http://justinhileman.com"
+                "name": "Simon Samtleben",
+                "email": "web@lemmingzshadow.net",
+                "homepage": "http://lemmingzshadow.net/"
+            },
+            {
+                "name": "Nico Kaiser",
+                "email": "nico@kaiser.me",
+                "homepage": "http://siriux.net/"
             }
         ],
-        "description": "A Mustache implementation in PHP.",
-        "homepage": "https://github.com/bobthecow/mustache.php",
+        "description": "PHP WebSocket client/server library",
+        "homepage": "http://github.com/varspool/Wrench",
         "keywords": [
-            "mustache",
-            "templating"
+            "WebSockets",
+            "hybi",
+            "websocket"
         ]
     }
 ]
