@@ -17,7 +17,7 @@ use \PatternLab\PatternEngine;
 use \PatternLab\Template\Helper;
 
 class Render {
-
+	
 	/**
 	* Renders a given pattern file using Mustache and incorporating the provided data
 	* @param  {String}       the filename of the file to be rendered
