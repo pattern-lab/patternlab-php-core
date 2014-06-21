@@ -7,29 +7,18 @@
 	</div>
 	{{# patternDescExists }}
 		<div class="sg-pattern-desc">
-			{{{ patternDesc }}}
-			{{# patternModifiersExist }}
-				<ul>
-					{{# patternModifiers }}
-						<li> <strong>{{ modifierName }}:</strong> {{ modifierDesc }}</li>
-					{{/ patternModifiers }}
-				</ul>
-			{{/ patternModifiersExist }}
+			<p>{{{ patternDesc }}}</p>
+			{{# patternDescAdditions }}
+				{{{ . }}}
+			{{/ patternDescAdditions }}
 		</div>
 	{{/ patternDescExists }}
 	<div class="sg-pattern-example">
 		{{{ patternPartialCode }}}
 	</div>
-	{{# patternModifiersExist }}
-		{{# patternModifiers }}
-			{{# modifierCodeExists }}
-			<div class="sg-pattern-example sg-pattern-example-modifier">
-				<span class="sg-pattern-example-modifier-name">{{ modifierName }}</span>
-				{{{ modifierCode }}}
-			</div>
-			{{/ modifierCodeExists }}
-		{{/ patternModifiers }}
-	{{/ patternModifiersExist }}
+	{{# patternExampleAdditions }}
+		{{{ . }}}
+	{{/ patternExampleAdditions }}
 	<div class="sg-pattern-extra">
 		<div class="sg-pattern-extra-annotations" style="display: none">
 			<span class="sg-pattern-extra-name">Annotations</span>
