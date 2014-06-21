@@ -67,23 +67,25 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		$patternStoreKey  = $patternPartial;
 		
 		// collect the data
-		$patternStoreData = array("category"   => "pattern",
-								  "name"       => $pattern,
-								  "partial"    => $patternPartial,
-								  "nameDash"   => $patternDash,
-								  "nameClean"  => $patternClean,
-								  "type"       => $patternType,
-								  "typeDash"   => $patternTypeDash,
-								  "breadcrumb" => $patternTypeClean,
-								  "state"      => $patternState,
-								  "hidden"     => $hidden,
-								  "depth"      => $depth,
-								  "ext"        => $ext,
-								  "path"       => $path,
-								  "pathName"   => $patternPath,
-								  "pathDash"   => $patternPathDash,
-								  "isDir"      => $this->isDirProp,
-								  "isFile"     => $this->isFileProp);
+		$patternStoreData = array("category"         => "pattern",
+								  "name"             => $pattern,
+								  "partial"          => $patternPartial,
+								  "nameDash"         => $patternDash,
+								  "nameClean"        => $patternClean,
+								  "type"             => $patternType,
+								  "typeDash"         => $patternTypeDash,
+								  "breadcrumb"       => $patternTypeClean,
+								  "state"            => $patternState,
+								  "hidden"           => $hidden,
+								  "depth"            => $depth,
+								  "ext"              => $ext,
+								  "path"             => $path,
+								  "pathName"         => $patternPath,
+								  "pathDash"         => $patternPathDash,
+								  "isDir"            => $this->isDirProp,
+								  "isFile"           => $this->isFileProp,
+								  "exampleAdditions" => array(),
+								  "descAdditions"    => array());
 		
 		// add any subtype info if necessary
 		if ($depth == 2) {
