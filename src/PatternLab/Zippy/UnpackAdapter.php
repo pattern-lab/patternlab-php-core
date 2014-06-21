@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Zippy Strip Directory Adapter
+ * Zippy Unpack Directory Adapter
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -15,7 +15,7 @@ namespace PatternLab\Zippy;
 
 use \Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 
-class StripDirectoryAdapter extends TarGNUTarAdapter {
+class UnpackAdapter extends TarGNUTarAdapter {
 	
 	protected function getExtractOptions() {
 		return array('--overwrite-dir', '--overwrite', '--strip-components=1');
