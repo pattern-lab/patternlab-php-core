@@ -1,5 +1,16 @@
 <?php
 
+/*!
+ * Zippy Strip Directory Strategy
+ *
+ * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license
+ *
+ * Gives zippy the ability to "unpack" a zip download from GitHub by modifying
+ * the default TarGNUTarAdapter options.
+ *
+ */
+
 namespace PatternLab\Zippy;
 
 use \Alchemy\Zippy\Adapter\AdapterContainer;
