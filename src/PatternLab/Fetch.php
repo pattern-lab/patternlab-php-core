@@ -13,7 +13,9 @@
 namespace PatternLab;
 
 use \Alchemy\Zippy\Zippy;
+use \Alchemy\Zippy\Adapter\AdapterContainer;
 use \PatternLab\Config;
+use \PatternLab\Zippy\StripDirectoryFileStrategy;
 
 class StarterKit {
 	
@@ -105,7 +107,9 @@ class StarterKit {
 		}
 		
 		// extract
+		// $adapters   = AdapterContainer::load();
 		$zippy      = Zippy::load();
+		$zippy->addStrategy(new StripDirectoryFileStrategy());
 		$zipAdapter = $zippy->getAdapterFor('tar.gz');
 		$archiveZip = $zipAdapter->open($tempFile);
 		$archiveZip = $archiveZip->extract(Config::$options["sourceDir"]);
