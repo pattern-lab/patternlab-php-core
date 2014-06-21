@@ -22,7 +22,6 @@ use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternData\Helpers\LineageHelper;
 use \PatternLab\PatternData\Helpers\PatternCodeHelper;
 use \PatternLab\PatternData\Helpers\PatternStateHelper;
-use \KSSPlugin;
 
 class PatternData {
 	
@@ -113,9 +112,6 @@ class PatternData {
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
 		
-		// loop through and check KSS (this will change in the future)
-		$KSSHelper               = new KSSPlugin\Helper($options);
-		$KSSHelper->run();
 		
 	}
 	
