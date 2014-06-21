@@ -124,7 +124,7 @@ class Snapshot {
 		
 		$d = array("html" => $html);
 		
-		TemplateHelper::setup();
+		Helper::init();
 		
 		// render the viewall template
 		$h = Helper::$htmlLoader->render(Helper::$mainPageHead);

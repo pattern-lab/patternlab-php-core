@@ -32,7 +32,7 @@ class Builder {
 		//$this->patternCSS   = array();
 		
 		// set-up the various attributes for rendering templates
-		Helper::setup();
+		Helper::init();
 		
 	}
 	

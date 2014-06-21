@@ -27,7 +27,7 @@ class Helper {
 	/**
 	* Set-up default vars
 	*/
-	public static function setup() {
+	public static function init() {
 		
 		// load pattern-lab's resources
 		$htmlHead               = file_get_contents(__DIR__."/../../../templates/pattern-header-footer/header.html");
