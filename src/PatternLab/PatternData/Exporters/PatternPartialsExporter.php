@@ -42,27 +42,27 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
-					$patternPartialData                           = array();
-					$patternPartialData["patternName"]            = ucwords($patternStoreData["nameClean"]);
-					$patternPartialData["patternLink"]            = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
-					$patternPartialData["patternPartial"]         = $patternStoreData["partial"];
-					$patternPartialData["patternPartialCode"]     = $patternStoreData["code"];
+					$patternPartialData                            = array();
+					$patternPartialData["patternName"]             = ucwords($patternStoreData["nameClean"]);
+					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
+					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
+					$patternPartialData["patternPartialCode"]      = $patternStoreData["code"];
 					
-					$patternPartialData["patternLineageExists"]   = isset($patternStoreData["lineages"]);
-					$patternPartialData["patternLineages"]        = isset($patternStoreData["lineages"]) ? $patternStoreData["lineages"] : array();
-					$patternPartialData["patternLineageRExists"]  = isset($patternStoreData["lineagesR"]);
-					$patternPartialData["patternLineagesR"]       = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
-					$patternPartialData["patternLineageEExists"]  = (isset($patternStoreData["lineages"]) || isset($patternStoreData["lineagesR"]));
+					$patternPartialData["patternLineageExists"]    = isset($patternStoreData["lineages"]);
+					$patternPartialData["patternLineages"]         = isset($patternStoreData["lineages"]) ? $patternStoreData["lineages"] : array();
+					$patternPartialData["patternLineageRExists"]   = isset($patternStoreData["lineagesR"]);
+					$patternPartialData["patternLineagesR"]        = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
+					$patternPartialData["patternLineageEExists"]   = (isset($patternStoreData["lineages"]) || isset($patternStoreData["lineagesR"]));
 					
-					$patternPartialData["patternDescExists"]      = isset($patternStoreData["desc"]);
-					$patternPartialData["patternDesc"]            = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
+					$patternPartialData["patternDescExists"]       = isset($patternStoreData["desc"]);
+					$patternPartialData["patternDesc"]             = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
 					
-					$patternPartialData["patternModifiersExist"]  = isset($patternStoreData["modifiers"]);
-					$patternPartialData["patternModifiers"]       = isset($patternStoreData["modifiers"]) ? $patternStoreData["modifiers"] : array();
+					$patternPartialData["patternDescAdditions"]    = $patternStoreData["descAdditions"];
+					$patternPartialData["patternExampleAdditions"] = $patternStoreData["exampleAdditions"];
 					
-					$patternPartialData["patternCSSExists"]       = Config::$options["enableCSS"];
+					$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
 					
-					$patternPartials[]                            = $patternPartialData;
+					$patternPartials[]                             = $patternPartialData;
 				
 				}
 				
