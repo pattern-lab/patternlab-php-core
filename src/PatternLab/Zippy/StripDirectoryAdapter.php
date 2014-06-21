@@ -2,7 +2,6 @@
 
 namespace PatternLab\Zippy;
 
-use \Alchemy\Zippy\Adapter\AdapterInterface;
 use \Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 
 class StripDirectoryAdapter extends TarGNUTarAdapter {
