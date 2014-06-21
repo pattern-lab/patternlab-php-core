@@ -47,8 +47,8 @@ class Dispatcher {
 				$dirs              = explode("/",$object->getPath());
 				$listenerName      = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
 				$listener          = new $listenerName();
-				foreach ($listener->events as $event => $eventProps) {
-					$eventPriority = (isset($eventProps["priotity"])) ? $eventProps["priority"] : 0;
+				foreach ($listener->listeners as $event => $eventProps) {
+					$eventPriority = (isset($eventProps["priority"])) ? $eventProps["priority"] : 0;
 					self::$instance->addListener($event, array($listener, $eventProps["callable"]), $eventPriority);
 				}
 			}
