@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Dispatcher;
 use \PatternLab\PatternData\Exporters\DataLinkExporter;
 use \PatternLab\PatternData\Exporters\DataMergeExporter;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
@@ -56,8 +57,12 @@ class PatternData {
 	*/
 	public static function gather($options = array()) {
 		
+		Dispatcher::$instance->dispatch("patternData.gatherStart");
+		
 		// load up the rules for parsing patterns and the directories
 		self::loadRules($options);
+		
+		Dispatcher::$instance->dispatch("patternData.rulesLoaded");
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
@@ -86,6 +91,8 @@ class PatternData {
 		
 		}
 		
+		Dispatcher::$instance->dispatch("patternData.dataLoaded");
+		
 		// make sure all of the appropriate pattern data is pumped into $this->d for rendering patterns
 		$dataLinkExporter       = new DataLinkExporter();
 		$dataLinkExporter->run();
@@ -112,6 +119,7 @@ class PatternData {
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
 		
+		Dispatcher::$instance->dispatch("patternData.gatherDone");
 		
 	}
 	
