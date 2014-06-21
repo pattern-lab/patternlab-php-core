@@ -50,3 +50,6 @@ publicDir = "public"
 
 // the source directory
 sourceDir = "source"
+
+// the plugin directory
+pluginDir = "plugins"
