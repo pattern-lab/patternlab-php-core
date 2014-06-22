@@ -25,10 +25,10 @@ class Fetch {
 	*/
 	public function __construct() {
 		if (!is_dir(Config::$options["sourceDir"])) {
-			mkdir(Config::$options["sourceDir");
+			mkdir(Config::$options["sourceDir"]);
 		}
 		if (!is_dir(Config::$options["pluginDir"])) {
-			mkdir(Config::$options["pluginDir");
+			mkdir(Config::$options["pluginDir"]);
 		}
 	}
 	
