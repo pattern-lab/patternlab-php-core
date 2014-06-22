@@ -10,12 +10,15 @@
 
 namespace PatternLab\Fetch;
 
+use \PatternLab\Console;
+
 class Rule {
 	
 	protected $name;
 	protected $unpack;
 	protected $writeTo;
-	protected $commandOption;
+	protected $shortCommand;
+	protected $longCommand;
 	
 	public function __construct() {
 		
@@ -25,6 +28,17 @@ class Rule {
 	
 	public function test($commandOption) {
 		return ($commandOption == $this->commandOption);
+	}
+	
+	/**
+	* Set the command line flags for the fetch rules
+	* @param  {String}       the name of the command
+	*/
+	public function setCommandOption($command) {
+		$desc   = "Install a ".$this->name;
+		$sample = $desc.":";
+		$extra  = "github-org/github-repo#tag";
+		Console::setCommandOption($command,$this->shortCommand,$this->longCommand,$desc,$sample,$extra);
 	}
 	
 }
