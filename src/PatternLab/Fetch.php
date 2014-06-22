@@ -97,12 +97,12 @@ class Fetch {
 		// if source directory isn't empty ask if it's ok to nuke what's there
 		if (!$emptyDir) {
 			$stdin = fopen("php://stdin", "r");
-			print("delete everything in ".$checkDir." before installing the starter kit? Y/n\n");
+			print($name." already installed. delete it to install or update the ".$name."? Y/n\n");
 			$answer = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			if ($answer == "y") {
 				
-				print "nuking everything in ".$checkDir."...\n";
+				print "deleting the ".$name." and re-installing it...\n";
 				
 				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($checkDir), \RecursiveIteratorIterator::CHILD_FIRST);
 				
