@@ -63,9 +63,6 @@ class Generator extends Builder {
 			
 		}
 		
-		// initialize the dispatcher
-		Dispatcher::init();
-		
 		// gather up all of the data to be used in patterns
 		Data::gather();
 		
