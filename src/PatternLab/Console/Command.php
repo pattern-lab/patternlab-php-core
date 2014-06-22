@@ -28,7 +28,7 @@ class Command {
 	* @return {Boolean}     the result of the test
 	*/
 	public function test($command) {
-		return ($command == $this->command);
+		return ($command == $this->command[0]);
 	}
 	
 }
