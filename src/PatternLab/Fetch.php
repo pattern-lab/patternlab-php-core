@@ -140,6 +140,12 @@ class Fetch {
 		unlink($tempFile);
 		
 		// run composer against any composer.json file in the package
+		if (file_exists($checkDir."/composer.json")) {
+			print "running composer...\n";
+			$composerPath = __DIR__."/../../bin/composer.phar";
+			passthru("cd ".$checkDir." && php ".$composerPath." install");
+		}
+		
 		// move any assets to source/ (requirejs?)
 		
 		print $name." installation complete...\n";
