@@ -33,8 +33,7 @@ class Fetch {
 	}
 	
 	/**
-	 * Fetch the starter kit from GitHub and put it into source/
-	 * @param  {String}    path of the GitHub repo
+	 * Fetch a package from GitHub
 	 *
 	 * @return {String}    the modified file contents
 	 */
@@ -132,6 +131,9 @@ class Fetch {
 		
 		// remove the temp file
 		unlink($tempFile);
+		
+		// run composer against any composer.json file in the package
+		// move any assets to source/ (requirejs?)
 		
 		print $name." installation complete...\n";
 		
