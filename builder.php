@@ -20,7 +20,7 @@ require(__DIR__."/vendor/autoload.php");
 // load the options
 \PatternLab\Config::init();
 
-// autoload plugins if available
+// autoload plugin vendored items if available
 $pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
 $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
 $objects->setFlags(\FilesystemIterator::SKIP_DOTS);
