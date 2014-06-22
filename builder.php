@@ -22,8 +22,12 @@ require(__DIR__."/vendor/autoload.php");
 
 // autoload plugins if available
 $pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
-if (file_exists($pluginDir."/vendor/autoload.php")) {
-	require($pluginDir."/vendor/autoload.php");
+$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
+$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+foreach($objects as $name => $object) {
+	if ((strpos($name,"autoload.php") !== false)) {
+		require($name);
+	}
 }
 
 // initialize the dispatcher
