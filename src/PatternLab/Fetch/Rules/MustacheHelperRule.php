@@ -23,7 +23,9 @@ class MustacheHelperRule extends Rule {
 		$this->name          = "mustache helper";
 		$this->unpack        = false;
 		$this->writeDir      = Config::$options["pluginDir"];
-		$this->commandOption = "m";
+		
+		$this->shortCommand  = "m";
+		$this->longCommand   = "mustachehelper";
 		
 	}
 	
