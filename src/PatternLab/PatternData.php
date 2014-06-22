@@ -133,9 +133,11 @@ class PatternData {
 	*/
 	public static function loadRules($options) {
 		foreach (glob(__DIR__."/PatternData/Rules/*.php") as $filename) {
-			$rule      = str_replace(".php","",str_replace(__DIR__."/PatternData/Rules/","",$filename));
-			$ruleClass = "\PatternLab\PatternData\Rules\\".$rule;
-			self::$rules[] = new $ruleClass($options);
+			$rule = str_replace(".php","",str_replace(__DIR__."/PatternData/Rules/","",$filename));
+			if ($rule[0] != "_") {
+				$ruleClass     = "\PatternLab\PatternData\Rules\\".$rule;
+				self::$rules[] = new $ruleClass($options);
+			}
 		}
 	}
 	

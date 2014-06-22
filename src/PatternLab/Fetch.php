@@ -169,9 +169,11 @@ class Fetch {
 	*/
 	public function loadRules() {
 		foreach (glob(__DIR__."/Fetch/Rules/*.php") as $filename) {
-			$rule      = str_replace(".php","",str_replace(__DIR__."/Fetch/Rules/","",$filename));
-			$ruleClass = "\PatternLab\Fetch\Rules\\".$rule;
-			self::$rules[] = new $ruleClass($options);
+			$rule = str_replace(".php","",str_replace(__DIR__."/Fetch/Rules/","",$filename));
+			if ($rule[0] != "_") {
+				$ruleClass     = "\PatternLab\Fetch\Rules\\".$rule;
+				self::$rules[] = new $ruleClass($options);
+			}
 		}
 	}
 	

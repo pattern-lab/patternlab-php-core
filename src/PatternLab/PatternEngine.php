@@ -45,9 +45,11 @@ class PatternEngine {
 	public static function loadRules($options) {
 		
 		foreach (glob(__DIR__."/PatternEngine/Rules/*.php") as $filename) {
-			$rule          = str_replace(".php","",str_replace(__DIR__."/PatternEngine/Rules/","",$filename));
-			$ruleClass     = "\PatternLab\PatternEngine\Rules\\".$rule;
-			self::$rules[] = new $ruleClass($options);
+			$rule = str_replace(".php","",str_replace(__DIR__."/PatternEngine/Rules/","",$filename));
+			if ($rule[0] != "_") {
+				$ruleClass     = "\PatternLab\PatternEngine\Rules\\".$rule;
+				self::$rules[] = new $ruleClass($options);
+			}
 		}
 		
 	}
