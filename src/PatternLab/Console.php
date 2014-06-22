@@ -324,7 +324,7 @@ class Console {
 		// write out the generic usage info
 		self::writeLine($commandLongUC." Command Options",true);
 		self::writeLine("Usage:");
-		self::writeLine("  php ".$this->self." --".$commandLong."|-".$commandShort." ".$optionList,true);
+		self::writeLine("  php ".self::$self." --".$commandLong."|-".$commandShort." ".$optionList,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
@@ -347,16 +347,16 @@ class Console {
 		if (count($commandExamples) > 0) {
 			foreach ($commandExamples as $example => $attributes) {
 				self::writeLine("   ".$attributes["exampleSample"]);
-				self::writeLine("     php ".$this->self." --".$commandLong." ".$attributes["exampleExtra"]);
-				self::writeLine("     php ".$this->self." -".$commandShort." ".$attributes["exampleExtra"],true);
+				self::writeLine("     php ".self::$self." --".$commandLong." ".$attributes["exampleExtra"]);
+				self::writeLine("     php ".self::$self." -".$commandShort." ".$attributes["exampleExtra"],true);
 			}
 		}
 		
 		if (count($commandOptions) > 0) {
 			foreach ($commandOptions as $option => $attributes) {
 				self::writeLine("   ".$attributes["optionSample"]);
-				self::writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
-				self::writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
+				self::writeLine("     php ".self::$self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
+				self::writeLine("     php ".self::$self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
 			}
 		}
 		
