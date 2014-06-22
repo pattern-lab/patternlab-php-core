@@ -16,9 +16,9 @@ use \PatternLab\Fetch\Rule;
 
 class PluginRule extends Rule {
 	
-	public function __construct($options) {
+	public function __construct() {
 		
-		parent::__construct($options);
+		parent::__construct();
 		
 		$this->name          = "plug-in";
 		$this->unpack        = false;

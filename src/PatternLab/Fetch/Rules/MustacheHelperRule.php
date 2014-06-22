@@ -16,9 +16,9 @@ use \PatternLab\Fetch\Rule;
 
 class MustacheHelperRule extends Rule {
 	
-	public function __construct($options) {
+	public function __construct() {
 		
-		parent::__construct($options);
+		parent::__construct();
 		
 		$this->name          = "mustache helper";
 		$this->unpack        = false;

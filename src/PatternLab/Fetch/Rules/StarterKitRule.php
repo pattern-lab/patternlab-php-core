@@ -16,9 +16,9 @@ use \PatternLab\Fetch\Rule;
 
 class StarterKitRule extends Rule {
 	
-	public function __construct($options) {
+	public function __construct() {
 		
-		parent::__construct($options);
+		parent::__construct();
 		
 		$this->name          = "starter kit";
 		$this->unpack        = true;
