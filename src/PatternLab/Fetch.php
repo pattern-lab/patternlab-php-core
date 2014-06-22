@@ -46,11 +46,12 @@ class Fetch {
 		$this->loadRules();
 		
 		// iterate over the rules and see if the current file matches one, if so run the rule
-		foreach ($this->$rules as $rule) {
-			if ($package = findCommandOptionValue($rule->commandOption)) {
-				$name          = $rule->name;
-				$unpack        = $rule->unpack;
-				$writeDir      = $rule->writeDir;
+		foreach ($this->rules as $rule) {
+			if ($package = Console::findCommandOptionValue($rule->shortCommand."|".$rule->longCommand)) {
+				$name     = $rule->name;
+				$unpack   = $rule->unpack;
+				$writeDir = $rule->writeDir;
+				break;
 			}
 		}
 		
