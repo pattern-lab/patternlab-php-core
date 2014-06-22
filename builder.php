@@ -16,13 +16,18 @@ if (!function_exists("json_decode")) {
 
 // auto-load classes
 require(__DIR__."/vendor/autoload.php");
-if (file_exists(__DIR__."/../plugins/vendor/autoload.php")) {
-	require(__DIR__."/../plugins/vendor/autoload.php");
+
+// load the options
+\PatternLab\Config::init();
+
+// autoload plugins if available
+$pluginDir = str_replace("../../",\PatternLab\Config::$pluginDir);
+if (file_exists($pluginDir."/vendor/autoload.php")) {
+	require($pluginDir."/vendor/autoload.php");
 }
 
-
-
-
+// initialize the dispatcher
+\PatternLab\Dispatcher::init();
 
 // run the console
 \PatternLab\Console::run();
