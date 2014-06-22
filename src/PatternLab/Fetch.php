@@ -1,12 +1,12 @@
 <?php
 
 /*!
- * StarterKit Class
+ * Fetch Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Copy a starter kit from GitHub and put it into source/
+ * Copy a package from GitHub and put it in it's appropriate location
  *
  */
 
@@ -69,14 +69,14 @@ class Fetch {
 		
 		print "downloading the ".$name."...\n";
 		
-		// try to download the given starter kit
+		// try to download the given package
 		if (!$package = @file_get_contents($tarballUrl)) {
 			$error = error_get_last();
 			print $name." wasn't downloaded because:\n\n  ".$error["message"]."\n";
 			exit;
 		}
 		
-		// write the starter kit to the temp directory
+		// write the package to the temp directory
 		$tempFile = tempnam(sys_get_temp_dir(), "pl-sk-archive.tar.gz");
 		file_put_contents($tempFile, $package);
 		
@@ -171,7 +171,7 @@ class Fetch {
 		if (strpos($package, "/") !== false) {
 			list($org,$repo) = explode("/",$package);
 		} else {
-			print "please provide a real path to a starter kit...\n";
+			print "please provide a real path to a package...\n";
 			exit;
 		}
 		
