@@ -23,7 +23,7 @@ class Config {
 	* Adds the config options to a var to be accessed from the rest of the system
 	* If it's an old config or no config exists this will update and generate it.
 	*/
-	public static function loadOptions() {
+	public static function init() {
 		
 		// can't add __DIR__ above so adding here
 		self::$userConfigPath = __DIR__.self::$userConfigPath;
