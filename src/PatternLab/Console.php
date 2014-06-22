@@ -106,7 +106,7 @@ class Console {
 	*/
 	public static function findCommandShort($arg) {
 		foreach (self::$commands as $command => $commandOptions) {
-			if ($commandOptions["commandLong"] == $arg) {
+			if (($commandOptions["commandLong"] == $arg) || ($commandOptions["commandShort"] == $arg)) {
 				return $command;
 			}
 		}
