@@ -21,8 +21,10 @@ class SnapshotCommand extends Command {
 		
 		parent::__construct();
 		
-		Console::setCommand("s","snapshot","Take a snapshot of public/","The snapshot command copies the current state of public/ and puts it in snapshots/v*/.");
-		Console::setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:","example-path/");
+		$this->command = "s";
+		
+		Console::setCommand($this->command,"snapshot","Take a snapshot of public/","The snapshot command copies the current state of public/ and puts it in snapshots/v*/.");
+		Console::setCommandOption($this->command,"d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:","example-path/");
 		
 	}
 	

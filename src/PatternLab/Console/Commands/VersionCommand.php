@@ -21,7 +21,9 @@ class VersionCommand extends Command {
 		
 		parent::__construct();
 		
-		Console::setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
+		$this->command = "v";
+		
+		Console::setCommand($this->command,"version","Print the version number","The version command prints out the current version of Pattern Lab.");
 		
 	}
 	

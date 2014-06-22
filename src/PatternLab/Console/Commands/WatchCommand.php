@@ -22,10 +22,12 @@ class WatchCommand extends Command {
 		
 		parent::__construct();
 		
-		Console::setCommand("w","watch","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
-		Console::setCommandOption("w","p","patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:");
-		Console::setCommandOption("w","n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
-		Console::setCommandOption("w","r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
+		$this->command = "w";
+		
+		Console::setCommand($this->command,"watch","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
+		Console::setCommandOption($this->command,"p","patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:");
+		Console::setCommandOption($this->command,"n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
+		Console::setCommandOption($this->command,"r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
 		
 	}
 	

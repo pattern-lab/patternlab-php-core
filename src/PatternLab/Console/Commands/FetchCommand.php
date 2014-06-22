@@ -21,9 +21,9 @@ class FetchCommand extends Command {
 		
 		parent::__construct();
 		
-		Console::setCommand("f:","fetch:","Fetch a package","The fetch command grabs a package from GitHub and installs it as well as any dependencies.");
-		Console::setCommandSample("f","Install a package:","github-org/github-repo");
-		Console::setCommandSample("f","Install a tagged version of a package:","github-org/github-repo#tag");
+		$this->command = "f";
+		
+		Console::setCommand($this->command,"fetch","Fetch a package","The fetch command grabs a package from GitHub and installs it as well as any dependencies.");
 		
 	}
 	

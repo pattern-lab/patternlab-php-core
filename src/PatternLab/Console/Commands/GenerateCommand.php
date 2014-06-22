@@ -21,10 +21,12 @@ class GenerateCommand extends Command {
 		
 		parent::__construct();
 		
-		Console::setCommand("g","generate","Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/");
-		Console::setCommandOption("g","p","patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:");
-		Console::setCommandOption("g","n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
-		Console::setCommandOption("g","c","enablecss","Generate CSS for each pattern. Resource intensive.","To run and generate the CSS for each pattern:");
+		$this->command = "g";
+		
+		Console::setCommand($this->command,"generate","Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/");
+		Console::setCommandOption($this->command,"p","patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:");
+		Console::setCommandOption($this->command,"n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
+		Console::setCommandOption($this->command,"c","enablecss","Generate CSS for each pattern. Resource intensive.","To run and generate the CSS for each pattern:");
 		
 	}
 	
