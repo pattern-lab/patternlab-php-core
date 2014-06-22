@@ -41,6 +41,7 @@ class Fetch {
 	public function fetch() {
 		
 		$package = "";
+		$name    = "";
 		
 		$this->loadRules();
 		
