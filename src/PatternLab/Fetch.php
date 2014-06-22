@@ -37,13 +37,15 @@ class Fetch {
 	 *
 	 * @return {String}    the modified file contents
 	 */
-	public function fetch($commandOption,$package) {
+	public function fetch() {
 		
-		$this->loadRules($options);
+		$package = "";
+		
+		$this->loadRules();
 		
 		// iterate over the rules and see if the current file matches one, if so run the rule
 		foreach ($this->$rules as $rule) {
-			if ($rule->test($commandOption)) {
+			if ($package = findCommandOptionValue($rule->commandOption)) {
 				$name          = $rule->name;
 				$unpack        = $rule->unpack;
 				$writeDir      = $rule->writeDir;
@@ -51,7 +53,7 @@ class Fetch {
 		}
 		
 		// see if the user passed anythign useful
-		if (empty($packageInfo)) {
+		if (empty($package)) {
 			print "please provide a path for the ".$name." before trying to fetch it...\n";
 			exit;
 		}
@@ -65,7 +67,7 @@ class Fetch {
 		print "downloading the ".$name."...\n";
 		
 		// try to download the given starter kit
-		if (!$starterKit = @file_get_contents($tarballUrl)) {
+		if (!$package = @file_get_contents($tarballUrl)) {
 			$error = error_get_last();
 			print $name." wasn't downloaded because:\n\n  ".$error["message"]."\n";
 			exit;
@@ -73,7 +75,7 @@ class Fetch {
 		
 		// write the starter kit to the temp directory
 		$tempFile = tempnam(sys_get_temp_dir(), "pl-sk-archive.tar.gz");
-		file_put_contents($tempFile, $starterKit);
+		file_put_contents($tempFile, $package);
 		
 		print "installing the ".$name."...\n";
 		
