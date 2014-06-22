@@ -13,6 +13,9 @@
 
 namespace PatternLab;
 
+use \PatternLab\Console\Event as ConsoleEvent;
+use \PatternLab\Dispatcher;
+
 class Console {
 	
 	public  static $commands         = array();
@@ -34,8 +37,15 @@ class Console {
 		
 		// get what was passed on the command line
 		self::$options = getopt(self::$optionsShort,self::$optionsLong);
+		
+		$event = new ConsoleEvent($options);
+		Dispatcher::$instance->dispatch("console.loadCommandStart",$event);
+		
 		// loadCommands
 		self::loadCommands();
+		
+		Dispatcher::$instance->dispatch("console.loadCommandEnd",$event);
+		
 		// test and run the given command
 		$commandFound = false;
 		$commandSent  = self::getCommand();
