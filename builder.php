@@ -21,7 +21,7 @@ require(__DIR__."/vendor/autoload.php");
 \PatternLab\Config::init();
 
 // autoload plugins if available
-$pluginDir = str_replace("../../","",\PatternLab\Config::$options["pluginDir"]);
+$pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
 if (file_exists($pluginDir."/vendor/autoload.php")) {
 	require($pluginDir."/vendor/autoload.php");
 }
