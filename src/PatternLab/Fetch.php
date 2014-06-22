@@ -172,7 +172,7 @@ class Fetch {
 			$rule = str_replace(".php","",str_replace(__DIR__."/Fetch/Rules/","",$filename));
 			if ($rule[0] != "_") {
 				$ruleClass     = "\PatternLab\Fetch\Rules\\".$rule;
-				self::$rules[] = new $ruleClass($options);
+				$this->rules[] = new $ruleClass();
 			}
 		}
 	}
