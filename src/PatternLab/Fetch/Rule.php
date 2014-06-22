@@ -44,7 +44,7 @@ class Rule {
 		$desc   = "Install a ".$this->name;
 		$sample = $desc.":";
 		$extra  = "github-org/github-repo#tag";
-		Console::setCommandOption($command,$this->shortCommand,$this->longCommand,$desc,$sample,$extra);
+		Console::setCommandOption($command,$this->shortCommand.":",$this->longCommand.":",$desc,$sample,$extra);
 	}
 	
 }
