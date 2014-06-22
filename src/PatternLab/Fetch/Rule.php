@@ -14,11 +14,11 @@ use \PatternLab\Console;
 
 class Rule {
 	
-	protected $name;
-	protected $unpack;
-	protected $writeTo;
-	protected $shortCommand;
-	protected $longCommand;
+	public $name;
+	public $unpack;
+	public $writeTo;
+	public $shortCommand;
+	public $longCommand;
 	
 	public function __construct() {
 		
