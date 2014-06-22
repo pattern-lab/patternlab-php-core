@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \Alchemy\Zippy\Zippy;
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Zippy\UnpackFileStrategy;
 
 class Fetch {
