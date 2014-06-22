@@ -25,6 +25,12 @@ class FetchCommand extends Command {
 		
 		Console::setCommand($this->command,"fetch","Fetch a package","The fetch command grabs a package from GitHub and installs it as well as any dependencies.");
 		
+		$fetch = new Fetch();
+		$fetch->loadRules();
+		foreach ($fetch->rules as $rule) {
+			$rule->setCommandOption($this->command);
+		}
+		
 	}
 	
 	public function run() {
