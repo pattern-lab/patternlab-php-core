@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Fetch Option Class
+ * Fetch Rule Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -26,6 +26,12 @@ class Rule {
 		
 	}
 	
+	/**
+	* Test the Fetch Rules to see if a Rule matches the supplied value
+	* @param  {String}       the command option
+	*
+	* @return {Boolean}      whether the test was succesful or not
+	*/
 	public function test($commandOption) {
 		return ($commandOption == $this->commandOption);
 	}
