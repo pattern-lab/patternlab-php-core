@@ -15,23 +15,16 @@ namespace PatternLab;
 
 class Console {
 	
-	private $optionsShort = "";
-	private $optionsLong  = array();
-	private $options      = array();
-	private $commands     = array();
-	private $self;
+	public  static $commands         = array();
+	public  static $commandInstances = array();
+	public  static $options          = array();
+	public  static $optionsShort     = "";
+	public  static $optionsLong      = array();
+	private static $self             = "";
 	
-	/**
-	* Set-up a default var
-	*/
-	public function __construct() {
-		$this->self = $_SERVER["PHP_SELF"];
-	}
-	
-	/**
-	* Get the arguments that have been passed to the script via the commmand line
-	*/
-	public function getArguments() {
+	public static function run() {
+		
+		// double-check this is being run from the command line
 		if (php_sapi_name() != 'cli') {
 			print "The builder script can only be run from the command line.\n";
 			exit;
@@ -45,12 +38,12 @@ class Console {
 	*
 	* @return {Boolean}      if the command has been passed to the script via the command line
 	*/
-	public function findCommand($args) {
+	public static function findCommand($args) {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
-			if (isset($this->options[$arg])) {
+			if (isset(self::$options[$arg])) {
 				return true;
-				
+			
 			}
 		}
 		return false;
@@ -62,11 +55,11 @@ class Console {
 	*
 	* @return {String}       the value that was passed via the command line
 	*/
-	public function findCommandValue($args) {
+	public static function findCommandValue($args) {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
-			if (isset($this->options[$arg])) {
-				return $this->options[$arg];
+			if (isset(self::$options[$arg])) {
+				return self::$options[$arg];
 			}
 		}
 		return false;
@@ -78,8 +71,8 @@ class Console {
 	*
 	* @return {String}       the search command
 	*/
-	public function findCommandShort($arg) {
-		foreach ($this->commands as $command => $commandOptions) {
+	public static function findCommandShort($arg) {
+		foreach (self::$commands as $command => $commandOptions) {
 			if ($commandOptions["commandLong"] == $arg) {
 				return $command;
 			}
@@ -92,9 +85,9 @@ class Console {
 	*
 	* @return {String}      the command. passes false if no command was found
 	*/
-	public function getCommand() {
-		foreach ($this->commands as $command => $attributes) {
-			if (isset($this->options[$command]) || isset($this->options[$attributes["commandLong"]])) {
+	public static function getCommand() {
+		foreach (self::$commands as $command => $attributes) {
+			if (isset(self::$options[$command]) || isset(self::$options[$attributes["commandLong"]])) {
 				return $command;
 			}
 		}
@@ -108,12 +101,12 @@ class Console {
 	* @param  {String}       the description to be used in the "available commands" section of writeHelp()
 	* @param  {String}       the description to be used in the "help" section of writeHelpCommand()
 	*/
-	public function setCommand($short,$long,$desc,$help) {
-		$this->optionsShort .= $short;
-		$this->optionsLong[] = $long;
+	public static function setCommand($short,$long,$desc,$help) {
+		self::$optionsShort .= $short;
+		self::$optionsLong[] = $long;
 		$short = str_replace(":","",$short);
 		$long  = str_replace(":","",$long);
-		$this->commands[$short] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array(), "commandExamples" => array());
+		self::$commands[$short] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array(), "commandExamples" => array());
 	}
 	
 	/**
@@ -122,8 +115,8 @@ class Console {
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
-	public function setCommandSample($command,$sample,$extra) {
-		$this->commands[$command]["commandExamples"][] = array("exampleSample" => $sample, "exampleExtra" => $extra);
+	public static function setCommandSample($command,$sample,$extra) {
+		self::$commands[$command]["commandExamples"][] = array("exampleSample" => $sample, "exampleExtra" => $extra);
 	}
 	
 	/**
@@ -132,32 +125,32 @@ class Console {
 	*
 	* @return {Boolean}      if the command has been passed to the script via the command line
 	*/
-	public function findCommandOption($args) {
+	public static function findCommandOption($args) {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
-			if (isset($this->options[$arg])) {
+			if (isset(self::$options[$arg])) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	* See if a particular option was passed to the script via the command line and return a value. Can either be the short or long version
 	* @param  {String}      list of arguments to check
 	*
 	* @return {String}      the value that was passed via the command line
 	*/
-	public function findCommandOptionValue($args) {
+	public static function findCommandOptionValue($args) {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
-			if (isset($this->options[$arg])) {
-				return $this->options[$arg];
+			if (isset(self::$options[$arg])) {
+				return self::$options[$arg];
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	* Set-up an option for a given command so it can be used from the command line
 	* @param  {String}       the single character of the command that this option is related to
@@ -167,22 +160,22 @@ class Console {
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
-	public function setCommandOption($command,$short,$long,$desc,$sample,$extra = "") {
-		if (strpos($this->optionsShort,$short) === false) {
-			$this->optionsShort .= $short;
+	public static function setCommandOption($command,$short,$long,$desc,$sample,$extra = "") {
+		if (strpos(self::$optionsShort,$short) === false) {
+			self::$optionsShort .= $short;
 		}
-		if (!in_array($long,$this->optionsLong)) {
-			$this->optionsLong[] = $long;
+		if (!in_array($long,self::$optionsLong)) {
+			self::$optionsLong[] = $long;
 		}
 		$short = str_replace(":","",$short);
 		$long  = str_replace(":","",$long);
-		$this->commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
+		self::$commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
 	}
 	
 	/**
 	* Write out the generic help
 	*/
-	public function writeHelp() {
+	public static function writeHelp() {
 		
 		/*
 		
@@ -203,23 +196,23 @@ class Console {
 		
 		// find length of longest command
 		$lengthLong = 0;
-		foreach ($this->commands as $command => $attributes) {
+		foreach (self::$commands as $command => $attributes) {
 			$lengthLong = ($attributes["commandLongLength"] > $lengthLong) ? $attributes["commandLongLength"] : $lengthLong;
 		}
 		
 		// write out the generic usage info
-		$this->writeLine("Pattern Lab Console Options",true);
-		$this->writeLine("Usage:");
-		$this->writeLine("  php ".$this->self." command [options]",true);
-		$this->writeLine("Available commands:");
+		self::writeLine("Pattern Lab Console Options",true);
+		self::writeLine("Usage:");
+		self::writeLine("  php ".self::$self." command [options]",true);
+		self::writeLine("Available commands:");
 		
 		// write out the commands
-		foreach ($this->commands as $command => $attributes) {
-			$spacer = $this->getSpacer($lengthLong,$attributes["commandLongLength"]);
-			$this->writeLine("  --".$attributes["commandLong"].$spacer."(-".$attributes["commandShort"].")    ".$attributes["commandDesc"]);
+		foreach (self::$commands as $command => $attributes) {
+			$spacer = self::getSpacer($lengthLong,$attributes["commandLongLength"]);
+			self::writeLine("  --".$attributes["commandLong"].$spacer."(-".$attributes["commandShort"].")    ".$attributes["commandDesc"]);
 		}
 		
-		$this->writeLine("");
+		self::writeLine("");
 		
 	}
 	
@@ -227,7 +220,7 @@ class Console {
 	* Write out the command-specific help
 	* @param  {String}       the single character of the command that this option is related to
 	*/
-	public function writeHelpCommand($command = "") {
+	public static function writeHelpCommand($command = "") {
 		
 		/*
 		
@@ -261,16 +254,16 @@ class Console {
 		
 		// if given an empty command or the command doesn't exist in the lists give the generic help
 		if (empty($command)) {
-			$this->writeHelp();
+			self::writeHelp();
 			return;
 		}
 		
-		$commandShort      = $this->commands[$command]["commandShort"];
-		$commandLong       = $this->commands[$command]["commandLong"];
-		$commandHelp       = $this->commands[$command]["commandHelp"];
-		$commandExtra      = isset($this->commands[$command]["commandExtra"]) ? $this->commands[$command]["commandExtra"] : "";
-		$commandOptions    = $this->commands[$command]["commandOptions"];
-		$commandExamples   = $this->commands[$command]["commandExamples"];
+		$commandShort      = self::$commands[$command]["commandShort"];
+		$commandLong       = self::$commands[$command]["commandLong"];
+		$commandHelp       = self::$commands[$command]["commandHelp"];
+		$commandExtra      = isset(self::$commands[$command]["commandExtra"]) ? self::$commands[$command]["commandExtra"] : "";
+		$commandOptions    = self::$commands[$command]["commandOptions"];
+		$commandExamples   = self::$commands[$command]["commandExamples"];
 		
 		$commandLongUC = ucfirst($commandLong);
 		
@@ -283,41 +276,41 @@ class Console {
 		}
 		
 		// write out the generic usage info
-		$this->writeLine($commandLongUC." Command Options",true);
-		$this->writeLine("Usage:");
-		$this->writeLine("  php ".$this->self." --".$commandLong."|-".$commandShort." ".$optionList,true);
+		self::writeLine($commandLongUC." Command Options",true);
+		self::writeLine("Usage:");
+		self::writeLine("  php ".$this->self." --".$commandLong."|-".$commandShort." ".$optionList,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
-			$this->writeLine("Available options:");
+			self::writeLine("Available options:");
 			foreach ($commandOptions as $option => $attributes) {
-				$spacer = $this->getSpacer($lengthLong,$attributes["optionLongLength"]);
-				$this->writeLine("  --".$attributes["optionLong"].$spacer."(-".$attributes["optionShort"].")    ".$attributes["optionDesc"]);
+				$spacer = self::getSpacer($lengthLong,$attributes["optionLongLength"]);
+				self::writeLine("  --".$attributes["optionLong"].$spacer."(-".$attributes["optionShort"].")    ".$attributes["optionDesc"]);
 			}
-			$this->writeLine("");
+			self::writeLine("");
 		}
 		
-		$this->writeLine("Help:");
-		$this->writeLine("  ".$commandHelp,true);
+		self::writeLine("Help:");
+		self::writeLine("  ".$commandHelp,true);
 		
 		// write out the samples
 		if ((count($commandOptions) > 0) || (count($commandExamples) > 0)) {
-			$this->writeLine("  Samples:",true);
+			self::writeLine("  Samples:",true);
 		}
 		
 		if (count($commandExamples) > 0) {
 			foreach ($commandExamples as $example => $attributes) {
-				$this->writeLine("   ".$attributes["exampleSample"]);
-				$this->writeLine("     php ".$this->self." --".$commandLong." ".$attributes["exampleExtra"]);
-				$this->writeLine("     php ".$this->self." -".$commandShort." ".$attributes["exampleExtra"],true);
+				self::writeLine("   ".$attributes["exampleSample"]);
+				self::writeLine("     php ".$this->self." --".$commandLong." ".$attributes["exampleExtra"]);
+				self::writeLine("     php ".$this->self." -".$commandShort." ".$attributes["exampleExtra"],true);
 			}
 		}
 		
 		if (count($commandOptions) > 0) {
 			foreach ($commandOptions as $option => $attributes) {
-				$this->writeLine("   ".$attributes["optionSample"]);
-				$this->writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
-				$this->writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
+				self::writeLine("   ".$attributes["optionSample"]);
+				self::writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
+				self::writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
 			}
 		}
 		
@@ -327,7 +320,7 @@ class Console {
 	* Write out a line of the help
 	* @param  {Boolean}       handle double-break
 	*/
-	protected function writeLine($line,$doubleBreak = false) {
+	protected static function writeLine($line,$doubleBreak = false) {
 		$break = ($doubleBreak) ? "\n\n" : "\n";
 		print $line.$break;
 	}
@@ -337,7 +330,7 @@ class Console {
 	* @param  {Integer}       the longest length of the command's options
 	* @param  {Integer}       the character length of the given option
 	*/
-	protected function getSpacer($lengthLong,$itemLongLength) {
+	protected static function getSpacer($lengthLong,$itemLongLength) {
 		$i            = 0;
 		$spacer       = " ";
 		$spacerLength = $lengthLong - $itemLongLength;
