@@ -109,12 +109,12 @@ class Fetch {
 				// make sure dots are skipped
 				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 				
-				foreach($objects as $name => $object) {
+				foreach($objects as $filename => $object) {
 					
 					if ($object->isDir()) {
-						rmdir($name);
+						rmdir($filename);
 					} else if ($object->isFile()) {
-						unlink($name);
+						unlink($filename);
 					}
 					
 				}
