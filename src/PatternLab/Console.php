@@ -247,6 +247,7 @@ class Console {
 		}
 		
 		// write out the generic usage info
+		self::writeLine("");
 		self::writeLine("Pattern Lab Console Options",true);
 		self::writeLine("Usage:");
 		self::writeLine("  php ".self::$self." command [options]",true);
@@ -322,6 +323,7 @@ class Console {
 		}
 		
 		// write out the generic usage info
+		self::writeLine("");
 		self::writeLine($commandLongUC." Command Options",true);
 		self::writeLine("Usage:");
 		self::writeLine("  php ".self::$self." --".$commandLong."|-".$commandShort." ".$optionList,true);
@@ -368,7 +370,7 @@ class Console {
 	*/
 	protected static function writeLine($line,$doubleBreak = false) {
 		$break = ($doubleBreak) ? "\n\n" : "\n";
-		print $line.$break;
+		print "  ".$line.$break;
 	}
 	
 	/**
