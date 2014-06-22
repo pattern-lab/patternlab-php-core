@@ -12,6 +12,7 @@
 
 namespace PatternLab\Fetch\Rules;
 
+use \PatternLab\Config;
 use \PatternLab\Fetch\Rule;
 
 class MustacheHelperRule extends Rule {
