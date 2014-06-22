@@ -84,11 +84,13 @@ class Fetch {
 		
 		// see if the source directory is empty
 		$emptyDir = true;
-		$checkDir = (!$unpack) ? $writeDir."/".$tag : $writeDir;
-		$objects  = new \DirectoryIterator($checkDir);
-		foreach ($objects as $object) {
-			if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
-				$emptyDir = false;
+		$checkDir = (!$unpack) ? $writeDir."/".$repo."-".$tag : $writeDir;
+		if (is_dir($checkDir)) {
+			$objects  = new \DirectoryIterator($checkDir);
+			foreach ($objects as $object) {
+				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+					$emptyDir = false;
+				}
 			}
 		}
 		
