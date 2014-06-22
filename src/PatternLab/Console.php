@@ -34,6 +34,25 @@ class Console {
 		
 		// get what was passed on the command line
 		self::$options = getopt(self::$optionsShort,self::$optionsLong);
+		// loadCommands
+		self::loadCommands();
+		// test and run the given command
+		$commandFound = false;
+		$commandSent  = self::getCommand();
+		foreach (self::$commandInstances as $command) {
+			if ($command->test($commandSent)) {
+				$command->run();
+				$commandFound = true;
+			}
+		}
+		
+		// no command was found so just draw the help by default
+		if (!$commandFound) {
+			
+			self::writeHelp();
+			
+		}
+		
 	}
 	
 	/**
@@ -96,6 +115,19 @@ class Console {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	* Load all of the rules related to Pattern Data
+	*/
+	public static function loadCommands() {
+		foreach (glob(__DIR__."/Console/Commands/*.php") as $filename) {
+			$command = str_replace(".php","",str_replace(__DIR__."/Console/Commands/","",$filename));
+			if ($command[0] != "_") {
+				$commandClass = "\PatternLab\Console\Commands\\".$command;
+				self::$commandInstances[] = new $commandClass();
+			}
+		}
 	}
 	
 	/**
