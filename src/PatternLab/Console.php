@@ -38,7 +38,7 @@ class Console {
 		// get what was passed on the command line
 		self::$options = getopt(self::$optionsShort,self::$optionsLong);
 		
-		$event = new ConsoleEvent($options);
+		$event = new ConsoleEvent($options = array());
 		Dispatcher::$instance->dispatch("console.loadCommandStart",$event);
 		
 		// loadCommands
