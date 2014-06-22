@@ -18,7 +18,7 @@ use \PatternLab\Zippy\UnpackFileStrategy;
 
 class Fetch {
 	
-	protected $rules = array();
+	public $rules = array();
 	
 	/**
 	* Set-up a default var
