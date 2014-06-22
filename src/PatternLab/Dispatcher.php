@@ -12,6 +12,7 @@
 
 namespace PatternLab;
 
+use \PatternLab\Config;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Dispatcher {
@@ -36,7 +37,7 @@ class Dispatcher {
 	*/
 	protected static function loadListeners() {
 		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__."/../../../plugins"), \RecursiveIteratorIterator::CHILD_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
 		
 		// make sure dots are skipped
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
