@@ -29,7 +29,11 @@ class Console {
 			print "The builder script can only be run from the command line.\n";
 			exit;
 		}
-		$this->options = getopt($this->optionsShort,$this->optionsLong);
+		
+		self::$self = $_SERVER["PHP_SELF"];
+		
+		// get what was passed on the command line
+		self::$options = getopt(self::$optionsShort,self::$optionsLong);
 	}
 	
 	/**
