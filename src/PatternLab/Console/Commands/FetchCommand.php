@@ -35,11 +35,9 @@ class FetchCommand extends Command {
 	
 	public function run() {
 		
-		// run the snapshot command
-		// also need to load options from fetch rules
-		$package = Console::findCommandValue("f|fetch");
-		$f       = new Fetch();
-		$f->fetch($package);
+		// run the fetch command
+		$f = new Fetch();
+		$f->fetch();
 		
 	}
 	
