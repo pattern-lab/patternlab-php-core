@@ -82,6 +82,7 @@ class Config {
 		self::$options["patternPublicDir"] = "/../../../".self::$options["publicDir"]."/patterns".DIRECTORY_SEPARATOR;
 		self::$options["sourceDir"]        = __DIR__."/../../../".self::$options["sourceDir"];
 		self::$options["publicDir"]        = __DIR__."/../../../".self::$options["publicDir"];
+		self::$options["pluginDir"]        = __DIR__."/../../../".self::$options["pluginDir"];
 		
 		// populate some standard variables out of the config
 		foreach (self::$options as $key => $value) {
