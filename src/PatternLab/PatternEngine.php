@@ -52,6 +52,18 @@ class PatternEngine {
 			}
 		}
 		
+		// fine pattern engines that might be in plugins
+		$pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		foreach($objects as $name => $object) {
+			if ((strpos($name,"PatternEngineRule.php") !== false) && (strpos($name,"plugins/vendor/") === false)) {
+				$dirs               = explode("/",$object->getPath());
+				$patternEngineName  = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
+				self::$rules[]      = new $patternEngineName($options);
+			}
+		}
+		
 	}
 	
 }
