@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Rules;
 use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\JSON;
+use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
 class PseudoPatternRule extends \PatternLab\PatternData\Rule {
@@ -116,7 +117,18 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 					JSON::lastErrorMsg($patternBaseJSON,$jsonErrorMessage,$data);
 				}
 			} else {
-				$patternDataBase = Yaml::parse($data);
+				
+				try {
+					$patternDataBase = YAML::parse($file);
+				} catch (ParseException $e) {
+					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+				}
+				
+				// single line of text won't throw a YAML error. returns as string
+				if (gettype($patternDataBase) == "string") {
+					$patternDataBase = array();
+				}
+				
 			}
 			
 		}
@@ -129,7 +141,18 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 				JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
 			}
 		} else {
-			$patternData = Yaml::parse($data);
+			
+			try {
+				$patternData = YAML::parse($data);
+			} catch (ParseException $e) {
+				printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+			}
+			
+			// single line of text won't throw a YAML error. returns as string
+			if (gettype($patternData) == "string") {
+				$patternData = array();
+			}
+			
 		}
 		
 		$patternStoreData["data"] = array_replace_recursive($patternDataBase, $patternData);

@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Rules;
 use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\JSON;
+use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
 class PatternInfoRule extends \PatternLab\PatternData\Rule {
@@ -58,7 +59,18 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 					JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
 				}
 			} else {
-				$data = Yaml::parse($file);
+				
+				try {
+					$data = YAML::parse($file);
+				} catch (ParseException $e) {
+					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+				}
+				
+				// single line of text won't throw a YAML error. returns as string
+				if (gettype($data) == "string") {
+					$data = array();
+				}
+				
 			}
 			
 			$patternStoreData["data"] = $data;

@@ -12,8 +12,9 @@
 
 namespace PatternLab\Parsers;
 
-use \Symfony\Component\Yaml\Yaml;
 use \Michelf\MarkdownExtra;
+use \Symfony\Component\Yaml\Exception\ParseException;
+use \Symfony\Component\Yaml\Yaml;
 
 class Documentation {
 	
@@ -37,8 +38,20 @@ class Documentation {
 	* @return {Array}        the parsed content
 	*/
 	public static function convertYAML($text) {
-		$yaml = Yaml::parse($text);
+		
+		try {
+			$yaml = YAML::parse($text);
+		} catch (ParseException $e) {
+			printf("unable to parse documentation: %s..\n", $e->getMessage());
+		}
+		
+		// single line of text won't throw a YAML error. returns as string
+		if (gettype($yaml) == "string") {
+			$yaml = array();
+		}
+		
 		return $yaml;
+		
 	}
 	
 	/**

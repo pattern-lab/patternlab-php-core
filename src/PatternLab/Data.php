@@ -13,6 +13,8 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Dispatcher;
+use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
 class Data {
@@ -82,7 +84,17 @@ class Data {
 					} else if ($ext == "yaml") {
 						
 						$file = file_get_contents($pathName);
-						$data = Yaml::parse($file);
+						
+						try {
+							$data = YAML::parse($file);
+						} catch (ParseException $e) {
+							printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+						}
+						
+						// single line of text won't throw a YAML error. returns as string
+						if (gettype($data) == "string") {
+							$data = array();
+						}
 						
 					}
 					
@@ -143,7 +155,18 @@ class Data {
 					JSON::lastErrorMsg($filepath,$jsonErrorMessage,$listItems);
 				}
 			} else {
-				$listItemsData = Yaml::parse($file);
+				
+				try {
+					$listItemsData = YAML::parse($file);
+				} catch (ParseException $e) {
+					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+				}
+				
+				// single line of text won't throw a YAML error. returns as string
+				if (gettype($listItemsData) == "string") {
+					$listItemsData = array();
+				}
+				
 			}
 			
 			
