@@ -116,6 +116,8 @@ class Data {
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
 		
+		Dispatcher::$instance->dispatch("data.dataLoadEnd");
+		
 	}
 	
 	/**

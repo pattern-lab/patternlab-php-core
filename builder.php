@@ -29,8 +29,9 @@ foreach ($plugins as $plugin) {
 	}
 }
 
-// initialize the dispatcher
+// initialize the dispatcher & note that the config has been loaded
 \PatternLab\Dispatcher::init();
+\PatternLab\Dispatcher::$instance->dispatch("config.configLoadEnd");
 
 // run the console
 \PatternLab\Console::run();
