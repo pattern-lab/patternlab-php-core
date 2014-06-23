@@ -12,6 +12,8 @@
 
 namespace PatternLab;
 
+use \PatternLab\Fetch;
+
 class Migrator {
 	
 	/**
@@ -115,21 +117,30 @@ class Migrator {
 			
 		} else {
 			
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath), \RecursiveIteratorIterator::SELF_FIRST);
-			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-			
-			foreach ($objects as $object) {
+			if (strpos($sourcePath,"pattern-lab/") !== false) {
 				
-				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace($sourcePath,"",$object->getPathname());
+				$sourcePath = str_replace(__DIR__."/../../../","",rtrim($sourcePath,"/"));
+				$f = new Fetch();
+				$f->fetch("s",$sourcePath);
 				
-				// check to see if it's a new directory
-				if ($object->isDir() && !is_dir($destinationPath.$fileName)) {	
-					mkdir($destinationPath.$fileName);
-				} else if ($object->isFile()) {
-					copy($sourcePath.$fileName,$destinationPath.$fileName);
+			} else {
+				
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath), \RecursiveIteratorIterator::SELF_FIRST);
+				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+				
+				foreach ($objects as $object) {
+					
+					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+					$fileName = str_replace($sourcePath,"",$object->getPathname());
+					
+					// check to see if it's a new directory
+					if ($object->isDir() && !is_dir($destinationPath.$fileName)) {	
+						mkdir($destinationPath.$fileName);
+					} else if ($object->isFile()) {
+						copy($sourcePath.$fileName,$destinationPath.$fileName);
+					}
+					
 				}
-				
 			}
 			
 		}
