@@ -22,11 +22,10 @@ require(__DIR__."/vendor/autoload.php");
 
 // autoload plugin vendored items if available
 $pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
-$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
-$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-foreach($objects as $name => $object) {
-	if ((strpos($name,"autoload.php") !== false)) {
-		require($name);
+$plugins = scandir($pluginDir);
+foreach ($plugins as $plugin) {
+	if (($plugin != ".") && ($plugin != "..") && file_exists($pluginDir."/".$plugin."/vendor/autoload.php")) {
+		require ($pluginDir."/".$plugin."/vendor/autoload.php");
 	}
 }
 
