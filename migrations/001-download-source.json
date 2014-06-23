@@ -1,5 +1,5 @@
 {
-	"sourcePath": "core/source",
+	"sourcePath": "pattern-lab/starterkit-mustache-demo",
 	"destinationPath": "source",
 	"checkType": "dirEmpty"
 }
