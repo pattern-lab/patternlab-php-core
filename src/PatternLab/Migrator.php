@@ -90,7 +90,7 @@ class Migrator {
 				
 			} else {
 				
-				print "Pattern Lab doesn't recognize a checkType of ".$checkType.". The migrator class is pretty thin at the moment.\n";
+				print "pattern Lab doesn't recognize a checkType of ".$checkType.". The migrator class is pretty thin at the moment.\n";
 				exit;
 				
 			}
@@ -109,7 +109,7 @@ class Migrator {
 	protected function runMigration($filename, $sourcePath, $destinationPath, $singleFile) {
 		
 		$filename = str_replace(".json","",$filename);
-		print "   Starting the ".$filename." migration...\n";
+		print "starting the ".$filename." migration...\n";
 		
 		if ($singleFile) {
 			
@@ -145,7 +145,7 @@ class Migrator {
 			
 		}
 		
-		print "   Completed the ".$filename." migration...\n";
+		print "completed the ".$filename." migration...\n";
 		
 	}
 	
