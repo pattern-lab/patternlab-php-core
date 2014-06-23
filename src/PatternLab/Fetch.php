@@ -35,24 +35,40 @@ class Fetch {
 	
 	/**
 	 * Fetch a package from GitHub
+	 * @param  {String}    the command option to provide the rule for
+	 * @param  {String}    the path to the package to be downloaded
 	 *
 	 * @return {String}    the modified file contents
 	 */
-	public function fetch() {
-		
-		$package = "";
-		$name    = "";
+	public function fetch($commandOption = "", $package = "") {
 		
 		$this->loadRules();
 		
-		// iterate over the rules and see if the current file matches one, if so run the rule
-		foreach ($this->rules as $rule) {
-			if ($package = Console::findCommandOptionValue($rule->shortCommand."|".$rule->longCommand)) {
-				$name     = $rule->name;
-				$unpack   = $rule->unpack;
-				$writeDir = $rule->writeDir;
-				break;
+		if (empty($commandOption)) {
+			
+			$package = "";
+			$name    = "";
+			
+			// iterate over the rules and see if the current file matches one, if so run the rule
+			foreach ($this->rules as $rule) {
+				if ($package = Console::findCommandOptionValue($rule->shortCommand."|".$rule->longCommand)) {
+					$name     = $rule->name;
+					$unpack   = $rule->unpack;
+					$writeDir = $rule->writeDir;
+					break;
+				}
 			}
+			
+		} else {
+			
+			foreach ($this->rules as $rule) {
+				if ($rule->shortCommand == $commandOption) {
+					$name     = $rule->name;
+					$unpack   = $rule->unpack;
+					$writeDir = $rule->writeDir;
+				}
+			}
+			
 		}
 		
 		// see if the user passed anythign useful
