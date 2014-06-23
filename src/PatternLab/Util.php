@@ -22,9 +22,9 @@ class Util {
 	public static function cleanPublic() {
 		
 		// make sure patterns exists before trying to clean it
-		if (is_dir(Config::$options["patternPublicDir"])) {
+		if (is_dir(__DIR__.Config::$options["patternPublicDir"])) {
 			
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternPublicDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.Config::$options["patternPublicDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
