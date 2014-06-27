@@ -68,6 +68,7 @@ class Fetch {
 					$name     = $rule->name;
 					$unpack   = $rule->unpack;
 					$writeDir = $rule->writeDir;
+					break;
 				}
 			}
 			
