@@ -175,7 +175,7 @@ class Fetch {
 			}
 			
 			// see if we should generate the vendor directory
-			if (!isset($composerConfig["extra"]) || (!isset($composerConfig["extra"]["runComposer"]) || ($composerConfig["extra"]["runComposer"])) {
+			if (!isset($composerConfig["extra"]) || !isset($composerConfig["extra"]["composerRun"]) || $composerConfig["extra"]["composerRun"]) {
 				print "running composer...\n";
 				$composerPath = __DIR__."/../../bin/composer.phar";
 				passthru("cd ".$checkDir." && php ".$composerPath." install");
