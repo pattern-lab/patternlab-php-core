@@ -46,6 +46,7 @@ class Fetch {
 		
 		$this->loadRules();
 		
+		// if not directly called the command option will be empty
 		if (empty($commandOption)) {
 			
 			$package = "";
