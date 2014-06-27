@@ -274,6 +274,7 @@ class Fetch {
 			$source      = key($fileItem);
 			$destination = $fileItem[$source];
 			
+			// depending on the source handle things differently. mirror if it ends in /*
 			if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
 				$destination = rtrim($destination,"/*");
