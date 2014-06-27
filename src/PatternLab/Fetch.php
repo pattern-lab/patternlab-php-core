@@ -203,7 +203,7 @@ class Fetch {
 				$answer = strtolower(trim(fgets($stdin)));
 				fclose($stdin);
 				if ($answer == "y") {
-					Config::update($composerConfig["extra"]["configOptions"],$composerConfig["extra"]["configValue"]);
+					Config::update($composerConfig["extra"]["configOption"],$composerConfig["extra"]["configValue"]);
 					print "config updated...\n";
 				} else {
 					print "config not updated...\n";
