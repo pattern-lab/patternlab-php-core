@@ -157,4 +157,24 @@ class Config {
 		
 	}
 	
+	/**
+	* Update a single config option
+	* @param  {String}       the name of the option to be changed
+	* @param  {String}       the new value of the option to be changed
+	*/
+	public static function update($optionName,$optionValue) {
+		
+		$configOutput = "";
+		$options      = parse_ini_file(self::$userConfigPath);
+		$options[$optionName] = $optionValue;
+		
+		foreach ($options as $key => $value) {
+			$configOutput .= $key." = \"".$value."\"\n";
+		}
+		
+		// write out the new config file
+		file_put_contents(self::$userConfigPath,$configOutput);
+		
+	}
+	
 }
