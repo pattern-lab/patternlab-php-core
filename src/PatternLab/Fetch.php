@@ -167,6 +167,20 @@ class Fetch {
 				$composerPath = __DIR__."/../../bin/composer.phar";
 				passthru("cd ".$checkDir." && php ".$composerPath." install");
 			}
+			// see if we need to prompt the user to modify the config
+			if (isset($composerConfig["extra"]) && (isset($composerConfig["extra"]["configUpdate"]) && $composerConfig["extra"]["configUpdate"]) && (isset($composerConfig["extra"]["configOption"]) && $composerConfig["extra"]["configOption"]) && (isset($composerConfig["extra"]["configValue"]) && $composerConfig["extra"]["configValue"])) {
+				$stdin = fopen("php://stdin", "r");
+				print("make this package the default ".$name."? Y/n\n");
+				$answer = strtolower(trim(fgets($stdin)));
+				fclose($stdin);
+				if ($answer == "y") {
+					Config::update($composerConfig["extra"]["configOptions"],$composerConfig["extra"]["configValue"]);
+					print "config updated...\n";
+				} else {
+					print "config not updated...\n";
+				}
+			}
+			
 		}
 		
 		// move any assets to source/ (requirejs?)
