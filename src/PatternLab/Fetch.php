@@ -16,6 +16,8 @@ use \Alchemy\Zippy\Zippy;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Zippy\UnpackFileStrategy;
+use \Symfony\Component\Filesystem\Filesystem;
+use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class Fetch {
 	
@@ -167,6 +169,20 @@ class Fetch {
 				$composerPath = __DIR__."/../../bin/composer.phar";
 				passthru("cd ".$checkDir." && php ".$composerPath." install");
 			}
+			
+			// see if there are assets to be moved
+			if (isset($composerConfig["extra"]) && isset($composerConfig["extra"]["assets"])) {
+				
+				if (isset($composerConfig["extra"]["assets"]["publicDir"])) {
+					$this->parseFileList($checkDir,Config::$options["publicDir"],$composerConfig["extra"]["assets"]["publicDir"]);
+				}
+				
+				if (isset($composerConfig["extra"]["assets"]["sourceDir"])) {
+					$this->parseFileList($checkDir,Config::$options["sourceDir"],$composerConfig["extra"]["assets"]["sourceDir"]);
+				}
+				
+			}
+			
 			// see if we need to prompt the user to modify the config
 			if (isset($composerConfig["extra"]) && (isset($composerConfig["extra"]["configUpdate"]) && $composerConfig["extra"]["configUpdate"]) && (isset($composerConfig["extra"]["configOption"]) && $composerConfig["extra"]["configOption"]) && (isset($composerConfig["extra"]["configValue"]) && $composerConfig["extra"]["configValue"])) {
 				$stdin = fopen("php://stdin", "r");
@@ -227,6 +243,36 @@ class Fetch {
 				$this->rules[] = new $ruleClass();
 			}
 		}
+	}
+	
+	/**
+	 * Move the files from the package to their location in the public dir or source dir
+	 * @param  {String}    the base directory for the source of the files
+	 * @param  {String}    the base directory for the destintation of the files (publicDir or sourceDir)
+	 * @param  {Array}     the list of files to be moved
+	 */
+	protected function parseFileList($sourceBase,$destinationBase,$fileList) {
+		
+		$fs = new Filesystem();
+		
+		foreach ($fileList as $source => $destination) {
+			
+			if ($source[strlen($source)-1] == "*") {
+				$source      = rtrim($source,"/*");
+				$destination = rtrim($destination,"/*");
+				$fs->mirror($sourceBase.$source,$destintationBase.$destination);
+			} else {
+				$pathInfo       = explode("/",$destination);
+				$file           = array_pop($pathInfo);
+				$destinationDir = implode("/",$pathInfo);
+				if (!$fs->exists($destinationBase.$destinationDir)) {
+					$fs->mkdir($destinationBase.$destinationDir);
+				}
+				$fs->copy($sourceBase.$source,$destinationBase.$destination,true);
+			}
+			
+		}
+		
 	}
 	
 }
