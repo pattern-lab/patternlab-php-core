@@ -192,6 +192,8 @@ class Fetch {
 					$this->parseFileList($checkDir,Config::$options["sourceDir"],$composerConfig["extra"]["assets"]["sourceDir"]);
 				}
 				
+				print "assets moved...\n";
+				
 			}
 			
 			// see if we need to prompt the user to modify the config
