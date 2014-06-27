@@ -157,9 +157,16 @@ class Fetch {
 		
 		// run composer against any composer.json file in the package
 		if (file_exists($checkDir."/composer.json")) {
-			print "running composer...\n";
-			$composerPath = __DIR__."/../../bin/composer.phar";
-			passthru("cd ".$checkDir." && php ".$composerPath." install");
+			
+			// load composer
+			$composerConfig = json_decode(file_get_contents($checkDir."/composer.json"),true);
+			
+			// see if we should generate the vendor directory
+			if (!isset($composerConfig["extra"]) || (!isset($composerConfig["extra"]["runComposer"]) || ($composerConfig["extra"]["runComposer"])) {
+				print "running composer...\n";
+				$composerPath = __DIR__."/../../bin/composer.phar";
+				passthru("cd ".$checkDir." && php ".$composerPath." install");
+			}
 		}
 		
 		// move any assets to source/ (requirejs?)
