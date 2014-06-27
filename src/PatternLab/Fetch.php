@@ -273,15 +273,15 @@ class Fetch {
 			if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
 				$destination = rtrim($destination,"/*");
-				$fs->mirror($sourceBase.$source,$destintationBase.$destination);
+				$fs->mirror($sourceBase."/assets/".$source,$destinationBase."/".$destination);
 			} else {
 				$pathInfo       = explode("/",$destination);
 				$file           = array_pop($pathInfo);
 				$destinationDir = implode("/",$pathInfo);
 				if (!$fs->exists($destinationBase.$destinationDir)) {
-					$fs->mkdir($destinationBase.$destinationDir);
+					$fs->mkdir($destinationBase."/".$destinationDir);
 				}
-				$fs->copy($sourceBase.$source,$destinationBase.$destination,true);
+				$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
 			}
 			
 		}
