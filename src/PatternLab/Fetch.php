@@ -268,7 +268,11 @@ class Fetch {
 		
 		$fs = new Filesystem();
 		
-		foreach ($fileList as $source => $destination) {
+		foreach ($fileList as $fileItem) {
+			
+			// retrieve the source & destination
+			$source      = key($fileItem);
+			$destination = $fileItem[$source];
 			
 			if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
