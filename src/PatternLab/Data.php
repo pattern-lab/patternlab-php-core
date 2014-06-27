@@ -20,7 +20,7 @@ use \Symfony\Component\Yaml\Yaml;
 class Data {
 	
 	public    static $store        = array();
-	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternFooterData");
+	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
 	
 	/**
 	* Grab a copy of the $store
