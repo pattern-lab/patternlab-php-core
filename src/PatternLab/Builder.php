@@ -139,41 +139,53 @@ class Builder {
 	}
 	
 	/**
-	* Generates the index page and style guide
+	* Generates the data that powers the index page
 	*/
 	protected function generateIndex() {
 		
-		// grab the items for the nav
+		$dataDir = Config::$options["publicDir"]."/styleguide/data";
+		
+		// double-check that the data directory exists
+		if (!is_dir($dataDir)) {
+			mkdir($dataDir);
+		}
+		
+		// load and write out the config options
+		$config                   = array();
+		$config["autoreloadnav"]  = Config::$options["autoReloadNav"];
+		$config["autoreloadport"] = Config::$options["autoReloadPort"];
+		$config["cacheBuster"]    = Config::$options["cacheBuster"];
+		$config["ipaddress"]      = getHostByName(getHostName());
+		$config["pagefollownav"]  = Config::$options["pageFollowNav"];
+		$config["pagefollowport"] = Config::$options["pageFollowPort"];
+		$config["xiphostname"]    = Config::$options["xipHostname"];
+		file_put_contents($dataDir."/config.js","var config = ".json_encode($config).";");
+		
+		// load the ish Controls
+		$ishControls                      = array();
+		$ishControls["ishminimum"]        = Config::$options["ishMinimum"];
+		$ishControls["ishmaximum"]        = Config::$options["ishMaximum"];
+		$ishControls["ishControlsHide"]   = Config::$options["ishControlsHide"];
+		$ishControls["mqs"]               = $this->gatherMQs();
+		$ishControls["qrcodegeneratoron"] = Config::$options["qrCodeGeneratorOn"];
+		file_put_contents($dataDir."/ish-controls.js","var ishControls = ".json_encode($ishControls).";");
+		
+		// load and write out the items for the navigation
 		$niExporter       = new NavItemsExporter();
 		$navItems         = $niExporter->run();
+		file_put_contents($dataDir."/nav-items.js","var navItems = ".json_encode($navItems).";");
 		
-		// grab the pattern paths that will be used on the front-end
-		$ppdExporter      = new PatternPathDestsExporter();
-		$patternPathDests = $ppdExporter->run();
+		// load and write out the items for the pattern paths
+		$patternPaths                 = array();
+		$ppdExporter                  = new PatternPathDestsExporter();
+		$patternPaths["patternpaths"] = json_encode($ppdExporter->run());
+		file_put_contents($dataDir."/pattern-paths.js","var patternPaths = ".json_encode($navItems).";");
 		
-		// grab the view all paths that will be used on the front-end
-		$vapExporter      = new ViewAllPathsExporter();
-		$viewAllPaths     = $vapExporter->run($navItems);
-		
-		// add the various configuration options that need to be drawn on the front-end
-		$navItems["autoreloadnav"]     = Config::$options["autoReloadNav"];
-		$navItems["autoreloadport"]    = Config::$options["autoReloadPort"];
-		$navItems["cacheBuster"]       = Config::$options["cacheBuster"];
-		$navItems["ipaddress"]         = getHostByName(getHostName());
-		$navItems["ishminimum"]        = Config::$options["ishMinimum"];
-		$navItems["ishmaximum"]        = Config::$options["ishMaximum"];
-		$navItems["ishControlsHide"]   = Config::$options["ishControlsHide"];
-		$navItems["mqs"]               = $this->gatherMQs();
-		$navItems["pagefollownav"]     = Config::$options["pageFollowNav"];
-		$navItems["pagefollowport"]    = Config::$options["pageFollowPort"];
-		$navItems["patternpaths"]      = json_encode($patternPathDests);
-		$navItems["qrcodegeneratoron"] = Config::$options["qrCodeGeneratorOn"];
-		$navItems["viewallpaths"]      = json_encode($viewAllPaths);
-		$navItems["xiphostname"]       = Config::$options["xipHostname"];
-		
-		// render the index page
-		$index = Helper::$filesystemLoader->render('index',$navItems);
-		file_put_contents(Config::$options["publicDir"]."/index.html",$index);
+		// load and write out the items for the view all paths
+		$viewAllPaths                 = array();
+		$vapExporter                  = new ViewAllPathsExporter();
+		$viewAllPaths["viewallpaths"] = json_encode($vapExporter->run($navItems));
+		file_put_contents($dataDir."/viewall-paths.js","var viewAllPaths = ".json_encode($navItems).";");
 		
 	}
 	
