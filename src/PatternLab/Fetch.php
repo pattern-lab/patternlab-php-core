@@ -73,6 +73,12 @@ class Fetch {
 			
 		}
 		
+		if (empty($name)) {
+			print_r(Console::$options);
+			print "fetch rule not found...\n";
+			exit;
+		}
+		
 		// see if the user passed anythign useful
 		if (empty($package)) {
 			print "please provide a path for the ".$name." before trying to fetch it...\n";
