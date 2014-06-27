@@ -162,6 +162,11 @@ class Fetch {
 			
 			// load composer
 			$composerConfig = json_decode(file_get_contents($checkDir."/composer.json"),true);
+			if ($jsonErrorMessage = JSON::hasError()) {
+				JSON::lastErrorMsg($filepath,$jsonErrorMessage,$listItems);
+				print "stopping install of ".$name."...";
+				exit;
+			}
 			
 			// see if we should generate the vendor directory
 			if (!isset($composerConfig["extra"]) || (!isset($composerConfig["extra"]["runComposer"]) || ($composerConfig["extra"]["runComposer"])) {
