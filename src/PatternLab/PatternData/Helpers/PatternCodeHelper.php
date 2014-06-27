@@ -39,21 +39,28 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 			
 			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
 				
-				$patternFooterData = array("patternFooterData" => array());
+				$data = Data::getPatternSpecificData($patternStoreKey);
+				
+				// add the pattern data so it can be exported
+				$patternData = array();
 				//$patternFooterData["patternFooterData"]["cssEnabled"]      = (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) ? "true" : "false";
-				$patternFooterData["patternFooterData"]["lineage"]           = isset($patternStoreData["lineages"])  ? json_encode($patternStoreData["lineages"]) : "[]";
-				$patternFooterData["patternFooterData"]["lineageR"]          = isset($patternStoreData["lineagesR"]) ? json_encode($patternStoreData["lineagesR"]) : "[]";
-				$patternFooterData["patternFooterData"]["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
-				$patternFooterData["patternFooterData"]["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
-				$patternFooterData["patternFooterData"]["patternExtension"]  = Config::$options["patternExtension"];
-				$patternFooterData["patternFooterData"]["patternModifiers"]  = (isset($patternStoreData["modifiers"])) ? json_encode($patternStoreData["modifiers"]) : "[]";
-				$patternFooterData["patternFooterData"]["patternName"]       = $patternStoreData["nameClean"];
-				$patternFooterData["patternFooterData"]["patternPartial"]    = $patternStoreData["partial"];
-				$patternFooterData["patternFooterData"]["patternState"]      = $patternStoreData["state"];
+				$patternData["cssEnabled"] = false;
+				$patternData["lineage"]           = isset($patternStoreData["lineages"])  ? json_encode($patternStoreData["lineages"]) : "[]";
+				$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? json_encode($patternStoreData["lineagesR"]) : "[]";
+				$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
+				$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
+				$patternData["patternExtension"]  = Config::$options["patternExtension"];
+				$patternData["patternModifiers"]  = (isset($patternStoreData["modifiers"])) ? json_encode($patternStoreData["modifiers"]) : "[]";
+				$patternData["patternName"]       = $patternStoreData["nameClean"];
+				$patternData["patternPartial"]    = $patternStoreData["partial"];
+				$patternData["patternState"]      = $patternStoreData["state"];
 				
+				// add the pattern lab specific mark-up
+				$data["patternLabHead"]           = Render::Header(Helper::$htmlHead,array("cacheBuster" => $data["cacheBuster"]));
+				$data["patternLabFoot"]           = Render::Footer(Helper::$htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)));
+				
+				// figure out the source path for the pattern to render
 				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::$store[$patternStoreData["original"]]["pathName"] : $patternStoreData["pathName"];
-				
-				$data    = Data::getPatternSpecificData($patternStoreKey,$patternFooterData);
 				
 				$header  = Render::Header(Helper::$patternHead,$data);
 				$code    = Render::Pattern($srcPath,$data);

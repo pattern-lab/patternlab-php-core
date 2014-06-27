@@ -244,13 +244,20 @@ class Builder {
 		} else {
 			
 			// grab the partials into a data object for the style guide
-			$ppExporter     = new PatternPartialsExporter();
-			$partialsAll    = $ppExporter->run();
+			$ppExporter                 = new PatternPartialsExporter();
+			$partials                   = $ppExporter->run();
 			
-			// render the style guide
-			$styleGuideHead = Helper::$htmlLoader->render(Helper::$mainPageHead,Data::$store);
-			$styleGuideFoot = Helper::$htmlLoader->render(Helper::$mainPageFoot,Data::$store);
-			$styleGuidePage = $styleGuideHead.Helper::$filesystemLoader->render("viewall",$partialsAll).$styleGuideFoot;
+			// add the pattern data so it can be exported
+			$patternData = array();
+			
+			// add the pattern lab specific mark-up
+			$partials["patternLabHead"] = Render::Header(Helper::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
+			$partials["patternLabFoot"] = Render::Footer(Helper::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+			
+			$header                     = Render::Header(Helper::$patternHead,$partials);
+			$code                       = Helper::$filesystemLoader->render("viewall",$partials);
+			$footer                     = Render::Footer(Helper::$patternFoot,$partials);
+			$styleGuidePage             = $header.$code.$footer;
 			
 			file_put_contents(Config::$options["publicDir"]."/styleguide/html/styleguide.html",$styleGuidePage);
 			
@@ -263,9 +270,6 @@ class Builder {
 	*/
 	protected function generateViewAllPages() {
 		
-		$viewAllHead = Helper::$htmlLoader->render(Helper::$mainPageHead,Data::$store);
-		$viewAllFoot = Helper::$htmlLoader->render(Helper::$mainPageFoot,Data::$store);
-		
 		// add view all to each list
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
@@ -277,9 +281,19 @@ class Builder {
 				
 				if (!empty($partials["partials"])) {
 					
-					$partials["patternPartial"] = "viewall-".$patternStoreData["typeDash"]."-".$patternStoreData["nameDash"];
+					// add the pattern data so it can be exported
+					$patternData = array();
+					$patternData["patternPartial"] = "viewall-".$patternStoreData["typeDash"]."-".$patternStoreData["nameDash"];
 					
-					$viewAllPage = $viewAllHead.Helper::$filesystemLoader->render("viewall",$partials).$viewAllFoot;
+					// add the pattern lab specific mark-up
+					$partials["patternLabHead"] = Render::Header(Helper::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
+					$partials["patternLabFoot"] = Render::Footer(Helper::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+					
+					// render the parts and join them
+					$header      = Render::Header(Helper::$patternHead,$partials);
+					$code        = Helper::$filesystemLoader->render("viewall",$partials);
+					$footer      = Render::Footer(Helper::$patternFoot,$partials);
+					$viewAllPage = $header.$code.$footer;
 					
 					// if the pattern directory doesn't exist create it
 					$patternPath = $patternStoreData["pathDash"];
@@ -300,9 +314,19 @@ class Builder {
 				
 				if (!empty($partials["partials"])) {
 					
-					$partials["patternPartial"] = "viewall-".$patternStoreData["nameDash"]."-all";
+					// add the pattern data so it can be exported
+					$patternData = array();
+					$patternData["patternPartial"] = "viewall-".$patternStoreData["nameDash"]."-all";
 					
-					$viewAllPage = $viewAllHead.Helper::$filesystemLoader->render("viewall",$partials).$viewAllFoot;
+					// add the pattern lab specific mark-up
+					$partials["patternLabHead"] = Render::Header(Helper::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
+					$partials["patternLabFoot"] = Render::Footer(Helper::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+					
+					// render the parts and join them
+					$header      = Render::Header(Helper::$patternHead,$partials);
+					$code        = Helper::$filesystemLoader->render("viewall",$partials);
+					$footer      = Render::Footer(Helper::$patternFoot,$partials);
+					$viewAllPage = $header.$code.$footer;
 					
 					// if the pattern directory doesn't exist create it
 					$patternPath = $patternStoreData["pathDash"];
