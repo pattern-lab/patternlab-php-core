@@ -70,7 +70,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 			
 		}
 		
-		return array("partials" => $patternPartials);
+		return array("partials" => $patternPartials, "cacheBuster" => Data::$store["cacheBuster"]);
 		
 	}
 	
