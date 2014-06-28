@@ -171,21 +171,21 @@ class Builder {
 		file_put_contents($dataDir."/ish-controls.js","var ishControls = ".json_encode($ishControls).";");
 		
 		// load and write out the items for the navigation
-		$niExporter       = new NavItemsExporter();
-		$navItems         = $niExporter->run();
+		$niExporter   = new NavItemsExporter();
+		$navItems     = $niExporter->run();
 		file_put_contents($dataDir."/nav-items.js","var navItems = ".json_encode($navItems).";");
 		
 		// load and write out the items for the pattern paths
-		$patternPaths                 = array();
-		$ppdExporter                  = new PatternPathDestsExporter();
-		$patternPaths["patternpaths"] = json_encode($ppdExporter->run());
-		file_put_contents($dataDir."/pattern-paths.js","var patternPaths = ".json_encode($navItems).";");
+		$patternPaths = array();
+		$ppdExporter  = new PatternPathDestsExporter();
+		$patternPaths = $ppdExporter->run();
+		file_put_contents($dataDir."/pattern-paths.js","var patternPaths = ".json_encode($patternPaths).";");
 		
 		// load and write out the items for the view all paths
-		$viewAllPaths                 = array();
-		$vapExporter                  = new ViewAllPathsExporter();
-		$viewAllPaths["viewallpaths"] = json_encode($vapExporter->run($navItems));
-		file_put_contents($dataDir."/viewall-paths.js","var viewAllPaths = ".json_encode($navItems).";");
+		$viewAllPaths = array();
+		$vapExporter  = new ViewAllPathsExporter();
+		$viewAllPaths = $vapExporter->run($navItems);
+		file_put_contents($dataDir."/viewall-paths.js","var viewAllPaths = ".json_encode($viewAllPaths).";");
 		
 	}
 	
