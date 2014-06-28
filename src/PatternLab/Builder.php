@@ -151,23 +151,23 @@ class Builder {
 		}
 		
 		// load and write out the config options
-		$config                   = array();
-		$config["autoreloadnav"]  = Config::$options["autoReloadNav"];
-		$config["autoreloadport"] = Config::$options["autoReloadPort"];
-		$config["cacheBuster"]    = Config::$options["cacheBuster"];
-		$config["ipaddress"]      = getHostByName(getHostName());
-		$config["pagefollownav"]  = Config::$options["pageFollowNav"];
-		$config["pagefollowport"] = Config::$options["pageFollowPort"];
-		$config["xiphostname"]    = Config::$options["xipHostname"];
+		$config                      = array();
+		$config["autoreloadnav"]     = Config::$options["autoReloadNav"];
+		$config["autoreloadport"]    = Config::$options["autoReloadPort"];
+		$config["cacheBuster"]       = Config::$options["cacheBuster"];
+		$config["ipaddress"]         = getHostByName(getHostName());
+		$config["pagefollownav"]     = Config::$options["pageFollowNav"];
+		$config["pagefollowport"]    = Config::$options["pageFollowPort"];
+		$config["xiphostname"]       = Config::$options["xipHostname"];
+		$config["ishminimum"]        = Config::$options["ishMinimum"];
+		$config["ishmaximum"]        = Config::$options["ishMaximum"];
+		$config["qrcodegeneratoron"] = Config::$options["qrCodeGeneratorOn"];
 		file_put_contents($dataDir."/config.js","var config = ".json_encode($config).";");
 		
 		// load the ish Controls
-		$ishControls                      = array();
-		$ishControls["ishminimum"]        = Config::$options["ishMinimum"];
-		$ishControls["ishmaximum"]        = Config::$options["ishMaximum"];
-		$ishControls["ishControlsHide"]   = Config::$options["ishControlsHide"];
-		$ishControls["mqs"]               = $this->gatherMQs();
-		$ishControls["qrcodegeneratoron"] = Config::$options["qrCodeGeneratorOn"];
+		$ishControls                    = array();
+		$ishControls["ishControlsHide"] = Config::$options["ishControlsHide"];
+		$ishControls["mqs"]             = $this->gatherMQs();
 		file_put_contents($dataDir."/ish-controls.js","var ishControls = ".json_encode($ishControls).";");
 		
 		// load and write out the items for the navigation
