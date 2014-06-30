@@ -50,7 +50,6 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
 				$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
 				$patternData["patternExtension"]  = Config::$options["patternExtension"];
-				$patternData["patternModifiers"]  = (isset($patternStoreData["modifiers"])) ? json_encode($patternStoreData["modifiers"]) : "[]";
 				$patternData["patternName"]       = $patternStoreData["nameClean"];
 				$patternData["patternPartial"]    = $patternStoreData["partial"];
 				$patternData["patternState"]      = $patternStoreData["state"];
