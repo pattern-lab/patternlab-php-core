@@ -14,7 +14,9 @@
 namespace PatternLab\PatternEngine\Rules;
 
 use \PatternLab\Config;
+use \PatternLab\Dispatcher;
 use \PatternLab\PatternEngine\Loaders\MustacheLoader;
+use \PatternLab\PatternEngine\Helpers\MustacheHelper;
 
 class MustacheRule extends \PatternLab\PatternEngine\Rule {
 	
@@ -30,11 +32,11 @@ class MustacheRule extends \PatternLab\PatternEngine\Rule {
 		
 	public function getInstance($options) {
 		
-		$this->loadHelpers();
+		Dispatcher::$instance->dispatch("mustacheRule.gatherHelpers");
 		
 		$options["loader"]         = new MustacheLoader(__DIR__."/../../".Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
 		$options["partial_loader"] = new MustacheLoader(__DIR__."/../../".Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
-		$options["helpers"]        = $this->helpers;
+		$options["helpers"]        = MustacheHelper::get();
 		
 		return new \Mustache_Engine($options);
 		
