@@ -261,7 +261,8 @@ class Console {
 		// write out the commands
 		foreach (self::$commands as $command => $attributes) {
 			$spacer = self::getSpacer($lengthLong,$attributes["commandLongLength"]);
-			self::writeLine("  --".$attributes["commandLong"].$spacer."(-".$attributes["commandShort"].")    ".$attributes["commandDesc"]);
+			$commandShort = ($attributes["commandShort"][0] != "z") ? "(-".$attributes["commandShort"].")" : "    ";
+			self::writeLine("  --".$attributes["commandLong"].$spacer.$commandShort.$attributes["commandDesc"]);
 		}
 		
 		self::writeLine("");
@@ -311,6 +312,7 @@ class Console {
 		}
 		
 		$commandShort      = self::$commands[$command]["commandShort"];
+		$commandShortList   = (self::$commands[$command]["commandShort"][0] != "z") ? "(-".self::$commands[$command]["commandShort"].")" : "    ";
 		$commandLong       = self::$commands[$command]["commandLong"];
 		$commandHelp       = self::$commands[$command]["commandHelp"];
 		$commandExtra      = isset(self::$commands[$command]["commandExtra"]) ? self::$commands[$command]["commandExtra"] : "";
@@ -323,7 +325,8 @@ class Console {
 		$optionList = "";
 		$lengthLong = 0;
 		foreach ($commandOptions as $option => $attributes) {
-			$optionList .= "[--".$attributes["optionLong"]."|-".$attributes["optionShort"]."] ";
+			$optionShort = ($attributes["optionShort"][0] != "z") ? "|-".self::$commands[$command]["commandShort"] : "";
+			$optionList .= "[--".$attributes["optionLong"].$optionShort."] ";
 			$lengthLong = ($attributes["optionLongLength"] > $lengthLong) ? $attributes["optionLongLength"] : $lengthLong;
 		}
 		
@@ -331,14 +334,16 @@ class Console {
 		self::writeLine("");
 		self::writeLine($commandLongUC." Command Options",true);
 		self::writeLine("Usage:");
+		
 		self::writeLine("  php ".self::$self." --".$commandLong."|-".$commandShort." ".$optionList,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
 			self::writeLine("Available options:");
 			foreach ($commandOptions as $option => $attributes) {
+				$optionShort = ($attributes["optionShort"][0] != "z") ? "|-".self::$commands[$command]["commandShort"] : "";
 				$spacer = self::getSpacer($lengthLong,$attributes["optionLongLength"]);
-				self::writeLine("  --".$attributes["optionLong"].$spacer."(-".$attributes["optionShort"].")    ".$attributes["optionDesc"]);
+				self::writeLine("  --".$attributes["optionLong"].$spacer.$optionShort."    ".$attributes["optionDesc"]);
 			}
 			self::writeLine("");
 		}
@@ -363,7 +368,9 @@ class Console {
 			foreach ($commandOptions as $option => $attributes) {
 				self::writeLine("   ".$attributes["optionSample"]);
 				self::writeLine("     php ".self::$self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
-				self::writeLine("     php ".self::$self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
+				$optionShort = ($attributes["optionShort"][0] != "z") ? "-".$attributes["optionShort"] : "--".$attributes["optionLong"];
+				self::writeLine("     php ".self::$self." -".$commandShort." ".$optionShort." ".$attributes["optionExtra"],true);
+				
 			}
 		}
 		
