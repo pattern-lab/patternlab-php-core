@@ -76,7 +76,6 @@ class Fetch {
 		}
 		
 		if (empty($name)) {
-			print_r(Console::$options);
 			print "fetch rule not found...\n";
 			exit;
 		}
