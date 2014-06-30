@@ -25,7 +25,6 @@ class PatternEngineRule extends Rule {
 		$this->unpack        = false;
 		$this->writeDir      = Config::$options["pluginDir"];
 		
-		$this->shortCommand  = "e";
 		$this->longCommand   = "patternengine";
 		
 	}

@@ -25,7 +25,6 @@ class StyleguideKitRule extends Rule {
 		$this->unpack        = false;
 		$this->writeDir      = Config::$options["pluginDir"];
 		
-		$this->shortCommand  = "k";
 		$this->longCommand   = "styleguidekit";
 		
 	}

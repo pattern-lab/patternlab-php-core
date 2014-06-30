@@ -25,7 +25,6 @@ class PluginRule extends Rule {
 		$this->unpack        = false;
 		$this->writeDir      = Config::$options["pluginDir"];
 		
-		$this->shortCommand  = "p";
 		$this->longCommand   = "plugin";
 		
 	}

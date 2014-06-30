@@ -25,7 +25,6 @@ class StarterKitRule extends Rule {
 		$this->unpack        = true;
 		$this->writeDir      = Config::$options["sourceDir"];
 		
-		$this->shortCommand  = "s";
 		$this->longCommand   = "starterkit";
 		
 	}
