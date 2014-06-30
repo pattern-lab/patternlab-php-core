@@ -24,6 +24,7 @@ class Console {
 	public  static $optionsShort     = "";
 	public  static $optionsLong      = array();
 	private static $self             = "";
+	private static $zTracker         = 1;
 	
 	public static function run() {
 		
@@ -207,7 +208,7 @@ class Console {
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
 	public static function setCommandOption($command,$short,$long,$desc,$sample,$extra = "") {
-		if (strpos(self::$optionsShort,$short) === false) {
+		if (($short != "z") && (strpos(self::$optionsShort,$short) === false)) {
 			self::$optionsShort .= $short;
 		}
 		if (!in_array($long,self::$optionsLong)) {
@@ -215,6 +216,10 @@ class Console {
 		}
 		$short = str_replace(":","",$short);
 		$long  = str_replace(":","",$long);
+		if ($short == "z") {
+			$short = "z".self::$zTracker;
+			self::$zTracker++;
+		}
 		self::$commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
 	}
 	
