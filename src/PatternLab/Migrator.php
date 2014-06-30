@@ -121,7 +121,7 @@ class Migrator {
 				
 				$sourcePath = str_replace(__DIR__."/../../../","",rtrim($sourcePath,"/"));
 				$f = new Fetch();
-				$f->fetch("s",$sourcePath);
+				$f->fetch("starterkit",$sourcePath);
 				
 			} else {
 				
