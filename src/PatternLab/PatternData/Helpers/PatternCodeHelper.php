@@ -55,6 +55,9 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$patternData["patternPartial"]    = $patternStoreData["partial"];
 				$patternData["patternState"]      = $patternStoreData["state"];
 				
+				// extra copy for the code view
+				$patternData["patternDescAdditions"] = isset($patternStoreData["codeViewDescAdditions"]) ? $patternStoreData["codeViewDescAdditions"] : array();
+				
 				// add the pattern lab specific mark-up
 				$data["patternLabHead"]           = Render::Header(Helper::$htmlHead,array("cacheBuster" => $data["cacheBuster"]));
 				$data["patternLabFoot"]           = Render::Footer(Helper::$htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)));

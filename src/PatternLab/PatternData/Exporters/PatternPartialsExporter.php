@@ -57,8 +57,8 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartialData["patternDescExists"]       = isset($patternStoreData["desc"]);
 					$patternPartialData["patternDesc"]             = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
 					
-					$patternPartialData["patternDescAdditions"]    = $patternStoreData["descAdditions"];
-					$patternPartialData["patternExampleAdditions"] = $patternStoreData["exampleAdditions"];
+					$patternPartialData["patternDescAdditions"]    = isset($patternStoreData["partialViewDescAdditions"]) ? $patternStoreData["partialViewDescAdditions"] : array();
+					$patternPartialData["patternExampleAdditions"] = isset($patternStoreData["partialViewExampleAdditions"]) ? $patternStoreData["partialViewExampleAdditions"] : array();
 					
 					$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
 					
