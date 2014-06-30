@@ -44,9 +44,9 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				// add the pattern data so it can be exported
 				$patternData = array();
 				//$patternFooterData["patternFooterData"]["cssEnabled"]      = (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) ? "true" : "false";
-				$patternData["cssEnabled"] = false;
-				$patternData["lineage"]           = isset($patternStoreData["lineages"])  ? json_encode($patternStoreData["lineages"]) : "[]";
-				$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? json_encode($patternStoreData["lineagesR"]) : "[]";
+				$patternData["cssEnabled"]        = false;
+				$patternData["lineage"]           = isset($patternStoreData["lineages"])  ? $patternStoreData["lineages"] : array();
+				$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
 				$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
 				$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
 				$patternData["patternExtension"]  = Config::$options["patternExtension"];
