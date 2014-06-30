@@ -26,16 +26,6 @@ class Rule {
 	}
 	
 	/**
-	* Test the Fetch Rules to see if a Rule matches the supplied value
-	* @param  {String}       the command option
-	*
-	* @return {Boolean}      whether the test was succesful or not
-	*/
-	public function test($commandOption) {
-		return ($commandOption == $this->commandOption);
-	}
-	
-	/**
 	* Set the command line flags for the fetch rules
 	* @param  {String}       the name of the command
 	*/
