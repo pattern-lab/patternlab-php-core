@@ -119,6 +119,9 @@ class PatternData {
 		$options                 = array();
 		$options["patternPaths"] = $patternPathSrc;
 		
+		$event = new PatternDataEvent($options);
+		Dispatcher::$instance->dispatch("patternData.codeHelperStart",$event);
+		
 		// render out all of the patterns and store the generated info in PatternData::$store
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
