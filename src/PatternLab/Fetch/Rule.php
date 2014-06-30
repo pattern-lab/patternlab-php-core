@@ -17,7 +17,6 @@ class Rule {
 	public $name;
 	public $unpack;
 	public $writeTo;
-	public $shortCommand;
 	public $longCommand;
 	
 	public function __construct() {
@@ -44,7 +43,7 @@ class Rule {
 		$desc   = "Install a ".$this->name;
 		$sample = $desc.":";
 		$extra  = "github-org/github-repo#tag";
-		Console::setCommandOption($command,$this->shortCommand.":",$this->longCommand.":",$desc,$sample,$extra);
+		Console::setCommandOption($command,"z:",$this->longCommand.":",$desc,$sample,$extra);
 	}
 	
 }
