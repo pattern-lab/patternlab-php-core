@@ -40,29 +40,4 @@ class MustacheRule extends \PatternLab\PatternEngine\Rule {
 		
 	}
 	
-	/**
-	* Load helpers to add tags to Mustache
-	*/
-	protected function loadHelpers() {
-		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["pluginDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach($objects as $name => $object) {
-			
-			if ((strpos($name,"MustacheHelper.php") !== false) && (strpos($name,"plugins/vendor/") === false)) {
-				$dirs            = explode("/",$object->getPath());
-				$helperName      = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				$helper          = new $helperName();
-				foreach ($helper->helpers as $tag => $function) {
-					$this->helpers[$tag] = $function;
-				}
-			}
-			
-		}
-		
-	}
-	
 }
