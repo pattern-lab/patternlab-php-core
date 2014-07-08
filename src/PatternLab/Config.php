@@ -22,8 +22,9 @@ class Config {
 	/**
 	* Adds the config options to a var to be accessed from the rest of the system
 	* If it's an old config or no config exists this will update and generate it.
+	* @param  {Boolean}       whether we should print out the status of the config being loaded
 	*/
-	public static function init() {
+	public static function init($verbose = true) {
 		
 		// can't add __DIR__ above so adding here
 		self::$userConfigPath = __DIR__.self::$userConfigPath;
@@ -43,7 +44,10 @@ class Config {
 		$defaultOptions = self::$options = parse_ini_file(self::$plConfigPath);
 		
 		// check to see if the user config exists, if not create it
-		print "configuring pattern lab...\n";
+		if ($verbose) {
+			print "configuring pattern lab...\n";
+		}
+		
 		if (!file_exists(self::$userConfigPath)) {
 			$migrate = true;
 		} else {
@@ -55,8 +59,10 @@ class Config {
 		
 		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
-			print "upgrading your version of pattern lab...\n";
-			print "checking for migrations...\n";
+			if ($verbose) {
+				print "upgrading your version of pattern lab...\n";
+				print "checking for migrations...\n";
+			}
 			$m = new Migrator;
 			$m->migrate(true);
 			if ($migrate) {
@@ -70,7 +76,7 @@ class Config {
 		}
 		
 		// making sure the config isn't empty
-		if (empty(self::$options)) {
+		if (empty(self::$options) && $verbose) {
 			print "A set of configuration options is required to use Pattern Lab.\n";
 			exit;
 		}
