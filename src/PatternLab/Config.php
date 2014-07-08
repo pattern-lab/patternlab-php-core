@@ -18,6 +18,7 @@ class Config {
 	protected static $userConfigPath = "/../../../config/config.ini";
 	protected static $plConfigPath   = "/../../config/config.ini.default";
 	protected static $cleanValues    = array("ie","id","patternStates","styleGuideExcludes");
+	protected static $dirAdded       = false;
 	
 	/**
 	* Adds the config options to a var to be accessed from the rest of the system
@@ -27,8 +28,12 @@ class Config {
 	public static function init($verbose = true) {
 		
 		// can't add __DIR__ above so adding here
-		self::$userConfigPath = __DIR__.self::$userConfigPath;
-		self::$plConfigPath   = __DIR__.self::$plConfigPath;
+		if (!self::$dirAdded) {
+			self::$userConfigPath = __DIR__.self::$userConfigPath;
+			self::$plConfigPath   = __DIR__.self::$plConfigPath;
+			self::$dirAdded       = true;
+		}
+		
 		
 		// make sure migrate doesn't happen by default
 		$migrate     = false;
