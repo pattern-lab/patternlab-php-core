@@ -21,12 +21,8 @@ require(__DIR__."/vendor/autoload.php");
 \PatternLab\Config::init();
 
 // autoload plugin vendored items if available
-$pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
-$plugins = scandir($pluginDir);
-foreach ($plugins as $plugin) {
-	if (($plugin != ".") && ($plugin != "..") && file_exists($pluginDir."/".$plugin."/vendor/autoload.php")) {
-		require ($pluginDir."/".$plugin."/vendor/autoload.php");
-	}
+if (file_exists(__DIR__."/../vendor/autoload.php")) {
+	require(__DIR__."/../vendor/autoload.php");
 }
 
 // initialize the dispatcher & note that the config has been loaded
