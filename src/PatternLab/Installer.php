@@ -107,8 +107,11 @@ class Installer {
 			$destination = $fileItem[$source];
 			
 			// depending on the source handle things differently. mirror if it ends in /*
-			if ($source == "*") {
+			if (($source == "*") && ($destination == "*")) {
 				$fs->mirror($sourceBase."/assets/",$destinationBase."/");
+			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
+				$destination = rtrim($destination,"/*");
+				$fs->mirror($sourceBase."/assets/",$destinationBase."/".$destination);
 			} else if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
 				$destination = rtrim($destination,"/*");
