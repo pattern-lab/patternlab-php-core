@@ -793,5 +793,142 @@
             "hybi",
             "websocket"
         ]
+    },
+    {
+        "name": "composer/installers",
+        "version": "v1.0.15",
+        "version_normalized": "1.0.15.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/installers.git",
+            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/composer/installers/zipball/8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
+            "reference": "8e6a72a78f6cfd537fde3350720dfdc9ae3c5621",
+            "shasum": ""
+        },
+        "replace": {
+            "roundcube/plugin-installer": "*",
+            "shama/baton": "*"
+        },
+        "require-dev": {
+            "composer/composer": "1.0.*@dev",
+            "phpunit/phpunit": "4.1.*"
+        },
+        "time": "2014-06-23 16:25:28",
+        "type": "composer-installer",
+        "extra": {
+            "class": "Composer\\Installers\\Installer",
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Composer\\Installers\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kyle Robinson Young",
+                "email": "kyle@dontkry.com",
+                "homepage": "https://github.com/shama",
+                "role": "Developer"
+            }
+        ],
+        "description": "A multi-framework Composer library installer",
+        "homepage": "http://composer.github.com/installers/",
+        "keywords": [
+            "Craft",
+            "Dolibarr",
+            "Hurad",
+            "MODX Evo",
+            "OXID",
+            "WolfCMS",
+            "agl",
+            "annotatecms",
+            "bitrix",
+            "cakephp",
+            "codeigniter",
+            "concrete5",
+            "croogo",
+            "drupal",
+            "elgg",
+            "fuelphp",
+            "installer",
+            "joomla",
+            "kohana",
+            "laravel",
+            "lithium",
+            "magento",
+            "mako",
+            "mediawiki",
+            "modulework",
+            "moodle",
+            "phpbb",
+            "piwik",
+            "ppi",
+            "roundcube",
+            "shopware",
+            "silverstripe",
+            "symfony",
+            "typo3",
+            "wordpress",
+            "zend",
+            "zikula"
+        ]
+    },
+    {
+        "name": "pattern-lab/unified-asset-installer",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pattern-lab/composer.git",
+            "reference": "9fbfcab46a3506c5eb5ff6cf77d624c481552ef4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pattern-lab/composer/zipball/9fbfcab46a3506c5eb5ff6cf77d624c481552ef4",
+            "reference": "9fbfcab46a3506c5eb5ff6cf77d624c481552ef4",
+            "shasum": ""
+        },
+        "require": {
+            "composer-plugin-api": "1.0.0"
+        },
+        "require-dev": {
+            "composer/composer": "~1.0@dev",
+            "phpunit/phpunit": "~3.7"
+        },
+        "time": "2014-07-07 21:01:52",
+        "type": "composer-installer",
+        "extra": {
+            "class": "\\PatternLab\\Composer\\UnifiedAssetInstaller"
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "PatternLab\\Composer": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Extensions installer for Pattern Lab",
+        "homepage": "http://patternlab.io",
+        "keywords": [
+            "assets",
+            "installer",
+            "pattern lab",
+            "plugins"
+        ]
     }
 ]
