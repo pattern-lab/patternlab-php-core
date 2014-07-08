@@ -21,23 +21,18 @@ class FetchCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "f";
+		$this->command = "f:";
 		
-		Console::setCommand($this->command,"fetch","Fetch a package","The fetch command grabs a package from GitHub and installs the package and any package dependencies.");
-		
-		$fetch = new Fetch();
-		$fetch->loadRules();
-		foreach ($fetch->rules as $rule) {
-			$rule->setCommandOption($this->command);
-		}
+		Console::setCommand($this->command,"fetch:","Fetch a package","The fetch command grabs a package from GitHub and installs the package and any package dependencies.");
 		
 	}
 	
 	public function run() {
 		
 		// run the fetch command
+		$p = Console::findCommandValue("f|fetch");
 		$f = new Fetch();
-		$f->fetch();
+		$f->fetch($p);
 		
 	}
 	
