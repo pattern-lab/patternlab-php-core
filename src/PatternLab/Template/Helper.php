@@ -30,9 +30,15 @@ class Helper {
 	public static function init() {
 		
 		// load pattern-lab's resources
-		$partialPath            = Config::$options["pluginDir"]."/".Config::$options["styleguideKit"]."/views/partials";
-		self::$htmlHead         = file_get_contents($partialPath."/general-header.mustache");
-		self::$htmlFoot         = file_get_contents($partialPath."/general-footer.mustache");
+		if (isset(Config::$options["styleguideKit"])) {
+			$partialPath            = Config::$options["pluginDir"]."/".Config::$options["styleguideKit"]."/views/partials";
+			self::$htmlHead         = file_get_contents($partialPath."/general-header.mustache");
+			self::$htmlFoot         = file_get_contents($partialPath."/general-footer.mustache");
+		} else {
+			print "no styleguideKit to use. please add it to the config.\n";
+			exit;
+		}
+		
 		
 		// gather the user-defined header and footer information
 		$patternHeadPath        = Config::$options["sourceDir"]."/_meta/_00-head.".Config::$options["patternExtension"];
