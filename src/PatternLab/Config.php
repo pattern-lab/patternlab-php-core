@@ -88,14 +88,12 @@ class Config {
 			exit;
 		}
 		
-		// set-up the source & public dirs
-		self::$options["sourceDir"]        = rtrim(self::$options["sourceDir"],"\\");
-		self::$options["publicDir"]        = rtrim(self::$options["publicDir"],"\\");
-		self::$options["patternSourceDir"] = FileUtil::normalizePath(__DIR__."/../../../".self::$options["sourceDir"]."/_patterns/");
-		self::$options["patternPublicDir"] = FileUtil::normalizePath(__DIR__."/../../../".self::$options["publicDir"]."/patterns/");
-		self::$options["sourceDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["sourceDir"]);
-		self::$options["publicDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["publicDir"]);
-		self::$options["pluginDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["pluginDir"]);
+		// set-up the various dirs
+		self::$options["sourceDir"]        = self::cleanDir(self::$options["sourceDir"]);
+		self::$options["publicDir"]        = self::cleanDir(self::$options["publicDir"]);
+		self::$options["pluginDir"]        = self::cleanDir(self::$options["pluginDir"]);
+		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
+		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		
 		// populate some standard variables out of the config
 		foreach (self::$options as $key => $value) {
