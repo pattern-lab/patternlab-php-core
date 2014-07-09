@@ -68,7 +68,7 @@ class PatternData {
 		Dispatcher::$instance->dispatch("patternData.rulesLoaded",$event);
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
-		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
+		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		$patternObjects = iterator_to_array($patternObjects);
@@ -80,8 +80,8 @@ class PatternData {
 			$isDir    = $object->isDir();
 			$isFile   = $object->isFile();
 			
-			$path     = str_replace(__DIR__.Config::$options["patternSourceDir"],"",$object->getPath());
-			$pathName = str_replace(__DIR__.Config::$options["patternSourceDir"],"",$object->getPathname());
+			$path     = str_replace(Config::$options["patternSourceDir"]."/","",$object->getPath());
+			$pathName = str_replace(Config::$options["patternSourceDir"]."/","",$object->getPathname());
 			$name     = $object->getFilename();
 			$depth    = substr_count($pathName,DIRECTORY_SEPARATOR);
 			

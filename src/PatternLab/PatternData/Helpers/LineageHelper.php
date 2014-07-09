@@ -25,7 +25,10 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 	
 	public function run() {
 		
-		$foundLineages = array();
+		// set-up default vars
+		$foundLineages    = array();
+		$patternSourceDir = Config::$options["patternSourceDir"];
+		$patternExtension = Config::$options["patternExtension"];
 		
 		// check for the regular lineages in only normal patterns
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
@@ -33,8 +36,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
 				
 				$patternLineages = array();
-				$fileName        = $patternStoreData["pathName"].".".Config::$options["patternExtension"];
-				$fileNameFull    = __DIR__."/../..".Config::$options["patternSourceDir"].$fileName;
+				$fileName        = $patternStoreData["pathName"].".".$patternExtension;
+				$fileNameFull    = $patternSourceDir."/".$fileName;
 				
 				if (file_exists($fileNameFull)) {
 					$foundLineages = $this->findLineages($fileNameFull);

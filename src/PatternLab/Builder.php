@@ -194,9 +194,14 @@ class Builder {
 	*/
 	protected function generatePatterns() {
 		
+		// set-up common vars
+		$patternPublicDir = Config::$options["patternPublicDir"];
+		$patternSourceDir = Config::$options["patternSourceDir"];
+		$patternExtension = Config::$options["patternExtension"];
+		
 		// make sure patterns exists
-		if (!is_dir(Config::$options["publicDir"]."/patterns")) {
-			mkdir(Config::$options["publicDir"]."/patterns");
+		if (!is_dir($patternPublicDir)) {
+			mkdir($patternPublicDir);
 		}
 		
 		// loop over the pattern data store to render the individual patterns
@@ -211,19 +216,19 @@ class Builder {
 				$markup        = $patternStoreData["code"];
 				$markupEncoded = htmlentities($markup);
 				$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
-				$markupEngine  = htmlentities(file_get_contents(__DIR__.Config::$options["patternSourceDir"].$pathName.".".Config::$options["patternExtension"]));
+				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension));
 				
 				// if the pattern directory doesn't exist create it
-				if (!is_dir(__DIR__.Config::$options["patternPublicDir"].$path)) {
-					mkdir(__DIR__.Config::$options["patternPublicDir"].$path);
+				if (!is_dir($patternPublicDir."/".$path)) {
+					mkdir($patternPublicDir."/".$path);
 				}
 				
 				// write out the various pattern files
-				file_put_contents(__DIR__.Config::$options["patternPublicDir"].$path."/".$path.".html",$markupFull);
-				file_put_contents(__DIR__.Config::$options["patternPublicDir"].$path."/".$path.".escaped.html",$markupEncoded);
-				file_put_contents(__DIR__.Config::$options["patternPublicDir"].$path."/".$path.".".Config::$options["patternExtension"],$markupEngine);
+				file_put_contents($patternPublicDir."/".$path."/".$path.".html",$markupFull);
+				file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
+				file_put_contents($patternPublicDir."/".$path."/".$path.".".Config::$options["patternExtension"],$markupEngine);
 				if (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) {
-					file_put_contents(__DIR__.Config::$options["patternPublicDir"].$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
+					file_put_contents($patternPublicDir.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
 				}
 				
 			}
@@ -270,6 +275,8 @@ class Builder {
 	*/
 	protected function generateViewAllPages() {
 		
+		$patternPublicDir = Config::$options["patternPublicDir"];
+		
 		// add view all to each list
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
@@ -297,11 +304,11 @@ class Builder {
 					
 					// if the pattern directory doesn't exist create it
 					$patternPath = $patternStoreData["pathDash"];
-					if (!is_dir(__DIR__.Config::$options["patternPublicDir"].$patternPath)) {
-						mkdir(__DIR__.Config::$options["patternPublicDir"].$patternPath);
-						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+					if (!is_dir($patternPublicDir."/".$patternPath)) {
+						mkdir($patternPublicDir."/".$patternPath);
+						file_put_contents($patternPublicDir."/".$patternPath."/index.html",$viewAllPage);
 					} else {
-						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+						file_put_contents($patternPublicDir."/".$patternPath."/index.html",$viewAllPage);
 					}
 					
 				}
@@ -330,11 +337,11 @@ class Builder {
 					
 					// if the pattern directory doesn't exist create it
 					$patternPath = $patternStoreData["pathDash"];
-					if (!is_dir(__DIR__.Config::$options["patternPublicDir"].$patternPath)) {
-						mkdir(__DIR__.Config::$options["patternPublicDir"].$patternPath);
-						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+					if (!is_dir($patternPublicDir."/".$patternPath)) {
+						mkdir($patternPublicDir."/".$patternPath);
+						file_put_contents($patternPublicDir."/".$patternPath."/index.html",$viewAllPage);
 					} else {
-						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+						file_put_contents($patternPublicDir."/".$patternPath."/index.html",$viewAllPage);
 					}
 					
 				}

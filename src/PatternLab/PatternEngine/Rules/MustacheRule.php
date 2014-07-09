@@ -34,8 +34,8 @@ class MustacheRule extends \PatternLab\PatternEngine\Rule {
 		
 		Dispatcher::$instance->dispatch("mustacheRule.gatherHelpers");
 		
-		$options["loader"]         = new MustacheLoader(__DIR__."/../../".Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
-		$options["partial_loader"] = new MustacheLoader(__DIR__."/../../".Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
+		$options["loader"]         = new MustacheLoader(Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
+		$options["partial_loader"] = new MustacheLoader(Config::$options["patternSourceDir"],array("patternPaths" => $options["patternPaths"]));
 		$options["helpers"]        = MustacheHelper::get();
 		
 		return new \Mustache_Engine($options);

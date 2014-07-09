@@ -109,8 +109,8 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		$patternDataBase = array();
-		if (file_exists(__DIR__."/../..".Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData)) {
-			$data = file_get_contents(__DIR__."/../..".Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData);
+		if (file_exists(Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData)) {
+			$data = file_get_contents(Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData);
 			if ($ext == "json") {
 				$patternDataBase = json_decode($data,true);
 				if ($jsonErrorMessage = JSON::hasError()) {
@@ -134,7 +134,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		// get the data for the pseudo-pattern
-		$data = file_get_contents(__DIR__."/../..".Config::$options["patternSourceDir"]."/".$pathName);
+		$data = file_get_contents(Config::$options["patternSourceDir"]."/".$pathName);
 		if ($ext == "json") {
 			$patternData = json_decode($data,true);
 			if ($jsonErrorMessage = JSON::hasError()) {

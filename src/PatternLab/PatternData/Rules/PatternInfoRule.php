@@ -51,7 +51,7 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 			
 			$patternStoreData = array("category" => "pattern");
 			
-			$file = file_get_contents(__DIR__."/../..".Config::$options["patternSourceDir"]."/".$pathName);
+			$file = file_get_contents(Config::$options["patternSourceDir"]."/".$pathName);
 			
 			if ($ext == "json") {
 				$data = json_decode($file,true);

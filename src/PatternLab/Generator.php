@@ -89,7 +89,7 @@ class Generator extends Builder {
 		if ($moveStatic) {
 			
 			// iterate over all of the other files in the source directory
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
