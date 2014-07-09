@@ -29,7 +29,7 @@ class VersionCommand extends Command {
 	
 	public function run() {
 		
-		print "You're running v".Config::$options["v"]." of the PHP version of Pattern Lab.\n";
+		print "you're running v".Config::$options["v"]." of the PHP version of Pattern Lab...\n";
 		
 	}
 	
