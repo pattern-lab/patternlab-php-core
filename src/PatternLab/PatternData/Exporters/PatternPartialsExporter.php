@@ -34,11 +34,13 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 	*/
 	public function run($type = "", $subtype = "") {
 		
-		$patternPartials = array();
+		// default vars
+		$patternPartials    = array();
+		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
 		
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"]) && ($patternStoreData["depth"] == 2) && (!in_array($patternStoreData["type"],Config::$options["styleGuideExcludes"]))) {
+			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"]) && ($patternStoreData["depth"] == 2) && (!in_array($patternStoreData["type"],$styleGuideExcludes))) {
 				
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
@@ -60,7 +62,8 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartialData["patternDescAdditions"]    = isset($patternStoreData["partialViewDescAdditions"]) ? $patternStoreData["partialViewDescAdditions"] : array();
 					$patternPartialData["patternExampleAdditions"] = isset($patternStoreData["partialViewExampleAdditions"]) ? $patternStoreData["partialViewExampleAdditions"] : array();
 					
-					$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
+					//$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
+					$patternPartialData["patternCSSExists"]        = false;
 					
 					$patternPartials[]                             = $patternPartialData;
 				

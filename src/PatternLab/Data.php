@@ -50,6 +50,7 @@ class Data {
 		$dataYAML      = array();
 		$listItemsJSON = array();
 		$listItemsYAML = array();
+		$sourceDir     = Config::$options["sourceDir"];
 		
 		// iterate over all of the other files in the source directory
 		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/");
@@ -67,7 +68,7 @@ class Data {
 			$isFile        = $object->isFile();
 			$isListItems   = strpos("listitems",$fileName);
 			$pathName      = $object->getPathname();
-			$pathNameClean = str_replace(Config::$options["sourceDir"]."/","",$pathName);
+			$pathNameClean = str_replace($sourceDir."/","",$pathName);
 			
 			if ($isFile && !$hidden && (($ext == "json") || ($ext == "yaml"))) {
 				

@@ -50,7 +50,8 @@ class FileUtil {
 	* @return {Boolean}      whether the directory should be ignored
 	*/
 	public static function ignoreDir($fileName) {
-		foreach (Config::$options["id"] as $dir) {
+		$id = Config::$options["id"];
+		foreach ($id as $dir) {
 			$pos = strpos(DIRECTORY_SEPARATOR.$fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
 			if ($pos !== false) {
 				return true;

@@ -31,9 +31,13 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 	
 	public function run() {
 		
+		// default vars
 		$options                 = array();
 		$options["patternPaths"] = $this->patternPaths;
-		PatternEngine::setup($options);
+		$patternExtension        = Config::$options["patternExtension"];
+		
+		// set-up the pattern engine
+		PatternEngine::init($options);
 		
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
@@ -49,7 +53,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
 				$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
 				$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
-				$patternData["patternExtension"]  = Config::$options["patternExtension"];
+				$patternData["patternExtension"]  = $patternExtension;
 				$patternData["patternName"]       = $patternStoreData["nameClean"];
 				$patternData["patternPartial"]    = $patternStoreData["partial"];
 				$patternData["patternState"]      = $patternStoreData["state"];

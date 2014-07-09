@@ -27,7 +27,8 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 	public function run() {
 		
 		// check on the states of the patterns
-		$patternStateLast = count(Config::$options["patternStates"]) - 1;
+		$patternStates    = Config::$options["patternStates"];
+		$patternStateLast = count($patternStates) - 1;
 		
 		// run through each item in the store and only look at patterns
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
@@ -39,7 +40,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 				// make sure the pattern has a given state
 				if ($patternState != "") {
 					
-					$patternStateDigit = array_search($patternState, Config::$options["patternStates"]);
+					$patternStateDigit = array_search($patternState,$patternStates);
 					
 					// if this is a true pattern state update various patterns
 					if ($patternStateDigit !== false) {
@@ -60,7 +61,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 										
 									} else {
 										
-										$patternStateCheck = array_search(PatternData::$store[$lineagePatternPartial]["state"], Config::$options["patternStates"]);
+										$patternStateCheck = array_search(PatternData::$store[$lineagePatternPartial]["state"], $patternStates);
 										if ($patternStateDigit < $patternStateCheck) {
 											PatternData::$store[$lineagePatternPartial]["state"] = $patternState;
 										}

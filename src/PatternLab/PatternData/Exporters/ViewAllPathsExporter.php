@@ -25,14 +25,16 @@ class ViewAllPathsExporter extends \PatternLab\PatternData\Exporter {
 	
 	public function run($navItems) {
 		
-		$viewAllPaths = array();
+		// default vars
+		$viewAllPaths       = array();
+		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
 		
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
 			
 			$patternType     = $patternTypeValues["patternType"];
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
-			if (!in_array($patternType,Config::$options["styleGuideExcludes"])) {
+			if (!in_array($patternType,$styleGuideExcludes)) {
 				
 				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
 					

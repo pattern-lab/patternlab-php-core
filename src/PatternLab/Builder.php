@@ -226,10 +226,13 @@ class Builder {
 				// write out the various pattern files
 				file_put_contents($patternPublicDir."/".$path."/".$path.".html",$markupFull);
 				file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
-				file_put_contents($patternPublicDir."/".$path."/".$path.".".Config::$options["patternExtension"],$markupEngine);
+				file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+				/*
+				Not being used and should be moved to a plug-in
 				if (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) {
 					file_put_contents($patternPublicDir.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
 				}
+				*/
 				
 			}
 			

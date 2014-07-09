@@ -61,6 +61,10 @@ class Watcher extends Builder {
 		
 		print "watching your site for changes...\n";
 		
+		// default vars
+		$publicDir = Config::$options["publicDir"];
+		$sourceDir = Config::$options["sourceDir"];
+		
 		// run forever
 		while (true) {
 			
@@ -68,7 +72,7 @@ class Watcher extends Builder {
 			$cp = clone $o->patterns;
 			
 			// iterate over the patterns & related data and regenerate the entire site if they've changed
-			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -76,7 +80,7 @@ class Watcher extends Builder {
 			foreach($patternObjects as $name => $object) {
 					
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName      = str_replace(Config::$options["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR,"",$name);
+				$fileName      = str_replace($sourceDir."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
 				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
@@ -142,14 +146,14 @@ class Watcher extends Builder {
 			}
 			
 			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_annotations/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/_annotations/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
-				$fileName = str_replace(Config::$options["sourceDir"]."/_annotations".DIRECTORY_SEPARATOR,"",$name);
+				$fileName = str_replace($sourceDir."/_annotations".DIRECTORY_SEPARATOR,"",$name);
 				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
@@ -165,7 +169,7 @@ class Watcher extends Builder {
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
 			if ($moveStatic) {
 				
-				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/"), \RecursiveIteratorIterator::SELF_FIRST);
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/"), \RecursiveIteratorIterator::SELF_FIRST);
 				
 				// make sure dots are skipped
 				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -173,15 +177,15 @@ class Watcher extends Builder {
 				foreach($objects as $name => $object) {
 					
 					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-					$fileName = str_replace(Config::$options["sourceDir"].DIRECTORY_SEPARATOR,"",$name);
+					$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
 					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 						
 						// catch directories that have the ignored dir in their path
 						$ignoreDir = $this->ignoreDir($fileName);
 						
 						// check to see if it's a new directory
-						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(Config::$options["publicDir"]."/".$fileName)) {
-							mkdir(Config::$options["publicDir"]."/".$fileName);
+						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($publicDir."/".$fileName)) {
+							mkdir($publicDir."/".$fileName);
 							$o->$fileName = "dir created"; // placeholder
 							print $fileName."/ directory was created...\n";
 						}
@@ -190,7 +194,7 @@ class Watcher extends Builder {
 						if (file_exists($name)) {
 							
 							$mt = $object->getMTime();
-							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(Config::$options["publicDir"]."/".$fileName)) {
+							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists($publicDir."/".$fileName)) {
 								$o->$fileName = $mt;
 								FileUtil::moveStaticFile($fileName,"added");
 								if ($object->getExtension() == "css") {

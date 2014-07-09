@@ -20,7 +20,7 @@ class PatternEngine {
 	/**
 	* Load a new instance of the Pattern Loader
 	*/
-	public static function setup($options) {
+	public static function init($options) {
 		
 		$found = false;
 		self::loadRules($options);

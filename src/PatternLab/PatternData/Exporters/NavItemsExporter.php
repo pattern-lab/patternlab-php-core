@@ -94,6 +94,9 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			
 		}
 		
+		// default vars
+		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
+		
 		// review each subtype. add a view all link or remove the subtype as necessary
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
 			
@@ -101,7 +104,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			$patternType     = $patternTypeValues["patternType"];
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
-			if (!in_array($patternType,Config::$options["styleGuideExcludes"])) {
+			if (!in_array($patternType,$styleGuideExcludes)) {
 				
 				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
 					

@@ -58,12 +58,14 @@ class PatternData {
 	*/
 	public static function gather($options = array()) {
 		
+		// dispatch that the data gather has started
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.gatherStart",$event);
 		
 		// load up the rules for parsing patterns and the directories
 		self::loadRules($options);
 		
+		// dispatch that the rules are loaded
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.rulesLoaded",$event);
 		
@@ -71,8 +73,11 @@ class PatternData {
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
+		// sort the returned objects
 		$patternObjects = iterator_to_array($patternObjects);
 		ksort($patternObjects);
+		
+		$patternSourceDir = Config::$options["patternSourceDir"];
 		
 		foreach ($patternObjects as $name => $object) {
 			
@@ -80,8 +85,8 @@ class PatternData {
 			$isDir    = $object->isDir();
 			$isFile   = $object->isFile();
 			
-			$path     = str_replace(Config::$options["patternSourceDir"]."/","",$object->getPath());
-			$pathName = str_replace(Config::$options["patternSourceDir"]."/","",$object->getPathname());
+			$path     = str_replace($patternSourceDir."/","",$object->getPath());
+			$pathName = str_replace($patternSourceDir."/","",$object->getPathname());
 			$name     = $object->getFilename();
 			$depth    = substr_count($pathName,DIRECTORY_SEPARATOR);
 			
@@ -94,6 +99,7 @@ class PatternData {
 		
 		}
 		
+		// dispatch that the data is loaded
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.dataLoaded",$event);
 		
@@ -119,6 +125,7 @@ class PatternData {
 		$options                 = array();
 		$options["patternPaths"] = $patternPathSrc;
 		
+		// dispatch that the code helper is about to start
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.codeHelperStart",$event);
 		
@@ -126,6 +133,7 @@ class PatternData {
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
 		
+		// dispatch that the gather has ended
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.gatherEnd",$event);
 		
