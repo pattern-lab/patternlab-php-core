@@ -12,6 +12,8 @@
 
 namespace PatternLab;
 
+use \PatternLab\FileUtil;
+
 class Config {
 	
 	public    static $options        = array();
@@ -89,11 +91,13 @@ class Config {
 		// set-up the source & public dirs
 		self::$options["sourceDir"]        = rtrim(self::$options["sourceDir"],"\\");
 		self::$options["publicDir"]        = rtrim(self::$options["publicDir"],"\\");
-		self::$options["patternSourceDir"] = "/../../../".self::$options["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
-		self::$options["patternPublicDir"] = "/../../../".self::$options["publicDir"]."/patterns".DIRECTORY_SEPARATOR;
-		self::$options["sourceDir"]        = __DIR__."/../../../".self::$options["sourceDir"];
-		self::$options["publicDir"]        = __DIR__."/../../../".self::$options["publicDir"];
-		self::$options["pluginDir"]        = __DIR__."/../../../".self::$options["pluginDir"];
+		self::$options["patternSourceDir"] = FileUtil::normalizePath(__DIR__."/../../../".self::$options["sourceDir"]."/_patterns/");
+		self::$options["patternPublicDir"] = FileUtil::normalizePath(__DIR__."/../../../".self::$options["publicDir"]."/patterns/");
+		self::$options["sourceDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["sourceDir"]);
+		self::$options["publicDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["publicDir"]);
+		self::$options["pluginDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["pluginDir"]);
+		
+		print FileUtil::normalizePath(self::$options["publicDir"]);
 		
 		// populate some standard variables out of the config
 		foreach (self::$options as $key => $value) {
