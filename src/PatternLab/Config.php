@@ -142,6 +142,22 @@ class Config {
 	}
 	
 	/**
+	* Clean a given dir from the config file
+	* @param  {String}       directory to be cleaned
+	*
+	* @return {String}       cleaned directory
+	*/
+	protected static function cleanDir($dir) {
+		
+		$dir = trim($dir);
+		$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		$dir = FileUtil::normalizePath(__DIR__."/../../../".$dir);
+		
+		return $dir;
+		
+	}
+	
+	/**
 	* Use the default config as a base and update it with old config options. Write out a new user config.
 	* @param  {Array}        the old configuration file options
 	* @param  {Array}        the default configuration file options
