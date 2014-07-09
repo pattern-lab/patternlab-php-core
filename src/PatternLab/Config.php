@@ -97,8 +97,6 @@ class Config {
 		self::$options["publicDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["publicDir"]);
 		self::$options["pluginDir"]        = FileUtil::normalizePath(__DIR__."/../../../".self::$options["pluginDir"]);
 		
-		print FileUtil::normalizePath(self::$options["publicDir"]);
-		
 		// populate some standard variables out of the config
 		foreach (self::$options as $key => $value) {
 			
