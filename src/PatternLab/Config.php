@@ -31,8 +31,8 @@ class Config {
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
-			self::$userConfigPath = __DIR__.self::$userConfigPath;
-			self::$plConfigPath   = __DIR__.self::$plConfigPath;
+			self::$userConfigPath = FileUtil::normalizePath(__DIR__.self::$userConfigPath);
+			self::$plConfigPath   = FileUtil::normalizePath(__DIR__.self::$plConfigPath);
 			self::$dirAdded       = true;
 		}
 		
