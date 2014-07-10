@@ -41,45 +41,61 @@ class Installer {
 	 */
 	public static function postPackageInstall(Event $event) {
 		
+		// initialize the config for the pluginDir
+		Config::init(false);
+		
 		// get package info
-		$package = $event->getComposer()->getPackage();
-		$path    = $event->getComposer()->getInstallationManager()->getInstallPath($package);
-		$extra   = $package->getExtra();
-		$name    = $package->getName();
-		$type    = $package->getType();
+		$package   = $event->getOperation()->getPackage();
+		$extra     = $package->getExtra();
+		$type      = $package->getType();
+		$path      = Config::$options["pluginDir"]."/".$package->getName();
 		
-		// move assets to the public directory
-		if (isset($extra["assets"]["publicDir"])) {
-			$this->parseFileList($path,Config::$options["publicDir"],$composerConfig["assets"]["publicDir"]);
-		}
-		
-		// move assets to the source directory
-		if (isset($extra["assets"]["sourceDir"])) {
-			$this->parseFileList($path,Config::$options["sourceDir"],$composerConfig["assets"]["sourceDir"]);
-		}
-		
-		// see if we need to modify the config
-		if (isset($extra["config"]) {
+		// make sure we're only evaluating pattern lab packages
+		if (strpos($type,"patternlab-") !== false) {
 			
-			foreach ($extra["config"] as $optionInfo) {
+			// make sure that it has the name-spaced section of data to be parsed
+			if (isset($extra["patternlab"])) {
 				
-				$option = key($optionInfo);
-				$value  = $optionInfo[$option];
+				// rebase $extra
+				$extra = $extra["patternlab"];
 				
-				// check if we should notify the user of a change
-				if (isset(Config::$options[$option])) {
-					$stdin = fopen("php://stdin", "r");
-					print("update the config option '".$option."' with the value '".$value."'? Y/n\n");
-					$answer = strtolower(trim(fgets($stdin)));
-					fclose($stdin);
-					if ($answer == "y") {
-						Config::update($option,$value);
-						print "config option '".$option."' updated...\n";
-					} else {
-						print "config option '".$option."' not  updated...\n";
+				// move assets to the public directory
+				if (isset($extra["assets"]["publicDir"])) {
+					self::parseFileList($path,Config::$options["publicDir"],$extra["assets"]["publicDir"]);
+				}
+				
+				// move assets to the source directory
+				if (isset($extra["assets"]["sourceDir"])) {
+					self::parseFileList($path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
+				}
+				
+				// see if we need to modify the config
+				if (isset($extra["config"])) {
+					
+					foreach ($extra["config"] as $optionInfo) {
+						
+						// get config info
+						$option = key($optionInfo);
+						$value  = $optionInfo[$option];
+						
+						// check if we should notify the user of a change
+						if (isset(Config::$options[$option])) {
+							$stdin = fopen("php://stdin", "r");
+							print("update the config option '".$option."' with the value '".$value."'? Y/n\n");
+							$answer = strtolower(trim(fgets($stdin)));
+							fclose($stdin);
+							if ($answer == "y") {
+								Config::update($option,$value);
+								print "config option '".$option."' updated...\n";
+							} else {
+								print "config option '".$option."' not  updated...\n";
+							}
+						} else {
+							Config::update($option,$value);
+						}
+						
 					}
-				} else {
-					Config::update($option,$value);
+					
 				}
 				
 			}
