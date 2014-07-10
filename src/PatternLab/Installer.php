@@ -19,8 +19,6 @@ use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class Installer {
 	
-	protected $types = array("mustachehelper" => "mustache helper", "patternengine" => "pattern engine", "plugin" => "plug-in", "starterkit" => "starterKit", "styleguidekit" => "styleguideKit");
-	
 	/**
 	 * Make sure certain things are set-up before running composer's install
 	 */
