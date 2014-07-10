@@ -94,7 +94,7 @@ class Installer {
 	 * @param  {String}    the base directory for the destintation of the files (publicDir or sourceDir)
 	 * @param  {Array}     the list of files to be moved
 	 */
-	protected function parseFileList($sourceBase,$destinationBase,$fileList) {
+	protected static function parseFileList($sourceBase,$destinationBase,$fileList) {
 		
 		$fs = new Filesystem();
 		
