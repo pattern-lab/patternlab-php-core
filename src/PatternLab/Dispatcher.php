@@ -44,7 +44,7 @@ class Dispatcher {
 		
 		foreach($objects as $name => $object) {
 			
-			if ((strpos($name,"Listener.php") !== false) && (strpos($name,"plugins/vendor/") === false)) {
+			if ((strpos($name,"PatternLabListener.php") !== false) && (strpos($name,"plugins/vendor/") === false)) {
 				$dirs              = explode("/",$object->getPath());
 				$listenerName      = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
 				$listener          = new $listenerName();
