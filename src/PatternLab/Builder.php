@@ -19,6 +19,7 @@ use \PatternLab\PatternData\Exporters\NavItemsExporter;
 use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
 use \PatternLab\PatternData\Exporters\PatternPathDestsExporter;
 use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
+use \PatternLab\PatternEngine;
 use \PatternLab\Render;
 use \PatternLab\Template;
 
@@ -30,6 +31,9 @@ class Builder {
 	public function __construct() {
 		
 		//$this->patternCSS   = array();
+		
+		// set-up the pattern engine
+		PatternEngine::init();
 		
 		// set-up the various attributes for rendering templates
 		Template::init();
