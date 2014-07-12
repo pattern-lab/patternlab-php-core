@@ -27,7 +27,7 @@ class Render {
 	*/
 	public static function Pattern($filePath,$data) {
 		
-		$pattern = PatternEngine::$patternLoader->render($filePath,$data);
+		$pattern = Template::$patternLoader->render($filePath,$data);
 		return $pattern;
 		
 	}
@@ -41,7 +41,7 @@ class Render {
 	*/
 	public static function Header($html,$data) {
 		
-		$header = Helper::$htmlLoader->render($html,$data);
+		$header = Template::$htmlLoader->render($html,$data);
 		return $header;
 		
 	}
@@ -55,7 +55,7 @@ class Render {
 	*/
 	public static function Footer($html,$data) {
 		
-		$footer = Helper::$htmlLoader->render($html,$data);
+		$footer = Template::$htmlLoader->render($html,$data);
 		return $footer;
 		
 	}

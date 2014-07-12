@@ -20,7 +20,7 @@ use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
 use \PatternLab\PatternData\Exporters\PatternPathDestsExporter;
 use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\Render;
-use \PatternLab\Template\Helper;
+use \PatternLab\Template;
 
 class Builder {
 	
@@ -32,7 +32,7 @@ class Builder {
 		//$this->patternCSS   = array();
 		
 		// set-up the various attributes for rendering templates
-		Helper::init();
+		Template::init();
 		
 	}
 	

@@ -17,7 +17,7 @@ use \PatternLab\Data;
 use \PatternLab\PatternData;
 use \PatternLab\PatternEngine;
 use \PatternLab\Render;
-use \PatternLab\Template\Helper;
+use \PatternLab\Template;
 
 class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 	
@@ -35,9 +35,13 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$options                 = array();
 		$options["patternPaths"] = $this->patternPaths;
 		$patternExtension        = Config::$options["patternExtension"];
+		$htmlHead                = Template::$htmlHead;
+		$htmlFoot                = Template::$htmlFoot;
+		$patternHead             = Template::$patternHead;
+		$patternFoot             = Template::$patternFoot;
 		
-		// set-up the pattern engine
-		PatternEngine::init($options);
+		// load the pattern loader
+		Template::$patternLoader = PatternEngine::$instance->getPatternLoader($options);
 		
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
