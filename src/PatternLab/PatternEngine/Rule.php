@@ -18,7 +18,7 @@ class Rule {
 	
 	protected $engineProp;
 	
-	public function __construct($options) {
+	public function __construct() {
 		
 		// nothing here yet
 		

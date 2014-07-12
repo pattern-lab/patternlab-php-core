@@ -20,10 +20,10 @@ class PatternEngine {
 	/**
 	* Load a new instance of the Pattern Loader
 	*/
-	public static function init($options) {
+	public static function init() {
 		
 		$found = false;
-		self::loadRules($options);
+		self::loadRules();
 		
 		foreach (self::$rules as $rule) {
 			if ($rule->test()) {
