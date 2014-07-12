@@ -1,22 +1,20 @@
 <?php
 
 /*!
- * Pattern Engine Loader Class
+ * Pattern Engine Util Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Shared functions that are meant to be used across all loader types
+ * Shared functions that are meant to be used across all pattern engines
  *
  */
 
 namespace PatternLab\PatternEngine;
 
-class Loader {
+class Util {
 	
-	protected $patternEngine = "";
 	protected $patternPaths  = array();
-	protected $rules         = array();
 	
 	/**
 	* Set-up the pattern paths var
