@@ -12,10 +12,12 @@
 
 namespace PatternLab;
 
+use \PatternLab\Config;
+
 class PatternEngine {
 	
-	public static $patternLoader;
-	public static $rules          = array();
+	public static $rules = array();
+	public static $instance;
 	
 	/**
 	* Load a new instance of the Pattern Loader
@@ -27,40 +29,31 @@ class PatternEngine {
 		
 		foreach (self::$rules as $rule) {
 			if ($rule->test()) {
+				self::$instance = $rule;
 				$found = true;
-				self::$patternLoader = $rule->getInstance($options);
+				break;
 			}
 		}
 		
 		if (!$found) {
-			print "the supplied pattern extension didn't match a pattern loader rule. please check.\n";
+			print "the supplied pattern extension didn't match a pattern loader rule. please check...\n";
 			exit;
 		}
 		
 	}
 	
 	/**
-	* Load all of the rules related to Pattern Engine
+	* Load all of the rules related to Pattern Engines. They're located in the plugin dir
 	*/
-	public static function loadRules($options) {
+	public static function loadRules() {
 		
-		foreach (glob(__DIR__."/PatternEngine/Rules/*.php") as $filename) {
-			$rule = str_replace(".php","",str_replace(__DIR__."/PatternEngine/Rules/","",$filename));
-			if ($rule[0] != "_") {
-				$ruleClass     = "\PatternLab\PatternEngine\Rules\\".$rule;
-				self::$rules[] = new $ruleClass($options);
-			}
-		}
-		
-		// fine pattern engines that might be in plugins
-		$pluginDir = str_replace("src/PatternLab/../../","",\PatternLab\Config::$options["pluginDir"]);
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginDir), \RecursiveIteratorIterator::CHILD_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["pluginDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		foreach($objects as $name => $object) {
-			if ((strpos($name,"PatternEngineRule.php") !== false) && (strpos($name,"plugins/vendor/") === false)) {
-				$dirs               = explode("/",$object->getPath());
-				$patternEngineName  = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				self::$rules[]      = new $patternEngineName($options);
+			if (strpos($name,"PatternEngineRule.php") !== false) {
+				$dirs              = explode("/",$object->getPath());
+				$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
+				self::$rules[]     = new $patternEngineName();
 			}
 		}
 		
