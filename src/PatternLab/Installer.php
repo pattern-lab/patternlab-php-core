@@ -67,6 +67,11 @@ class Installer {
 					// rebase $extra
 					$extra = $extra["patternlab"];
 					
+					// move assets to the base directory
+					if (isset($extra["assets"]["baseDir"])) {
+						self::parseFileList($path,Config::$options["baseDir"],$extra["assets"]["baseDir"]);
+					}
+					
 					// move assets to the public directory
 					if (isset($extra["assets"]["publicDir"])) {
 						self::parseFileList($path,Config::$options["publicDir"],$extra["assets"]["publicDir"]);
