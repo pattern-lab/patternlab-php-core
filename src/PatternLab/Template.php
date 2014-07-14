@@ -60,6 +60,7 @@ class Template {
 		// add the generic loaders
 		$options                 = array();
 		$options["templatePath"] = $pluginDir."/".$styleguideKit."/views";
+		$options["partialsPath"] = $pluginDir."/".$styleguideKit."/views/partials";
 		self::$filesystemLoader  = PatternEngine::$instance->getFileSystemLoader($options);
 		self::$htmlLoader        = PatternEngine::$instance->getVanillaLoader();
 		
