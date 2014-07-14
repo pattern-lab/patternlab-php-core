@@ -1,4 +1,0 @@
-*.sw[m-p]
-phpunit
-build
-doc/build
