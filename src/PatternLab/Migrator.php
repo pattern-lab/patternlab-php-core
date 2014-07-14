@@ -8,11 +8,18 @@
  *
  * Moves any necessary files from core/ into source/ or public/
  *
+ * THIS CLASS ISN'T USED ANYMORE. KEEPING IT AROUND JUST IN CASE.
+ *
+ * Example migration.json:
+ * {
+ *     "sourcePath": "core/styleguide",
+ *     "destinationPath": "public/styleguide",
+ *     "checkType": "versionDiffDir"
+ *  }
+ *
  */
 
 namespace PatternLab;
-
-use \PatternLab\Fetch;
 
 class Migrator {
 	
