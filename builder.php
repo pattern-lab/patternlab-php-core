@@ -8,6 +8,10 @@
  *
  */
 
+use \PatternLab\Config;
+use \PatternLab\Dispatcher;
+use \PatternLab\Console;
+
 // check to see if json_decode exists. might be disabled in installs of PHP 5.5
 if (!function_exists("json_decode")) {
 	print "Please check that your version of PHP includes the JSON extension. It's required for Pattern Lab to run. Aborting.\n";
@@ -23,11 +27,11 @@ if (file_exists(__DIR__."/../vendor/autoload.php")) {
 }
 
 // load the options
-\PatternLab\Config::init();
+Config::init()
 
 // initialize the dispatcher & note that the config has been loaded
-\PatternLab\Dispatcher::init();
-\PatternLab\Dispatcher::$instance->dispatch("config.configLoadEnd");
+Dispatcher::init();
+Dispatcher::$instance->dispatch("config.configLoadEnd");
 
 // run the console
-\PatternLab\Console::run();
+Console::run();
