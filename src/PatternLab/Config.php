@@ -172,7 +172,7 @@ class Config {
 		// check if we should notify the user of a change
 		if (isset(Config::$options[$option])) {
 			$stdin = fopen("php://stdin", "r");
-			print("update the config option '".$option."' with the value '".$value."'? Y/n\n");
+			print("update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > ");
 			$answer = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			if ($answer == "y") {
