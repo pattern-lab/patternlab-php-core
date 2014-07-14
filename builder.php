@@ -18,6 +18,9 @@ if (!function_exists("json_decode")) {
 	exit;
 }
 
+// set-up the project base directory
+$baseDir = __DIR__."/../";
+
 // auto-load classes
 if (file_exists(__DIR__."/../vendor/autoload.php")) {
 	require(__DIR__."/../vendor/autoload.php");
@@ -27,7 +30,7 @@ if (file_exists(__DIR__."/../vendor/autoload.php")) {
 }
 
 // load the options
-Config::init()
+Config::init($baseDir);
 
 // initialize the dispatcher & note that the config has been loaded
 Dispatcher::init();

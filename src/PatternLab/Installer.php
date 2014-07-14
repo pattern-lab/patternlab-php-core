@@ -32,6 +32,8 @@ class Installer {
 		
 		if (!is_dir(Config::$options["pluginDir"])) {
 			mkdir(Config::$options["pluginDir"]);
+			$baseDir = __DIR__."/../../../";
+			Config::init($baseDir,false);
 		}
 		
 	}
@@ -68,6 +70,8 @@ class Installer {
 				if (isset($extra["assets"]["sourceDir"])) {
 					self::parseFileList($path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
 				}
+			$baseDir = __DIR__."/../../../";
+			Config::init($baseDir,false);
 				
 				// see if we need to modify the config
 				if (isset($extra["config"])) {
