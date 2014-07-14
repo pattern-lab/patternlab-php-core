@@ -18,7 +18,7 @@ class Config {
 	
 	public    static $options        = array();
 	protected static $userConfigPath = "config/config.ini";
-	protected static $plConfigPath   = "config/config.ini.default";
+	protected static $plConfigPath   = "core/config/config.ini.default";
 	protected static $cleanValues    = array("ie","id","patternStates","styleGuideExcludes");
 	protected static $dirAdded       = false;
 	
