@@ -41,8 +41,8 @@ class Config {
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
-			self::$userConfigPath = $baseDir.self::$userConfigPath;
-			self::$plConfigPath   = $baseDir.self::$plConfigPath;
+			self::$userConfigPath = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigPath;
+			self::$plConfigPath   = $baseDir.DIRECTORY_SEPARATOR.self::$plConfigPath;
 			self::$dirAdded       = true;
 		}
 		
@@ -96,9 +96,9 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		self::$options["sourceDir"]        = $baseDir.self::cleanDir(self::$options["sourceDir"]);
-		self::$options["publicDir"]        = $baseDir.self::cleanDir(self::$options["publicDir"]);
-		self::$options["pluginDir"]        = $baseDir.self::cleanDir(self::$options["pluginDir"]);
+		self::$options["sourceDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["sourceDir"]);
+		self::$options["publicDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["publicDir"]);
+		self::$options["pluginDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["pluginDir"]);
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		
