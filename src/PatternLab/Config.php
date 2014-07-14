@@ -170,19 +170,19 @@ class Config {
 	public static function updateConfigOption($optionName,$optionValue) {
 		
 		// check if we should notify the user of a change
-		if (isset(Config::$options[$option])) {
+		if (isset(Config::$options[$optionName])) {
 			$stdin = fopen("php://stdin", "r");
 			print("update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > ");
 			$answer = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			if ($answer == "y") {
-				self::writeUpdateConfigOption($option,$value);
-				print "config option '".$option."' updated...\n";
+				self::writeUpdateConfigOption($optionName,$optionValue);
+				print "config option '".$optionName."' updated...\n";
 			} else {
-				print "config option '".$option."' not  updated...\n";
+				print "config option '".$optionName."' not  updated...\n";
 			}
 		} else {
-			self::writeUpdateConfigOption($option,$value);
+			self::writeUpdateConfigOption($optionName,$optionValue);
 		}
 		
 	}
