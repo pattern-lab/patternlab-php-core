@@ -13,7 +13,6 @@ namespace PatternLab\Console\Commands;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
-use \PatternLab\Snapshot;
 
 class VersionCommand extends Command {
 	
