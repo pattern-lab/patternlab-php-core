@@ -37,6 +37,7 @@ class Config {
 		
 		// normalize the baseDir
 		$baseDir = FileUtil::normalizePath($baseDir);
+		self::$options["baseDir"] = $baseDir;
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
