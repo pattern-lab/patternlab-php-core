@@ -17,8 +17,8 @@ use \PatternLab\FileUtil;
 class Config {
 	
 	public    static $options        = array();
-	protected static $userConfigPath = "/../../../config/config.ini";
-	protected static $plConfigPath   = "/../../config/config.ini.default";
+	protected static $userConfigPath = "config/config.ini";
+	protected static $plConfigPath   = "config/config.ini.default";
 	protected static $cleanValues    = array("ie","id","patternStates","styleGuideExcludes");
 	protected static $dirAdded       = false;
 	
@@ -27,15 +27,23 @@ class Config {
 	* If it's an old config or no config exists this will update and generate it.
 	* @param  {Boolean}       whether we should print out the status of the config being loaded
 	*/
-	public static function init($verbose = true) {
+	public static function init($baseDir = "", $verbose = true) {
+		
+		// make sure a base dir was supplied
+		if (empty($baseDir)) {
+			print "need a base directory to initialize the config class...";
+			exit;
+		}
+		
+		// normalize the baseDir
+		$baseDir = FileUtil::normalizePath($baseDir);
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
-			self::$userConfigPath = FileUtil::normalizePath(__DIR__.self::$userConfigPath);
-			self::$plConfigPath   = FileUtil::normalizePath(__DIR__.self::$plConfigPath);
+			self::$userConfigPath = $baseDir.self::$userConfigPath;
+			self::$plConfigPath   = $baseDir.self::$plConfigPath;
 			self::$dirAdded       = true;
 		}
-		
 		
 		// make sure migrate doesn't happen by default
 		$migrate     = false;
@@ -89,9 +97,9 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		self::$options["sourceDir"]        = self::cleanDir(self::$options["sourceDir"]);
-		self::$options["publicDir"]        = self::cleanDir(self::$options["publicDir"]);
-		self::$options["pluginDir"]        = self::cleanDir(self::$options["pluginDir"]);
+		self::$options["sourceDir"]        = $baseDir.self::cleanDir(self::$options["sourceDir"]);
+		self::$options["publicDir"]        = $baseDir.self::cleanDir(self::$options["publicDir"]);
+		self::$options["pluginDir"]        = $baseDir.self::cleanDir(self::$options["pluginDir"]);
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		
@@ -148,8 +156,8 @@ class Config {
 	protected static function cleanDir($dir) {
 		
 		$dir = trim($dir);
+		$dir = ($dir[0] == DIRECTORY_SEPARATOR) ? ltrim($dir, DIRECTORY_SEPARATOR) : $dir;
 		$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
-		$dir = FileUtil::normalizePath(__DIR__."/../../../".$dir);
 		
 		return $dir;
 		
