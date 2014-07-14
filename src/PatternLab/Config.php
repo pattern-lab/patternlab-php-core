@@ -78,8 +78,6 @@ class Config {
 				print "upgrading your version of pattern lab...\n";
 				print "checking for migrations...\n";
 			}
-			$m = new Migrator;
-			$m->migrate(true);
 			if ($migrate) {
 				if (!@copy(self::$plConfigPath, self::$userConfigPath)) {
 					print "Please make sure that Pattern Lab can write a new config to config/.\n";
