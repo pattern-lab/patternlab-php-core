@@ -25,7 +25,8 @@ $baseDir = __DIR__."/../";
 if (file_exists($baseDir."vendor/autoload.php")) {
 	require($baseDir."vendor/autoload.php");
 } else {
-	print "vendor should exist...\n";
+	print "it doesn't appear that pattern lab has been set-up yet...\n";
+	print "please install pattern lab's dependicies by typing: php core/bin/composer.phar --install...\n";
 	exit;
 }
 
