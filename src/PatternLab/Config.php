@@ -162,6 +162,51 @@ class Config {
 	}
 	
 	/**
+	* Update a single config option
+	* @param  {String}       the name of the option to be changed
+	* @param  {String}       the new value of the option to be changed
+	*/
+	public static function updateConfigOption($optionName,$optionValue) {
+		
+		// check if we should notify the user of a change
+		if (isset(Config::$options[$option])) {
+			$stdin = fopen("php://stdin", "r");
+			print("update the config option '".$option."' with the value '".$value."'? Y/n\n");
+			$answer = strtolower(trim(fgets($stdin)));
+			fclose($stdin);
+			if ($answer == "y") {
+				self::writeUpdateConfigOption($option,$value);
+				print "config option '".$option."' updated...\n";
+			} else {
+				print "config option '".$option."' not  updated...\n";
+			}
+		} else {
+			self::writeUpdateConfigOption($option,$value);
+		}
+		
+	}
+	
+	/**
+	* Write out the new config option value
+	* @param  {String}       the name of the option to be changed
+	* @param  {String}       the new value of the option to be changed
+	*/
+	protected static function writeUpdateConfigOption($optionName,$optionValue) {
+		
+		$configOutput = "";
+		$options      = parse_ini_file(self::$userConfigPath);
+		$options[$optionName] = $optionValue;
+		
+		foreach ($options as $key => $value) {
+			$configOutput .= $key." = \"".$value."\"\n";
+		}
+		
+		// write out the new config file
+		file_put_contents(self::$userConfigPath,$configOutput);
+		
+	}
+	
+	/**
 	* Use the default config as a base and update it with old config options. Write out a new user config.
 	* @param  {Array}        the old configuration file options
 	* @param  {Array}        the default configuration file options
@@ -187,26 +232,6 @@ class Config {
 		file_put_contents(self::$userConfigPath,$configOutput);
 		
 		return $defaultOptions;
-		
-	}
-	
-	/**
-	* Update a single config option
-	* @param  {String}       the name of the option to be changed
-	* @param  {String}       the new value of the option to be changed
-	*/
-	public static function update($optionName,$optionValue) {
-		
-		$configOutput = "";
-		$options      = parse_ini_file(self::$userConfigPath);
-		$options[$optionName] = $optionValue;
-		
-		foreach ($options as $key => $value) {
-			$configOutput .= $key." = \"".$value."\"\n";
-		}
-		
-		// write out the new config file
-		file_put_contents(self::$userConfigPath,$configOutput);
 		
 	}
 	

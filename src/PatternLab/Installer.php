@@ -86,21 +86,8 @@ class Installer {
 							$option = key($optionInfo);
 							$value  = $optionInfo[$option];
 							
-							// check if we should notify the user of a change
-							if (isset(Config::$options[$option])) {
-								$stdin = fopen("php://stdin", "r");
-								print("update the config option '".$option."' with the value '".$value."'? Y/n\n");
-								$answer = strtolower(trim(fgets($stdin)));
-								fclose($stdin);
-								if ($answer == "y") {
-									Config::update($option,$value);
-									print "config option '".$option."' updated...\n";
-								} else {
-									print "config option '".$option."' not  updated...\n";
-								}
-							} else {
-								Config::update($option,$value);
-							}
+							// update the config option
+							Config::updateConfigOption($option,$value);
 							
 						}
 						
