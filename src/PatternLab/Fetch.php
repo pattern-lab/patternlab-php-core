@@ -15,7 +15,7 @@ namespace PatternLab;
 class Fetch {
 	
 	/**
-	 * Fetch a package from GitHub
+	 * Fetch a package using Composer
 	 * @param  {String}    the path to the package to be downloaded
 	 *
 	 * @return {String}    the modified file contents
@@ -27,6 +27,7 @@ class Fetch {
 			exit;
 		}
 		
+		// run composer
 		$composerPath = __DIR__."/../../bin/composer.phar";
 		passthru("php ".$composerPath." require ".$package);
 		
