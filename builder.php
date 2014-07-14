@@ -22,8 +22,8 @@ if (!function_exists("json_decode")) {
 $baseDir = __DIR__."/../";
 
 // auto-load classes
-if (file_exists(__DIR__."/../vendor/autoload.php")) {
-	require(__DIR__."/../vendor/autoload.php");
+if (file_exists($baseDir."vendor/autoload.php")) {
+	require($baseDir."vendor/autoload.php");
 } else {
 	print "vendor should exist...\n";
 	exit;
