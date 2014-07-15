@@ -249,32 +249,32 @@ class Builder {
 	*/
 	protected function generateStyleguide() {
 		
-		if (!is_dir(Config::$options["publicDir"]."/styleguide/html/")) {
-			
-			print "ERROR: the main style guide wasn't written out. make sure public/styleguide exists. can copy core/styleguide\n";
-			
-		} else {
-			
-			// grab the partials into a data object for the style guide
-			$ppExporter                 = new PatternPartialsExporter();
-			$partials                   = $ppExporter->run();
-			
-			// add the pattern data so it can be exported
-			$patternData = array();
-			
-			// add the pattern lab specific mark-up
-			$partials["patternLabHead"] = Render::Header(Template::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
-			$partials["patternLabFoot"] = Render::Footer(Template::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
-			
-			$header                     = Render::Header(Template::$patternHead,$partials);
-			$code                       = Template::$filesystemLoader->render("viewall",$partials);
-			$footer                     = Render::Footer(Template::$patternFoot,$partials);
-			
-			$styleGuidePage             = $header.$code.$footer;
-			
-			file_put_contents(Config::$options["publicDir"]."/styleguide/html/styleguide.html",$styleGuidePage);
-			
+		if (!is_dir(Config::$options["publicDir"]."/styleguide/")) {
+			mkdir(Config::$options["publicDir"]."/styleguide/");
 		}
+		
+		if (!is_dir(Config::$options["publicDir"]."/styleguide/html/")) {
+			mkdir(Config::$options["publicDir"]."/styleguide/html/");
+		}
+			
+		// grab the partials into a data object for the style guide
+		$ppExporter                 = new PatternPartialsExporter();
+		$partials                   = $ppExporter->run();
+		
+		// add the pattern data so it can be exported
+		$patternData = array();
+		
+		// add the pattern lab specific mark-up
+		$partials["patternLabHead"] = Render::Header(Template::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
+		$partials["patternLabFoot"] = Render::Footer(Template::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+		
+		$header                     = Render::Header(Template::$patternHead,$partials);
+		$code                       = Template::$filesystemLoader->render("viewall",$partials);
+		$footer                     = Render::Footer(Template::$patternFoot,$partials);
+		
+		$styleGuidePage             = $header.$code.$footer;
+		
+		file_put_contents(Config::$options["publicDir"]."/styleguide/html/styleguide.html",$styleGuidePage);
 		
 	}
 	
