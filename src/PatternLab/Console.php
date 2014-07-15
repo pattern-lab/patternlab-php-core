@@ -30,7 +30,7 @@ class Console {
 		
 		// double-check this is being run from the command line
 		if (php_sapi_name() != 'cli') {
-			print "The builder script can only be run from the command line.\n";
+			print "The console can only be run from the command line.\n";
 			exit;
 		}
 		
