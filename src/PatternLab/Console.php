@@ -37,12 +37,12 @@ class Console {
 		self::$self = $_SERVER["PHP_SELF"];
 		
 		$event = new ConsoleEvent($options = array());
-		Dispatcher::$instance->dispatch("console.loadCommandStart",$event);
+		Dispatcher::$instance->dispatch("console.loadCommandsStart",$event);
 		
 		// loadCommands
 		self::loadCommands();
 		
-		Dispatcher::$instance->dispatch("console.loadCommandEnd",$event);
+		Dispatcher::$instance->dispatch("console.loadCommandsEnd",$event);
 		
 		// get what was passed on the command line
 		self::$options = getopt(self::$optionsShort,self::$optionsLong);
