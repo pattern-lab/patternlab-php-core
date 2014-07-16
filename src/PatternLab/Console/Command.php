@@ -28,7 +28,7 @@ class Command {
 	* @return {Boolean}     the result of the test
 	*/
 	public function test($command) {
-		return ($command == $this->command[0]);
+		return ($command == str_replace(":","",$this->command));
 	}
 	
 }
