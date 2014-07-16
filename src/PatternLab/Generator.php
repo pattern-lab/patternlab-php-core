@@ -12,6 +12,7 @@
 
 namespace PatternLab;
 
+use \PatternLab\Annotations;
 use \PatternLab\Builder;
 use \PatternLab\Config;
 use \PatternLab\Console;
@@ -68,6 +69,9 @@ class Generator extends Builder {
 		
 		// gather all of the various pattern info
 		PatternData::gather();
+		
+		// gather the annotations
+		Annotations::gather();
 		
 		// clean the public directory to remove old files
 		if ((Config::$options["cleanPublic"] == "true") && $moveStatic) {

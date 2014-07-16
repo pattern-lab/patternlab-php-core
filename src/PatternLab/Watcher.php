@@ -16,6 +16,7 @@
 
 namespace PatternLab;
 
+use \PatternLab\Annotations;
 use \PatternLab\Builder;
 use \PatternLab\Config;
 use \PatternLab\Console;
@@ -264,6 +265,7 @@ class Watcher extends Builder {
 		
 		Data::gather();
 		PatternData::gather();
+		Annotations::gather();
 		
 		$this->generateIndex();
 		$this->generateStyleguide();
