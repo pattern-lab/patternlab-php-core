@@ -28,7 +28,7 @@ class Console {
 	private static $self             = "";
 	private static $zTracker         = 1;
 	
-	public static function run() {
+	public static function init() {
 		
 		// double-check this is being run from the command line
 		if (php_sapi_name() != 'cli') {
@@ -38,6 +38,29 @@ class Console {
 		
 		self::$self = $_SERVER["PHP_SELF"];
 		
+		// set-up the cli coloring
+		self::$color = new Color();
+		
+		// define the pattern lab color theme
+		$colorTheme = array();
+		$colorTheme["h1"]       = "bold";
+		$colorTheme["h2"]       = "underline";
+		$colorTheme["optional"] = "italic";
+		$colorTheme["desc"]     = "green";
+		$colorTheme["enter"]    = "blue";
+		$colorTheme["ok"]       = "green";
+		$colorTheme["info"]     = "cyan";
+		$colorTheme["warning"]  = "yellow";
+		$colorTheme["error"]    = "red";
+		$colorTheme["bold"]     = "bold";
+		self::$color->setTheme($colorTheme);
+		
+	}
+	
+	
+	public static function run() {
+		
+		// send out an event
 		$event = new ConsoleEvent($options = array());
 		Dispatcher::$instance->dispatch("console.loadCommandsStart",$event);
 		
