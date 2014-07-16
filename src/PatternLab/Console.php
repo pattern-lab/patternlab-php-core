@@ -67,6 +67,7 @@ class Console {
 		// loadCommands
 		self::loadCommands();
 		
+		// send out an event
 		Dispatcher::$instance->dispatch("console.loadCommandsEnd",$event);
 		
 		// get what was passed on the command line
