@@ -21,24 +21,23 @@ class GenerateCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "g";
+		$this->command = "generate";
 		
-		Console::setCommand($this->command,"generate","Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/");
-		Console::setCommandOption($this->command,"p","patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:");
-		Console::setCommandOption($this->command,"n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
-		Console::setCommandOption($this->command,"c","enablecss","Generate CSS for each pattern. Resource intensive.","To run and generate the CSS for each pattern:");
+		Console::setCommand($this->command,"Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/","g");
+		Console::setCommandOption($this->command,"patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:","p");
+		Console::setCommandOption($this->command,"nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:","n");
 		
 	}
 	
 	public function run() {
 		
 		// set-up required vars
-		$enableCSS     = Console::findCommandOption("c|enablecss");
-		$moveStatic    = (Console::findCommandOption("p|patternsonly")) ? false : true;
-		$noCacheBuster = Console::findCommandOption("n|nocache");
+		$options                  = array();
+		$options["moveStatic"]    = (Console::findCommandOption("p|patternsonly")) ? false : true;
+		$options["noCacheBuster"] = Console::findCommandOption("n|nocache");
 		
 		$g = new Generator();
-		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
+		$g->generate($options);
 		$g->printSaying();
 		
 	}

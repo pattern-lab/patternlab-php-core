@@ -22,32 +22,30 @@ class WatchCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "w";
+		$this->command = "watch";
 		
-		Console::setCommand($this->command,"watch","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
-		Console::setCommandOption($this->command,"p","patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:");
-		Console::setCommandOption($this->command,"n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
-		Console::setCommandOption($this->command,"r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
+		Console::setCommand($this->command,"Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.","w");
+		Console::setCommandOption($this->command,"patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:","p");
+		Console::setCommandOption($this->command,"nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:","n");
+		Console::setCommandOption($this->command,"autoreload","Turn on the auto-reload service.","To turn on auto-reload:","r");
 		
 	}
 	
 	public function run() {
 		
 		// set-up required vars
-		$enableCSS     = Console::findCommandOption("c|enablecss");
-		$moveStatic    = (Console::findCommandOption("p|patternsonly")) ? false : true;
-		$noCacheBuster = Console::findCommandOption("n|nocache");
-		
-		// CSS feature should't be used with watch
-		$enableCSS = false;
+		$options                  = array();
+		$options["moveStatic"]    = (Console::findCommandOption("p|patternsonly")) ? false : true;
+		$options["noCacheBuster"] = Console::findCommandOption("n|nocache");
+		$options["autoReload"]    = Console::findCommandOption("r|autoreload");
 		
 		// load the generator
 		$g = new Generator();
-		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
+		$g->generate($options);
 		
 		// load the watcher
 		$w = new Watcher();
-		$w->watch($autoReload,$moveStatic,$noCacheBuster);
+		$w->watch($options);
 		
 	}
 	

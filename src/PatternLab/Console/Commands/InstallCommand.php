@@ -20,9 +20,9 @@ class InstallCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "i";
+		$this->command = "install";
 		
-		Console::setCommand($this->command,"install","Install Pattern Lab's dependencies","The install command will run the included version of Composer to install Pattern Lab's dependencies.");
+		Console::setCommand($this->command,"Install Pattern Lab's dependencies","The install command will run the included version of Composer to install Pattern Lab's dependencies.","i");
 		
 	}
 	

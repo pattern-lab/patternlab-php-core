@@ -19,9 +19,10 @@ class HelpCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "h:";
+		$this->command = "help:";
 		
-		Console::setCommand($this->command,"help:","Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.");
+		Console::setCommand($this->command,"Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.","h:");
+		Console::setCommandSample($this->command,"To get help for a particular command:","<command-name>");
 		
 	}
 	
@@ -29,7 +30,7 @@ class HelpCommand extends Command {
 		
 		if ($helpCommand = Console::findCommandValue("h|help")) {
 			$helpCommand = str_replace("-","",$helpCommand);
-			if ($commandFound = Console::findCommandShort($helpCommand)) {
+			if ($commandFound = Console::findCommandLong($helpCommand)) {
 				Console::writeHelpCommand($commandFound);
 			} else {
 				Console::writeHelp();
