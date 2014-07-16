@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 
 class PatternEngine {
 	
@@ -36,7 +37,7 @@ class PatternEngine {
 		}
 		
 		if (!$found) {
-			print "the supplied pattern extension didn't match a pattern loader rule. please check...\n";
+			Console::writeLine("<error>the supplied pattern extension didn't match a pattern loader rule...</error>");
 			exit;
 		}
 		

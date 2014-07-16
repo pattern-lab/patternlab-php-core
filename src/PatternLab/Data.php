@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Dispatcher;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
@@ -120,7 +121,7 @@ class Data {
 		if (is_array(self::$store)) {
 			foreach (self::$reservedKeys as $reservedKey) {
 				if (array_key_exists($reservedKey,self::$store)) {
-					print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
+					Console::writeLine("<warning>\"".$reservedKey."\" is a reserved key in Pattern Lab. the data using that key will be overwritten. please choose a new key...</warning>");
 				}
 			}
 		}

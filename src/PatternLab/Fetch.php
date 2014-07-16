@@ -12,6 +12,8 @@
 
 namespace PatternLab;
 
+use \PatternLab\Console;
+
 class Fetch {
 	
 	/**
@@ -23,7 +25,7 @@ class Fetch {
 	public function fetch($package = "") {
 		
 		if (empty($package)) {
-			print "please provide a path for the package before trying to fetch it...\n";
+			Console::writeLine("<error>please provide a path for the package before trying to fetch it...</error>");
 			exit;
 		}
 		

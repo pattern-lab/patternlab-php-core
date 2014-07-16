@@ -12,6 +12,7 @@
 
 namespace PatternLab;
 
+use \PatternLab\Console;
 use \PatternLab\FileUtil;
 
 class Config {
@@ -31,8 +32,7 @@ class Config {
 		
 		// make sure a base dir was supplied
 		if (empty($baseDir)) {
-			print "need a base directory to initialize the config class...";
-			exit;
+			Console::writeLine("<error>need a base directory to initialize the config class...</error>"); exit;
 		}
 		
 		// normalize the baseDir
@@ -52,8 +52,7 @@ class Config {
 		
 		// double-check the default config file exists
 		if (!file_exists(self::$plConfigPath)) {
-			print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically.\n";
-			exit;
+			Console::writeLine("<error>make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically...</error>"); exit;
 		}
 		
 		// set the default config using the pattern lab config
@@ -61,7 +60,7 @@ class Config {
 		
 		// check to see if the user config exists, if not create it
 		if ($verbose) {
-			print "configuring pattern lab...\n";
+			Console::writeLine("configuring pattern lab...");
 		}
 		
 		if (!file_exists(self::$userConfigPath)) {
@@ -76,12 +75,11 @@ class Config {
 		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
 			if ($verbose) {
-				print "upgrading your version of pattern lab...\n";
-				print "checking for migrations...\n";
+				Console::writeLine("<info>upgrading your version of pattern lab...</info>");
 			}
 			if ($migrate) {
 				if (!@copy(self::$plConfigPath, self::$userConfigPath)) {
-					print "Please make sure that Pattern Lab can write a new config to config/.\n";
+					Console::writeLine("<error>make sure that Pattern Lab can write a new config to ".self::$userConfigPath."...</error>");
 					exit;
 				}
 			} else {
@@ -91,7 +89,7 @@ class Config {
 		
 		// making sure the config isn't empty
 		if (empty(self::$options) && $verbose) {
-			print "A set of configuration options is required to use Pattern Lab.\n";
+			Console::writeLine("<error>a set of configuration options is required to use Pattern Lab...");
 			exit;
 		}
 		
@@ -172,14 +170,14 @@ class Config {
 		// check if we should notify the user of a change
 		if (isset(Config::$options[$optionName])) {
 			$stdin = fopen("php://stdin", "r");
-			print("update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > ");
+			Console::writeLine("<info>update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > </info><nophpeol>");
 			$answer = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			if ($answer == "y") {
 				self::writeUpdateConfigOption($optionName,$optionValue);
-				print "config option '".$optionName."' updated...\n";
+				Console::writeLine("<ok>config option '".$optionName."' updated...</ok>", false, true);
 			} else {
-				print "config option '".$optionName."' not  updated...\n";
+				Console::writeLine("<warning>config option '".$optionName."' not  updated...</warning>", false, true);
 			}
 		} else {
 			self::writeUpdateConfigOption($optionName,$optionValue);

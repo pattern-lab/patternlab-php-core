@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 
 class FileUtil {
 
@@ -39,7 +40,7 @@ class FileUtil {
 		self::moveFile($fileName,str_replace($find, $replace, $fileName));
 		Util::updateChangeTime();
 		if ($copy != "") {
-			print $fileName." ".$copy."...\n";
+			Console::writeLine($fileName." ".$copy."...");
 		}
 	}
 

@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \Seld\JsonLint;
+use \PatternLab\Console;
 
 class JSON {
 	
@@ -40,13 +41,12 @@ class JSON {
 	* @param  {String}       the file that generated the error
 	*/
 	public static function lastErrorMsg($file,$message,$data) {
-		print "\nThe JSON file, ".$file.", wasn't loaded. The error: ".$message."\n";
+		Console::writeLine(PHP_EOL."<error>The JSON file, ".$file.", wasn't loaded. The error: ".$message."</error>");
 		if ($message == "Syntax error, malformed JSON") {
-			print "\n";
+			Console::writeLine("");
 			$parser = new JsonLint\JsonParser();
 			$error  = $parser->lint($data);
-			print $error->getMessage();
-			print "\n\n";
+			Console::writeLine("<error>".$error->getMessage()."</error>", false, true);
 		}
 	}
 	

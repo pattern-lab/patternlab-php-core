@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 
 class Template {
 	
@@ -31,12 +32,12 @@ class Template {
 		
 		// make sure config vars exist
 		if (!isset(Config::$options["patternExtension"])) {
-			print "no pattern extension. make sure you've loaded one.\n";
+			Console::writeLine("<error>the pattern extension config option needs to be set...</error>");
 			exit;
 		}
 		
 		if (!isset(Config::$options["styleguideKit"])) {
-			print "no styleguideKit to use. please add it to the config.\n";
+			Console::writeLine("<error>the styleguideKit config option needs to be set...</error>");
 			exit;
 		}
 		

@@ -13,6 +13,7 @@
 namespace PatternLab\PatternData\Helpers;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\PatternData;
 
 class LineageHelper extends \PatternLab\PatternData\Helper {
@@ -55,7 +56,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 						} else {
 							
 							if (strpos($lineage, '/') === false) {
-								print "You may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern.\n";
+								Console::writeLine("<warning>you may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern...</warning>");
 							}
 							
 						}

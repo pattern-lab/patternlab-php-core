@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Builder;
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
 use \PatternLab\FileUtil;
@@ -48,8 +49,10 @@ class Generator extends Builder {
 			$starttime = $mtime;
 		}
 		
-		if ($noCacheBuster) {
-			Config::$options["cacheBuster"] = 0;
+		// double-checks options was properly set
+		if (empty($options)) {
+			Console::writeLine("<error>need to pass options to generate...</error>");
+			exit;
 		}
 		
 		// set the default vars
@@ -126,7 +129,7 @@ class Generator extends Builder {
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		Util::updateChangeTime();
 		
-		print "your site has been generated...\n";
+		Console::writeLine("your site has been generated...");
 		
 		// print out how long it took to generate the site
 		if ($timePL) {
@@ -136,7 +139,7 @@ class Generator extends Builder {
 			$endtime = $mtime;
 			$totaltime = ($endtime - $starttime);
 			$mem = round((memory_get_peak_usage(true)/1024)/1024,2);
-			print "site generation took ".$totaltime." seconds and used ".$mem."MB of memory...\n";
+			Console::writeLine("site generation took ".$totaltime." seconds and used ".$mem."MB of memory...");
 		}
 		
 	}
@@ -168,7 +171,7 @@ class Generator extends Builder {
 		                   "i don't have time for a grudge match with every poseur in a parka"
 		                );
 		if (isset($sayings[$randomNumber])) {
-			print $sayings[$randomNumber]."...\n";
+			Console::writeLine("<".$color.">".$sayings[$randomNumber]."...</".$color.">");
 		}
 		
 	}

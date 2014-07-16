@@ -18,6 +18,7 @@ namespace PatternLab;
 
 use \PatternLab\Builder;
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Data;
 use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
@@ -44,7 +45,7 @@ class Watcher extends Builder {
 		
 		// double-checks options was properly set
 		if (empty($options)) {
-			print "need to pass options to generate";
+			Console::writeLine("<error>need to pass options to generate...</error>");
 			exit;
 		}
 		
@@ -57,7 +58,7 @@ class Watcher extends Builder {
 		if ($reload) {
 			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
-			print "starting page auto-reload...\n";
+			Console::writeLine("starting page auto-reload...");
 		}
 		
 		if ($noCacheBuster) {
@@ -70,7 +71,7 @@ class Watcher extends Builder {
 		
 		$o->patterns = new \stdClass();
 		
-		print "watching your site for changes...\n";
+		Console::writeLine("watching your site for changes...");
 		
 		// default vars
 		$publicDir = Config::$options["publicDir"];
@@ -99,7 +100,6 @@ class Watcher extends Builder {
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
 					$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
-					
 					
 					// make sure the pattern still exists in source just in case it's been deleted during the iteration
 					if (file_exists($name)) {
@@ -198,7 +198,7 @@ class Watcher extends Builder {
 						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($publicDir."/".$fileName)) {
 							mkdir($publicDir."/".$fileName);
 							$o->$fileName = "dir created"; // placeholder
-							print $fileName."/ directory was created...\n";
+							Console::writeLine($fileName."/ directory was created...");
 						}
 						
 						// check to see if it's a new file or a file that has changed
@@ -275,13 +275,13 @@ class Watcher extends Builder {
 		
 		if ($verbose) {
 			if ($message == "added") {
-				print $fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...\n";
+				Console::writeLine($fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...");
 			} elseif ($message == "removed") {
-				print $fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+				Console::writeLine($fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...");
 			} elseif ($message == "hidden") {
-				print $fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+				Console::writeLine($fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...");
 			} else {
-				print $fileName." changed...\n";
+				Console::writeLine($fileName." changed...");
 			}
 		}
 	}
