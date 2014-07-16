@@ -12,6 +12,7 @@
 
 namespace PatternLab;
 
+use \PatternLab\Annotations;
 use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\Parsers\Documentation;
@@ -78,59 +79,13 @@ class Builder {
 		
 	}
 	
+	/**
+	* Generates the annotations js file
+	*/
 	protected function generateAnnotations() {
 		
-		$annotations             = array();
-		$annotations["comments"] = array();
-		
-		// iterate over all of the files in the annotations dir
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_annotations");
-		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach ($objects as $name => $object) {
-			
-			// if it's an .md file parse and generate the proper info
-			if ($object->isFile() && ($object->getExtension() == "md")) {
-				
-				$data    = array();
-				$data[0] = array();
-				
-				$text = file_get_contents($object->getPathname());
-				list($yaml,$markdown) = Documentation::parse($text);
-				
-				if (isset($yaml["el"]) || isset($yaml["selector"])) {
-					$data[0]["el"]  = (isset($yaml["el"])) ? $yaml["el"] : $yaml["selector"];
-				} else {
-					$data[0]["el"]  = "#someimpossibleselector";
-				}
-				$data[0]["title"]   = isset($yaml["title"]) ? $yaml["title"] : "";
-				$data[0]["comment"] = $markdown;
-				
-				$annotations["comments"] = array_merge($annotations["comments"],$data);
-				
-			}
-			
-		}
-		
-		// read in the old style annotations.js, modify the data and generate JSON array to merge
-		if (file_exists(Config::$options["sourceDir"]."/_annotations/annotations.js")) {
-			$text = file_get_contents(Config::$options["sourceDir"]."/_annotations/annotations.js");
-			$text = str_replace("var comments = ","",$text);
-			$text = rtrim($text,";");
-			$data = json_decode($text,true);
-			if ($jsonErrorMessage = JSON::hasError()) {
-				JSON::lastErrorMsg("_annotations/annotations.js",$jsonErrorMessage,$data);
-			}
-		}
-		
-		// merge in any data from the old file
-		$annotations["comments"] = array_merge($annotations["comments"],$data["comments"]);
-		
 		// encode the content so it can be written out
-		$json = json_encode($annotations);
+		$json = json_encode(Annotations::$store);
 		
 		// make sure annotations/ exists
 		if (!is_dir(Config::$options["publicDir"]."/annotations")) {
