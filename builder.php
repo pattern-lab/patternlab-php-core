@@ -31,6 +31,7 @@ if (file_exists($baseDir."vendor/autoload.php")) {
 }
 
 // load the options
+Console::init();
 Config::init($baseDir);
 
 // initialize the dispatcher & note that the config has been loaded

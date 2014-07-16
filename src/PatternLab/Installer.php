@@ -48,6 +48,9 @@ class Installer {
 		
 		if (class_exists("\PatternLab\Config")) {
 			
+			// initialize the console to print out any issues
+			Console::init();
+			
 			// initialize the config for the pluginDir
 			$baseDir = __DIR__."/../../../";
 			Config::init($baseDir,false);
