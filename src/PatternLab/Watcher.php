@@ -40,7 +40,18 @@ class Watcher extends Builder {
 	* @param  {Boolean}       decide if the reload server should be turned on
 	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function watch($reload = false, $moveStatic = true, $noCacheBuster = false) {
+	public function watch($options = array()) {
+		
+		// double-checks options was properly set
+		if (empty($options)) {
+			print "need to pass options to generate";
+			exit;
+		}
+		
+		// set default attributes
+		$reload        = (isset($options["autoReload"])) ? $options["autoReload"] : false;
+		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
+		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {

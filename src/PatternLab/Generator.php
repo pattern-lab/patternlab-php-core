@@ -37,7 +37,7 @@ class Generator extends Builder {
 	* @param  {Boolean}       decide if CSS should be parsed and saved. performance hog.
 	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function generate($enableCSS = false, $moveStatic = true, $noCacheBuster = false) {
+	public function generate($options = array()) {
 		
 		$timePL = true; // track how long it takes to generate a PL site
 		
@@ -52,15 +52,12 @@ class Generator extends Builder {
 			Config::$options["cacheBuster"] = 0;
 		}
 		
-		if ($enableCSS) {
-			
-			// enable CSS globally throughout PL
-			$this->enableCSS = true;
-			
-			// initialize CSS rule saver
-			$this->initializeCSSRuleSaver();
-			print "CSS generation enabled. This could take a few seconds...\n";
-			
+		// set the default vars
+		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
+		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
+		
+		if ($noCacheBuster) {
+			Config::$options["cacheBuster"] = 0;
 		}
 		
 		// gather up all of the data to be used in patterns
