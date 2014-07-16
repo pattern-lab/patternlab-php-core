@@ -9,8 +9,8 @@
  */
 
 use \PatternLab\Config;
-use \PatternLab\Dispatcher;
 use \PatternLab\Console;
+use \PatternLab\Dispatcher;
 
 // check to see if json_decode exists. might be disabled in installs of PHP 5.5
 if (!function_exists("json_decode")) {
