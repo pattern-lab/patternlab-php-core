@@ -130,7 +130,7 @@ class Console {
 	*
 	* @return {String}       the search command
 	*/
-	public static function findCommandShort($arg) {
+	public static function findCommandLong($arg) {
 		foreach (self::$commands as $command => $commandOptions) {
 			if (($commandOptions["commandLong"] == $arg) || ($commandOptions["commandShort"] == $arg)) {
 				return $command;
@@ -146,7 +146,7 @@ class Console {
 	*/
 	public static function getCommand() {
 		foreach (self::$commands as $command => $attributes) {
-			if (isset(self::$options[$command]) || isset(self::$options[$attributes["commandLong"]])) {
+			if (isset(self::$options[$command]) || isset(self::$options[$attributes["commandShort"]])) {
 				return $command;
 			}
 		}
@@ -173,21 +173,24 @@ class Console {
 	* @param  {String}       the description to be used in the "available commands" section of writeHelp()
 	* @param  {String}       the description to be used in the "help" section of writeHelpCommand()
 	*/
-	public static function setCommand($short,$long,$desc,$help) {
-		self::$optionsShort .= $short;
+	public static function setCommand($long,$desc,$help,$short = "") {
+		if (!empty($short)) {
+			self::$optionsShort .= $short;
+		}
 		self::$optionsLong[] = $long;
 		$short = str_replace(":","",$short);
 		$long  = str_replace(":","",$long);
-		self::$commands[$short] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array(), "commandExamples" => array());
+		self::$commands[$long] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array(), "commandExamples" => array());
 	}
 	
 	/**
 	* Set a sample for a specific command
-	* @param  {String}       the single character of the command that this option is related to
+	* @param  {String}       the long version of the command that this option is related to
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
 	public static function setCommandSample($command,$sample,$extra) {
+		$command = str_replace(":","",$command);
 		self::$commands[$command]["commandExamples"][] = array("exampleSample" => $sample, "exampleExtra" => $extra);
 	}
 	
@@ -225,15 +228,15 @@ class Console {
 
 	/**
 	* Set-up an option for a given command so it can be used from the command line
-	* @param  {String}       the single character of the command that this option is related to
-	* @param  {String}       the single character version of the option
+	* @param  {String}       the long version of the command that this option is related to
 	* @param  {String}       the long version of the option
 	* @param  {String}       the description to be used in the "available options" section of writeHelpCommand()
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
+	* @param  {String}       the single character version of the option
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
-	public static function setCommandOption($command,$short,$long,$desc,$sample,$extra = "") {
-		if (($short != "z") && (strpos(self::$optionsShort,$short) === false)) {
+	public static function setCommandOption($command,$long,$desc,$sample,$short = "",$extra = "") {
+		if (($short != "") && ($short != "z") && (strpos(self::$optionsShort,$short) === false)) {
 			self::$optionsShort .= $short;
 		}
 		if (!in_array($long,self::$optionsLong)) {
@@ -245,7 +248,7 @@ class Console {
 			$short = "z".self::$zTracker;
 			self::$zTracker++;
 		}
-		self::$commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
+		self::$commands[$command]["commandOptions"][$long] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
 	}
 	
 	/**
