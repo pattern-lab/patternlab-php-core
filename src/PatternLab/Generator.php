@@ -146,6 +146,10 @@ class Generator extends Builder {
 	*/
 	public function printSaying() {
 		
+		$randomNumber = rand(0,3);
+		$colors = array("ok","info","warning","error");
+		$color  = (isset($colors[$randomNumber])) ? $colors[$randomNumber] : "desc";
+		
 		$randomNumber = rand(0,60);
 		$sayings = array(
 		                   "have fun storming the castle",
