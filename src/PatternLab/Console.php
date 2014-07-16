@@ -408,9 +408,15 @@ class Console {
 	* Write out a line of the help
 	* @param  {Boolean}       handle double-break
 	*/
-	protected static function writeLine($line,$doubleBreak = false) {
-		$break = ($doubleBreak) ? "\n\n" : "\n";
-		print "  ".$line.$break;
+	public static function writeLine($line,$doubleSpace = false,$doubleBreak = false) {
+		$break = ($doubleBreak) ? PHP_EOL.PHP_EOL : PHP_EOL;
+		if (strpos($line,"<nophpeol>") !== false) {
+			$break = "";
+			$line  = str_replace("<nophpeol>","",$line);
+		}
+		$space = ($doubleSpace) ? "  " : "";
+		$c     = self::$color;
+		print $space.$c($line)->colorize().$break;
 	}
 	
 	/**
