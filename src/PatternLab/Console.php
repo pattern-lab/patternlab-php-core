@@ -281,16 +281,15 @@ class Console {
 		
 		// write out the generic usage info
 		self::writeLine("");
-		self::writeLine("Pattern Lab Console Options",true);
-		self::writeLine("Usage:");
-		self::writeLine("  php ".self::$self." command [options]",true);
-		self::writeLine("Available commands:");
+		self::writeLine("<h1>Pattern Lab Console Options</h1>",true,true);
+		self::writeLine("<h2>Usage</h2>:",true,true);
+		self::writeLine("  php ".self::$self." command <optional>[options]</optional>",true,true);
+		self::writeLine("<h2>Available commands</h2>:",true,true);
 		
 		// write out the commands
 		foreach (self::$commands as $command => $attributes) {
 			$spacer = self::getSpacer($lengthLong,$attributes["commandLongLength"]);
-			$commandShort = ($attributes["commandShort"][0] != "z") ? "(-".$attributes["commandShort"].")" : "    ";
-			self::writeLine("  --".$attributes["commandLong"].$spacer.$commandShort.$attributes["commandDesc"]);
+			self::writeLine("  --".$attributes["commandLong"].$spacer."  <desc>".$attributes["commandDesc"]."</desc>",true);
 		}
 		
 		self::writeLine("");
@@ -324,13 +323,13 @@ class Console {
 		 Samples:
 		
 		   To run and generate the CSS for each pattern:
-		     php core/console build -c
+		     php core/console --build -c
 		
 		   To build only the patterns and not move other files from source/ to public/
-		     php core/console build -p
+		     php core/console --build -p
 		
 		   To turn off the cacheBuster
-		     php core/console build -n
+		     php core/console --build -n
 		*/
 		
 		// if given an empty command or the command doesn't exist in the lists give the generic help
@@ -339,66 +338,67 @@ class Console {
 			return;
 		}
 		
-		$commandShort      = self::$commands[$command]["commandShort"];
-		$commandShortList   = (self::$commands[$command]["commandShort"][0] != "z") ? "(-".self::$commands[$command]["commandShort"].")" : "    ";
 		$commandLong       = self::$commands[$command]["commandLong"];
+		$commandLongUC     = ucfirst($commandLong);
 		$commandHelp       = self::$commands[$command]["commandHelp"];
 		$commandExtra      = isset(self::$commands[$command]["commandExtra"]) ? self::$commands[$command]["commandExtra"] : "";
 		$commandOptions    = self::$commands[$command]["commandOptions"];
 		$commandExamples   = self::$commands[$command]["commandExamples"];
-		
-		$commandLongUC = ucfirst($commandLong);
+		$commandShort      = self::$commands[$command]["commandShort"];
+		$commandShortInc   = ($commandShort != "") ? "|-".$commandShort : "";
 		
 		// write out the option list and get the longest item
 		$optionList = "";
 		$lengthLong = 0;
 		foreach ($commandOptions as $option => $attributes) {
-			$optionShort = ($attributes["optionShort"][0] != "z") ? "|-".self::$commands[$command]["commandShort"] : "";
+			$optionShort = (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != "")) ? "|-".$attributes["optionShort"] : "";
 			$optionList .= "[--".$attributes["optionLong"].$optionShort."] ";
 			$lengthLong = ($attributes["optionLongLength"] > $lengthLong) ? $attributes["optionLongLength"] : $lengthLong;
 		}
 		
+		$commandExampleList = "";
+		if (count($commandExamples) > 0) {
+			foreach ($commandExamples as $example => $attributes) {
+				$commandExampleList .= $attributes["exampleExtra"]." ";
+			}
+		}
+		
 		// write out the generic usage info
 		self::writeLine("");
-		self::writeLine($commandLongUC." Command Options",true);
-		self::writeLine("Usage:");
-		
-		self::writeLine("  php ".self::$self." --".$commandLong."|-".$commandShort." ".$optionList,true);
+		self::writeLine("<h1>".$commandLongUC." Command Options</h1>",true,true);
+		self::writeLine("<h2>Usage</h2>:",true,true);
+		self::writeLine("  php ".self::$self." --".$commandLong.$commandShortInc." ".$commandExampleList.$optionList,true,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
-			self::writeLine("Available options:");
+			self::writeLine("<h2>Available options</h2>:",true,true);
 			foreach ($commandOptions as $option => $attributes) {
-				$optionShort = ($attributes["optionShort"][0] != "z") ? "|-".self::$commands[$command]["commandShort"] : "";
+				$optionShort = (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != "")) ? "(-".$attributes["optionShort"].")" : "    ";
 				$spacer = self::getSpacer($lengthLong,$attributes["optionLongLength"]);
-				self::writeLine("  --".$attributes["optionLong"].$spacer.$optionShort."    ".$attributes["optionDesc"]);
+				self::writeLine("  --".$attributes["optionLong"].$spacer.$optionShort."    <desc>".$attributes["optionDesc"]."</desc>",true);
 			}
 			self::writeLine("");
 		}
 		
-		self::writeLine("Help:");
-		self::writeLine("  ".$commandHelp,true);
+		self::writeLine("<h2>Help</h2>:",true,true);
+		self::writeLine("  ".$commandHelp,true,true);
 		
 		// write out the samples
 		if ((count($commandOptions) > 0) || (count($commandExamples) > 0)) {
-			self::writeLine("  Samples:",true);
+			self::writeLine("<h2>Samples</h2>:",true,true);
 		}
 		
 		if (count($commandExamples) > 0) {
 			foreach ($commandExamples as $example => $attributes) {
-				self::writeLine("   ".$attributes["exampleSample"]);
-				self::writeLine("     php ".self::$self." --".$commandLong." ".$attributes["exampleExtra"]);
-				self::writeLine("     php ".self::$self." -".$commandShort." ".$attributes["exampleExtra"],true);
+				self::writeLine(" ".$attributes["exampleSample"],true,true);
+				self::writeLine("   <desc>php ".self::$self." --".$commandLong." ".$attributes["exampleExtra"]."</desc>",true,true);
 			}
 		}
 		
 		if (count($commandOptions) > 0) {
 			foreach ($commandOptions as $option => $attributes) {
-				self::writeLine("   ".$attributes["optionSample"]);
-				self::writeLine("     php ".self::$self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
-				$optionShort = ($attributes["optionShort"][0] != "z") ? "-".$attributes["optionShort"] : "--".$attributes["optionLong"];
-				self::writeLine("     php ".self::$self." -".$commandShort." ".$optionShort." ".$attributes["optionExtra"],true);
-				
+				self::writeLine(" ".$attributes["optionSample"],true,true);
+				self::writeLine("   <desc>php ".self::$self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]."</desc>",true,true);
 			}
 		}
 		
