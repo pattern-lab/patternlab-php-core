@@ -13,6 +13,7 @@
 
 namespace PatternLab;
 
+use \Colors\Color;
 use \PatternLab\Console\Event as ConsoleEvent;
 use \PatternLab\Dispatcher;
 
@@ -23,6 +24,7 @@ class Console {
 	public  static $options          = array();
 	public  static $optionsShort     = "";
 	public  static $optionsLong      = array();
+	private static $color;
 	private static $self             = "";
 	private static $zTracker         = 1;
 	
