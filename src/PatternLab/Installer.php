@@ -125,6 +125,22 @@ class Installer {
 		}
 		
 	}
+	
+	/**
+	 * Remove dots from the path to make sure there is no file system traversal when looking for or writing files
+	 * @param  {String}    the path to check and remove dots
+	 *
+	 * @return {String}    the path minus dots
+	 */
+	protected static function removeDots($path) {
+		$parts = array();
+		foreach (explode("/", $path) as $chunk) {
+			if ((".." !== $chunk) && ("." !== $chunk) && ("" !== $chunk)) {
+				$parts[] = $chunk;
+			}
+		}
+		return implode("/", $parts);
+	}
 		if (class_exists("\PatternLab\Config")) {
 			
 			// initialize the console to print out any issues
