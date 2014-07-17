@@ -53,3 +53,6 @@ sourceDir = "source"
 
 // the plugin directory
 pluginDir = "plugins"
+
+// the export directory
+exportDir = "export"
