@@ -77,6 +77,7 @@ class Installer {
 	 */
 	public static function postPackageInstall(Event $event) {
 		
+		self::runTasks($event);
 	/**
 	 * Move the files from the package to their location in the public dir or source dir
 	 * @param  {String}    the name of the package
