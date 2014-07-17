@@ -132,20 +132,6 @@ class Config {
 						$class->$value2 = true;
 					}
 				}
-				if (self::$options["pageFollowNav"] == "false") {
-					$value = "tools-follow";
-					$class->$value = true;
-				}
-				if (self::$options["autoReloadNav"] == "false") {
-					$value = "tools-reload";
-					$class->$value = true;
-				}
-				$toolssnapshot = "tools-snapshot"; // i was an idgit and used dashes
-				if (!isset($class->$toolssnapshot)) {
-					if (!is_dir(self::$options["patternSourceDir"]."/snapshots")) {
-						$class->$toolssnapshot = true;
-					}
-				}
 			}
 			
 		}
