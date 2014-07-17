@@ -122,6 +122,85 @@ class FileUtil {
 		$fs->remove($files);
 		
 	}
+	
+	/**
+	* Delete patterns and user-created directories and files in public/
+	*/
+	public static function cleanPublic() {
+		
+		// make sure patterns exists before trying to clean it
+		if (is_dir(Config::$options["patternPublicDir"])) {
+			
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternPublicDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+			
+			// for each file figure out what to do with it
+			foreach($objects as $name => $object) {
+				
+				if ($object->isDir()) {
+					// if this is a directory remove it
+					rmdir($name);
+				} else if ($object->isFile() && ($object->getFilename() != "README")) {
+					// if this is a file remove it
+					unlink($name);
+				}
+				
+			}
+			
+		}
+		
+		// scan source/ & public/ to figure out what directories might need to be cleaned up
+		$publicDir  = Config::$options["publicDir"];
+		$sourceDir  = Config::$options["sourceDir"];
+		$publicDirs = glob($publicDir."/*",GLOB_ONLYDIR);
+		$sourceDirs = glob(Config::$options["sourceDir"]."/*",GLOB_ONLYDIR);
+		
+		// make sure some directories aren't deleted
+		$ignoreDirs = array("styleguide","snapshots");
+		foreach ($ignoreDirs as $ignoreDir) {
+			$key = array_search($publicDir."/".$ignoreDir,$publicDirs);
+			if ($key !== false){
+				unset($publicDirs[$key]);
+			}
+		}
+		
+		// compare source dirs against public. remove those dirs w/ an underscore in source/ from the public/ list
+		foreach ($sourceDirs as $dir) {
+			$cleanDir = str_replace($sourceDir."/","",$dir);
+			if ($cleanDir[0] == "_") {
+				$key = array_search($publicDir."/".str_replace("_","",$cleanDir),$publicDirs);
+				if ($key !== false){
+					unset($publicDirs[$key]);
+				}
+			}
+		}
+		
+		// for the remaining dirs in public delete them and their files
+		foreach ($publicDirs as $dir) {
+			
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::CHILD_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+			
+			foreach($objects as $name => $object) {
+				
+				if ($object->isDir()) {
+					rmdir($name);
+				} else if ($object->isFile()) {
+					unlink($name);
+				}
+				
+			}
+			
+			rmdir($dir);
+			
+		}
+		
+	}
+	
 	/**
 	* moves user-generated static files from public/ to export/
 	*/

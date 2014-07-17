@@ -80,7 +80,7 @@ class Generator extends Builder {
 		
 		// clean the public directory to remove old files
 		if ((Config::$options["cleanPublic"] == "true") && $moveStatic) {
-			Util::cleanPublic();
+			FileUtil::cleanPublic();
 		}
 		
 		// render out the index and style guide
