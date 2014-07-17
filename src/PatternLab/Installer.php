@@ -165,7 +165,8 @@ class Installer {
 			$package   = $event->getOperation()->getPackage();
 			$extra     = $package->getExtra();
 			$type      = $package->getType();
-			$path      = Config::$options["pluginDir"]."/".$package->getName();
+			$name      = $package->getName();
+			$path      = Config::$options["pluginDir"]."/".$name;
 			
 			// make sure we're only evaluating pattern lab packages
 			if (strpos($type,"patternlab-") !== false) {
