@@ -353,7 +353,7 @@ class Console {
 		$optionList = "";
 		$lengthLong = 0;
 		foreach ($commandOptions as $option => $attributes) {
-			$optionShort = (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != "")) ? "|-".$attributes["optionShort"] : "";
+			$optionShort = (!empty($attributes["optionShort"][0]) && (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != ""))) ? "|-".$attributes["optionShort"] : "";
 			$optionList .= "[--".$attributes["optionLong"].$optionShort."] ";
 			$lengthLong = ($attributes["optionLongLength"] > $lengthLong) ? $attributes["optionLongLength"] : $lengthLong;
 		}
@@ -375,7 +375,7 @@ class Console {
 		if (count($commandOptions) > 0) {
 			self::writeLine("<h2>Available options</h2>:",true,true);
 			foreach ($commandOptions as $option => $attributes) {
-				$optionShort = (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != "")) ? "(-".$attributes["optionShort"].")" : "    ";
+				$optionShort = (!empty($attributes["optionShort"]) && (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != ""))) ? "(-".$attributes["optionShort"].")" : "    ";
 				$spacer = self::getSpacer($lengthLong,$attributes["optionLongLength"]);
 				self::writeLine("  --".$attributes["optionLong"].$spacer.$optionShort."    <desc>".$attributes["optionDesc"]."</desc>",true);
 			}
