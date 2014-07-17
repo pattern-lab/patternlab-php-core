@@ -86,3 +86,5 @@ class Annotations {
 		self::$store["comments"] = array_merge(self::$store["comments"],$data["comments"]);
 		
 	}
+	
+}
