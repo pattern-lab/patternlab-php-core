@@ -21,6 +21,36 @@ use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class Installer {
 	
 	/**
+	 * Check to see if the path already exists. If it does prompt the user to double-check it should be overwritten
+	 * @param  {String}    the package name
+	 * @param  {String}    path to be checked
+	 *
+	 * @return {Boolean}   if the path exists and should be overwritten
+	 */
+	protected static function pathExists($packageName,$path) {
+		
+		$fs = new Filesystem();
+		
+		if ($fs->exists($path)) {
+			
+			Console::writeLine("<info>the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>? Y/n > </info><nophpeol>");
+			$answer = strtolower(trim(fgets($stdin)));
+			fclose($stdin);
+			if ($answer == "y") {
+				Console::writeLine("<ok>contents of <path>".$path."</path> being overwritten...</ok>", false, true);
+				return false;
+			} else {
+				Console::writeLine("<warning>contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...</warning>", false, true);
+				return true;
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	 * Make sure certain things are set-up before running composer's install
 	 */
 	public static function preInstallCmd(Event $event) {
