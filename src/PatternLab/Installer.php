@@ -47,6 +47,54 @@ class Installer {
 	 */
 	public static function postPackageInstall(Event $event) {
 		
+	/**
+	 * Move the files from the package to their location in the public dir or source dir
+	 * @param  {String}    the name of the package
+	 * @param  {String}    the base directory for the source of the files
+	 * @param  {String}    the base directory for the destintation of the files (publicDir or sourceDir)
+	 * @param  {Array}     the list of files to be moved
+	 */
+	protected static function parseFileList($packageName,$sourceBase,$destinationBase,$fileList) {
+		
+		$fs = new Filesystem();
+		
+		foreach ($fileList as $fileItem) {
+			
+			// retrieve the source & destination
+			$source      = self::removeDots(key($fileItem));
+			$destination = self::removeDots($fileItem[$source]);
+			
+			// depending on the source handle things differently. mirror if it ends in /*
+			if (($source == "*") && ($destination == "*")) {
+				if (!self::pathExists($packageName,$destinationBase."/")) {
+					$fs->mirror($sourceBase."/assets/",$destinationBase."/");
+				}
+			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
+				$destination = rtrim($destination,"/*");
+				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
+					$fs->mirror($sourceBase."/assets/",$destinationBase."/".$destination);
+				}
+			} else if ($source[strlen($source)-1] == "*") {
+				$source      = rtrim($source,"/*");
+				$destination = rtrim($destination,"/*");
+				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
+					$fs->mirror($sourceBase."/assets/".$source,$destinationBase."/".$destination);
+				}
+			} else {
+				$pathInfo       = explode("/",$destination);
+				$file           = array_pop($pathInfo);
+				$destinationDir = implode("/",$pathInfo);
+				if (!$fs->exists($destinationBase."/".$destinationDir)) {
+					$fs->mkdir($destinationBase."/".$destinationDir);
+				}
+				if (!self::pathExists($packageName,$destinationBase."/".$destination))
+					$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
+				}
+			}
+			
+		}
+		
+	}
 		if (class_exists("\PatternLab\Config")) {
 			
 			// initialize the console to print out any issues
@@ -108,62 +156,6 @@ class Installer {
 			
 		}
 		
-	}
-	
-	/**
-	 * Move the files from the package to their location in the public dir or source dir
-	 * @param  {String}    the base directory for the source of the files
-	 * @param  {String}    the base directory for the destintation of the files (publicDir or sourceDir)
-	 * @param  {Array}     the list of files to be moved
-	 */
-	protected static function parseFileList($sourceBase,$destinationBase,$fileList) {
-		
-		$fs = new Filesystem();
-		
-		foreach ($fileList as $fileItem) {
-			
-			// retrieve the source & destination
-			$source      = self::removeDots(key($fileItem));
-			$destination = self::removeDots($fileItem[$source]);
-			
-			// depending on the source handle things differently. mirror if it ends in /*
-			if (($source == "*") && ($destination == "*")) {
-				$fs->mirror($sourceBase."/assets/",$destinationBase."/");
-			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
-				$destination = rtrim($destination,"/*");
-				$fs->mirror($sourceBase."/assets/",$destinationBase."/".$destination);
-			} else if ($source[strlen($source)-1] == "*") {
-				$source      = rtrim($source,"/*");
-				$destination = rtrim($destination,"/*");
-				$fs->mirror($sourceBase."/assets/".$source,$destinationBase."/".$destination);
-			} else {
-				$pathInfo       = explode("/",$destination);
-				$file           = array_pop($pathInfo);
-				$destinationDir = implode("/",$pathInfo);
-				if (!$fs->exists($destinationBase.$destinationDir)) {
-					$fs->mkdir($destinationBase."/".$destinationDir);
-				}
-				$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
-			}
-			
-		}
-		
-	}
-	
-	/**
-	 * Remove dots from the path to make sure there is no file system traversal when looking for or writing files
-	 * @param  {String}    the path to check and remove dots
-	 *
-	 * @return {String}    the path minus dots
-	 */
-	protected static function removeDots($path) {
-		$parts = array();
-		foreach (explode("/", $path) as $chunk) {
-			if ((".." !== $chunk) && ("." !== $chunk) && ("" !== $chunk)) {
-				$parts[] = $chunk;
-			}
-		}
-		return implode("/", $parts);
 	}
 	
 }
