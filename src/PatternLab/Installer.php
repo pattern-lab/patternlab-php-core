@@ -134,8 +134,8 @@ class Installer {
 				mkdir(Config::$options["sourceDir"]);
 			}
 			
-			if (!is_dir(Config::$options["pluginDir"])) {
-				mkdir(Config::$options["pluginDir"]);
+			if (!is_dir(Config::$options["packagesDir"])) {
+				mkdir(Config::$options["packagesDir"]);
 			}
 			
 		}
@@ -179,7 +179,7 @@ class Installer {
 			$extra     = $package->getExtra();
 			$type      = $package->getType();
 			$name      = $package->getName();
-			$path      = Config::$options["pluginDir"]."/".$name;
+			$path      = Config::$options["packagesDir"]."/".$name;
 			
 			// make sure we're only evaluating pattern lab packages
 			if (strpos($type,"patternlab-") !== false) {

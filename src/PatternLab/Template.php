@@ -43,7 +43,7 @@ class Template {
 		
 		// set-up config vars
 		$patternExtension        = Config::$options["patternExtension"];
-		$pluginDir               = Config::$options["pluginDir"];
+		$pluginDir               = Config::$options["packagesDir"];
 		$sourceDir               = Config::$options["sourceDir"];
 		$styleguideKit           = Config::$options["styleguideKit"];
 		

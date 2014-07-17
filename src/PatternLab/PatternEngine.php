@@ -48,7 +48,7 @@ class PatternEngine {
 	*/
 	public static function loadRules() {
 		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["pluginDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["packagesDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		foreach($objects as $name => $object) {
 			if (strpos($name,"PatternEngineRule.php") !== false) {

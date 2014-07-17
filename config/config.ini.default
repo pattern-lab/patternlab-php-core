@@ -51,8 +51,8 @@ publicDir = "public"
 // the source directory
 sourceDir = "source"
 
-// the plugin directory
-pluginDir = "plugins"
+// the packages directory
+packagesDir = "packages"
 
 // the export directory
 exportDir = "export"
