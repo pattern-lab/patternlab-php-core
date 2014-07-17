@@ -79,6 +79,16 @@ class Installer {
 		
 		self::runTasks($event);
 	/**
+	 * Run the PL tasks when a package is updated
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function postPackageUpdate(Event $event) {
+		
+		self::runTasks($event);
+		
+	}
+	
+	/**
 	 * Move the files from the package to their location in the public dir or source dir
 	 * @param  {String}    the name of the package
 	 * @param  {String}    the base directory for the source of the files
