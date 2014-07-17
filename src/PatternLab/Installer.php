@@ -21,79 +21,6 @@ use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class Installer {
 	
 	/**
-	 * Check to see if the path already exists. If it does prompt the user to double-check it should be overwritten
-	 * @param  {String}    the package name
-	 * @param  {String}    path to be checked
-	 *
-	 * @return {Boolean}   if the path exists and should be overwritten
-	 */
-	protected static function pathExists($packageName,$path) {
-		
-		$fs = new Filesystem();
-		
-		if ($fs->exists($path)) {
-			
-			Console::writeLine("<info>the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>? Y/n > </info><nophpeol>");
-			$answer = strtolower(trim(fgets($stdin)));
-			fclose($stdin);
-			if ($answer == "y") {
-				Console::writeLine("<ok>contents of <path>".$path."</path> being overwritten...</ok>", false, true);
-				return false;
-			} else {
-				Console::writeLine("<warning>contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...</warning>", false, true);
-				return true;
-			}
-			
-		}
-		
-		return false;
-		
-	}
-	
-	/**
-	 * Make sure certain things are set-up before running composer's install
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function preInstallCmd(Event $event) {
-		
-		if (class_exists("\PatternLab\Config")) {
-			
-			$baseDir = __DIR__."/../../../";
-			Config::init($baseDir,false);
-			
-			if (!is_dir(Config::$options["sourceDir"])) {
-				mkdir(Config::$options["sourceDir"]);
-			}
-			
-			if (!is_dir(Config::$options["pluginDir"])) {
-				mkdir(Config::$options["pluginDir"]);
-			}
-			
-		}
-		
-	}
-	
-	/**
-	 * Run the PL tasks when a package is installed
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function postPackageInstall(Event $event) {
-		
-		self::runTasks($event);
-		
-	}
-	
-	/**
-	 * Run the PL tasks when a package is updated
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function postPackageUpdate(Event $event) {
-		
-		self::runTasks($event);
-		
-	}
-	
-	/**
 	 * Move the files from the package to their location in the public dir or source dir
 	 * @param  {String}    the name of the package
 	 * @param  {String}    the base directory for the source of the files
@@ -136,6 +63,79 @@ class Installer {
 				if (!self::pathExists($packageName,$destinationBase."/".$destination))
 					$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
 				}
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Check to see if the path already exists. If it does prompt the user to double-check it should be overwritten
+	 * @param  {String}    the package name
+	 * @param  {String}    path to be checked
+	 *
+	 * @return {Boolean}   if the path exists and should be overwritten
+	 */
+	protected static function pathExists($packageName,$path) {
+		
+		$fs = new Filesystem();
+		
+		if ($fs->exists($path)) {
+			
+			Console::writeLine("<info>the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>? Y/n > </info><nophpeol>");
+			$answer = strtolower(trim(fgets($stdin)));
+			fclose($stdin);
+			if ($answer == "y") {
+				Console::writeLine("<ok>contents of <path>".$path."</path> being overwritten...</ok>", false, true);
+				return false;
+			} else {
+				Console::writeLine("<warning>contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...</warning>", false, true);
+				return true;
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 * Run the PL tasks when a package is installed
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function postPackageInstall(Event $event) {
+		
+		self::runTasks($event);
+		
+	}
+	
+	/**
+	 * Run the PL tasks when a package is updated
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function postPackageUpdate(Event $event) {
+		
+		self::runTasks($event);
+		
+	}
+	
+	/**
+	 * Make sure certain things are set-up before running composer's install
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function preInstallCmd(Event $event) {
+		
+		if (class_exists("\PatternLab\Config")) {
+			
+			$baseDir = __DIR__."/../../../";
+			Config::init($baseDir,false);
+			
+			if (!is_dir(Config::$options["sourceDir"])) {
+				mkdir(Config::$options["sourceDir"]);
+			}
+			
+			if (!is_dir(Config::$options["pluginDir"])) {
+				mkdir(Config::$options["pluginDir"]);
 			}
 			
 		}
