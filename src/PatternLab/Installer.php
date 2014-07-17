@@ -164,6 +164,7 @@ class Installer {
 	 */
 	protected static function runTasks($event) {
 		
+		// make sure pattern lab has been loaded
 		if (class_exists("\PatternLab\Config")) {
 			
 			// initialize the console to print out any issues
