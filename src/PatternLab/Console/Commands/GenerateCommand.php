@@ -23,8 +23,8 @@ class GenerateCommand extends Command {
 		
 		$this->command = "generate";
 		
-		Console::setCommand($this->command,"Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/","g");
-		Console::setCommandOption($this->command,"patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:","p");
+		Console::setCommand($this->command,"Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in <path>public/</path>, compiles the patterns and moves content from <path>source/</path> into <path>public/</path>","g");
+		Console::setCommandOption($this->command,"patternsonly","Generate only the patterns. Does NOT clean <path>public/</path>.","To generate only the patterns:","p");
 		Console::setCommandOption($this->command,"nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:","n");
 		
 	}

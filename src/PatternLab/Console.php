@@ -47,6 +47,7 @@ class Console {
 		$colorTheme["h2"]       = "underline";
 		$colorTheme["optional"] = "italic";
 		$colorTheme["desc"]     = "green";
+		$colorTheme["path"]     = "green";
 		$colorTheme["enter"]    = "blue";
 		$colorTheme["ok"]       = "green";
 		$colorTheme["info"]     = "cyan";
