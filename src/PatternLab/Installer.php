@@ -179,17 +179,17 @@ class Installer {
 					
 					// move assets to the base directory
 					if (isset($extra["assets"]["baseDir"])) {
-						self::parseFileList($path,Config::$options["baseDir"],$extra["assets"]["baseDir"]);
+						self::parseFileList($name,$path,Config::$options["baseDir"],$extra["assets"]["baseDir"]);
 					}
 					
 					// move assets to the public directory
 					if (isset($extra["assets"]["publicDir"])) {
-						self::parseFileList($path,Config::$options["publicDir"],$extra["assets"]["publicDir"]);
+						self::parseFileList($name,$path,Config::$options["publicDir"],$extra["assets"]["publicDir"]);
 					}
 					
 					// move assets to the source directory
 					if (isset($extra["assets"]["sourceDir"])) {
-						self::parseFileList($path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
+						self::parseFileList($name,$path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
 					}
 					
 					// see if we need to modify the config
