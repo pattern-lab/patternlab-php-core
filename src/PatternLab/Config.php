@@ -17,11 +17,13 @@ use \PatternLab\FileUtil;
 
 class Config {
 	
-	public    static $options        = array();
-	protected static $userConfigPath = "config/config.ini";
-	protected static $plConfigPath   = "core/config/config.ini.default";
-	protected static $cleanValues    = array("ie","id","patternStates","styleGuideExcludes");
-	protected static $dirAdded       = false;
+	public    static $options            = array();
+	protected static $userConfig         = "config.ini";
+	protected static $userConfigDirClean = "config";
+	protected static $userConfigDirDash  = "_config";
+	protected static $plConfigPath       = "../../config/config.ini.default";
+	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes");
+	protected static $dirAdded           = false;
 	
 	/**
 	* Adds the config options to a var to be accessed from the rest of the system
@@ -41,9 +43,19 @@ class Config {
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
-			self::$userConfigPath = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigPath;
-			self::$plConfigPath   = $baseDir.DIRECTORY_SEPARATOR.self::$plConfigPath;
-			self::$dirAdded       = true;
+			
+			// set-up the paths
+			self::$userConfigDirClean  = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirClean;
+			self::$userConfigDirDash   = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirDash;
+			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
+			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
+			self::$dirAdded            = true;
+			
+			// just in case the config directory doesn't exist at all
+			if (!is_dir(self::$userConfigDir)) {
+				mkdir(self::$userConfigDir);
+			}
+			
 		}
 		
 		// make sure migrate doesn't happen by default
