@@ -52,6 +52,7 @@ class Installer {
 	
 	/**
 	 * Make sure certain things are set-up before running composer's install
+	 * @param  {Object}     a script event object from composer
 	 */
 	public static function preInstallCmd(Event $event) {
 		
@@ -73,11 +74,15 @@ class Installer {
 	}
 	
 	/**
-	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
+	 * Run the PL tasks when a package is installed
+	 * @param  {Object}     a script event object from composer
 	 */
 	public static function postPackageInstall(Event $event) {
 		
 		self::runTasks($event);
+		
+	}
+	
 	/**
 	 * Run the PL tasks when a package is updated
 	 * @param  {Object}     a script event object from composer
@@ -152,6 +157,13 @@ class Installer {
 		}
 		return implode("/", $parts);
 	}
+	
+	/**
+	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
+	 * @param  {Object}     a script event object from composer
+	 */
+	protected static function runTasks($event) {
+		
 		if (class_exists("\PatternLab\Config")) {
 			
 			// initialize the console to print out any issues
