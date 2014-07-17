@@ -58,6 +58,13 @@ class PatternData {
 	*/
 	public static function gather($options = array()) {
 		
+		// set a default var
+		$exportClean = (isset($options["exportClean"])) ? $options["exportClean"] : false;
+		$exportFiles = (isset($options["exportClean"])) ? $options["exportFiles"] : false;
+		
+		// cleaning the var for use below, i know this is stupid
+		$options = array();
+		
 		// dispatch that the data gather has started
 		$event = new PatternDataEvent($options);
 		Dispatcher::$instance->dispatch("patternData.gatherStart",$event);
@@ -130,6 +137,8 @@ class PatternData {
 		Dispatcher::$instance->dispatch("patternData.codeHelperStart",$event);
 		
 		// render out all of the patterns and store the generated info in PatternData::$store
+		$options["exportFiles"]  = $exportFiles;
+		$options["exportClean"]  = $exportClean;
 		$patternCodeHelper       = new PatternCodeHelper($options);
 		$patternCodeHelper->run();
 		

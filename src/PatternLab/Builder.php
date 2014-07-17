@@ -150,11 +150,13 @@ class Builder {
 	
 	/**
 	* Generates all of the patterns and puts them in the public directory
+	* @param   {Array}     various options that might affect the export. primarily the location.
 	*/
-	protected function generatePatterns() {
+	protected function generatePatterns($options = array()) {
 		
 		// set-up common vars
-		$patternPublicDir = Config::$options["patternPublicDir"];
+		$exportFiles      = (isset($options["exportFiles"]) && $options["exportFiles"]);
+		$patternPublicDir = !$exportFiles ? Config::$options["patternPublicDir"] : Config::$options["patternExportDir"];
 		$patternSourceDir = Config::$options["patternSourceDir"];
 		$patternExtension = Config::$options["patternExtension"];
 		
@@ -184,8 +186,10 @@ class Builder {
 				
 				// write out the various pattern files
 				file_put_contents($patternPublicDir."/".$path."/".$path.".html",$markupFull);
-				file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
-				file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+				if (!$exportFiles) {
+					file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
+					file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+				}
 				/*
 				Not being used and should be moved to a plug-in
 				if (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) {

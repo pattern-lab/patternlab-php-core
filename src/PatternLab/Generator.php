@@ -57,8 +57,10 @@ class Generator extends Builder {
 		}
 		
 		// set the default vars
-		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
+		$moveStatic    = (isset($options["moveStatic"]))    ? $options["moveStatic"] : true;
 		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
+		$exportFiles   = (isset($options["exportFiles"]))   ? $options["exportFiles"] : false;
+		$exportClean   = (isset($options["exportClean"]))   ? $options["exportClean"] : false;
 		
 		if ($noCacheBuster) {
 			Config::$options["cacheBuster"] = 0;
@@ -68,7 +70,10 @@ class Generator extends Builder {
 		Data::gather();
 		
 		// gather all of the various pattern info
-		PatternData::gather();
+		$options = array();
+		$options["exportClean"] = $exportClean;
+		$options["exportFiles"] = $exportFiles;
+		PatternData::gather($options);
 		
 		// gather the annotations
 		Annotations::gather();
@@ -84,7 +89,9 @@ class Generator extends Builder {
 		$this->generateViewAllPages();
 		
 		// render out the patterns and move them to public/patterns
-		$this->generatePatterns();
+		$options = array();
+		$options["exportFiles"] = $exportFiles;
+		$this->generatePatterns($options);
 		
 		// render the annotations as a js file
 		$this->generateAnnotations();

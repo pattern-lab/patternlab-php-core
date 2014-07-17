@@ -25,6 +25,8 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		
 		parent::__construct($options);
 		
+		$this->exportFiles  = $options["exportFiles"];
+		$this->exportClean  = $options["exportClean"];
 		$this->patternPaths = $options["patternPaths"];
 		
 	}
@@ -66,15 +68,17 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$patternData["patternDescAdditions"] = isset($patternStoreData["codeViewDescAdditions"]) ? $patternStoreData["codeViewDescAdditions"] : array();
 				
 				// add the pattern lab specific mark-up
-				$data["patternLabHead"]           = Render::Header($htmlHead,array("cacheBuster" => $data["cacheBuster"]));
-				$data["patternLabFoot"]           = Render::Footer($htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)));
+				// set a default var
+				$exportClean = (isset($options["exportClean"])) ? $options["exportClean"] : false;
+				$data["patternLabHead"]           = (!$this->exportFiles) ? Render::Header($htmlHead,array("cacheBuster" => $data["cacheBuster"])) : "";
+				$data["patternLabFoot"]           = (!$this->exportFiles) ? Render::Footer($htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData))) : "";
 				
 				// figure out the source path for the pattern to render
 				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::$store[$patternStoreData["original"]]["pathName"] : $patternStoreData["pathName"];
 				
-				$header  = Render::Header($patternHead,$data);
+				$header  = (!$this->exportClean) ? Render::Header($patternHead,$data) : "";
 				$code    = Render::Pattern($srcPath,$data);
-				$footer  = Render::Footer($patternFoot,$data);
+				$footer  = (!$this->exportClean) ? Render::Footer($patternFoot,$data) : "";
 				
 				PatternData::$store[$patternStoreKey]["header"] = $header;
 				PatternData::$store[$patternStoreKey]["code"]   = $code;
