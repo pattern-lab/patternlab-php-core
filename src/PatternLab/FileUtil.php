@@ -14,6 +14,8 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Console;
+use \Symfony\Component\Filesystem\Filesystem;
+use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class FileUtil {
 
@@ -98,6 +100,57 @@ class FileUtil {
 		}
 		
 		return $prefix.($absolute ? '/' : '').implode('/', $parts);
+		
+	}
+	
+	/**
+	* Delete everything in export/
+	*/
+	public static function cleanExport() {
+		
+		$files = scandir(Config::$options["exportDir"]);
+		foreach ($files as $file) {
+			if (($file == "..") || ($file == ".")) {
+				array_shift($files);
+			} else {
+				$key = array_keys($files,$file);
+				$files[$key[0]] = Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file;
+			}
+		}
+		
+		$fs = new Filesystem();
+		$fs->remove($files);
+		
+	}
+	/**
+	* moves user-generated static files from public/ to export/
+	*/
+	public static function exportStatic() {
+		
+		// decide which files in public should def. be ignored
+		$ignore = array("annotations","data","patterns","styleguide","index.html","latest-change.txt",".DS_Store",".svn","README");
+		
+		$files = scandir(Config::$options["publicDir"]);
+		foreach ($files as $key => $file) {
+			if (($file == "..") || ($file == ".")) {
+				unset($files[$key]);
+			} else if (in_array($file,$ignore)) {
+				unset($files[$key]);
+			} else if (is_dir(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file) && !is_dir(Config::$options["sourceDir"].DIRECTORY_SEPARATOR.$file)) {
+				unset($files[$key]);
+			} else if (is_file(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file) && !is_file(Config::$options["sourceDir"].DIRECTORY_SEPARATOR.$file)) {
+				unset($files[$key]);
+			}
+		}
+		
+		$fs = new Filesystem();
+		foreach ($files as $file) {
+			if (is_dir(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file)) {
+				$fs->mirror(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file,Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file);
+			} else if (is_file(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file)) {
+				$fs->copy(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file,Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file);
+			}
+		}
 		
 	}
 	
