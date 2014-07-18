@@ -19,8 +19,10 @@ class Config {
 	
 	public    static $options            = array();
 	protected static $userConfig         = "config.ini";
+	protected static $userConfigDir      = "";
 	protected static $userConfigDirClean = "config";
 	protected static $userConfigDirDash  = "_config";
+	protected static $userConfigPath     = "";
 	protected static $plConfigPath       = "../../config/config.ini.default";
 	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes");
 	protected static $dirAdded           = false;
