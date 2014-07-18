@@ -60,7 +60,7 @@ class Installer {
 				if (!$fs->exists($destinationBase."/".$destinationDir)) {
 					$fs->mkdir($destinationBase."/".$destinationDir);
 				}
-				if (!self::pathExists($packageName,$destinationBase."/".$destination))
+				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
 					$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
 				}
 			}
@@ -127,9 +127,14 @@ class Installer {
 		
 		if (class_exists("\PatternLab\Config")) {
 			
+			// initialize the console to print out any issues
+			Console::init();
+			
+			// initialize the config
 			$baseDir = __DIR__."/../../../";
 			Config::init($baseDir,false);
 			
+			// check directories
 			if (!is_dir(Config::$options["sourceDir"])) {
 				mkdir(Config::$options["sourceDir"]);
 			}
