@@ -1,8 +1,7 @@
 {
-	"name":             "PatternLab/Core",
-	"description":      "The core files used for Pattern Lab. Not tracked in Packagist.",
-	"version":          "0.7.12",
-	"keywords":         ["twig", "pattern lab", "pattern engine"],
+	"name":             "pattern-lab/core",
+	"description":      "The core functionality for the PHP edition of Pattern Lab.",
+	"keywords":         ["pattern lab", "styleguide", "style guide", "atomic", "atomic design"],
 	"homepage":         "http://patternlab.io",
 	"license":          "MIT",
 	"authors": [
@@ -19,20 +18,22 @@
 		}
 	],
 	"support": {
-		"issues":         "https://github.com/pattern-lab/patternlab-php/issues",
+		"issues":         "https://github.com/pattern-lab/patternlab-php-core/issues",
 		"wiki":           "http://patternlab.io/docs/",
-		"source":         "https://github.com/pattern-lab/patternlab-php/releases"
+		"source":         "https://github.com/pattern-lab/patternlab-php-core/releases"
 	},
 	"autoload": {
 		"psr-0": {
 			"PatternLab":   "src/"
 		}
 	},
-	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.3.6",
-		"alchemy/zippy": "0.2.0",
-		
-		"composer/installers": "~1.0"
+		"michelf/php-markdown": "1.4",
+		"symfony/yaml": "2.4.4",
+		"seld/jsonlint": "1.1.2",
+		"symfony/event-dispatcher": "v2.5.0",
+		"symfony/filesystem": "v2.5.0",
+		"kevinlebrun/colors.php": "0.*",
 	}
 }
