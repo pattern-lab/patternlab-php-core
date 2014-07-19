@@ -35,5 +35,6 @@
 		"symfony/event-dispatcher": "v2.5.0",
 		"symfony/filesystem": "v2.5.0",
 		"kevinlebrun/colors.php": "0.*",
+		"pattern-lab/unified-asset-installer": "dev-master"
 	}
 }
