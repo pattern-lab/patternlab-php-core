@@ -51,6 +51,7 @@ class Config {
 			self::$userConfigDirDash   = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
+			self::$plConfigPath        = __DIR__.DIRECTORY_SEPARATOR.self::$plConfigPath;
 			self::$dirAdded            = true;
 			
 			// just in case the config directory doesn't exist at all
