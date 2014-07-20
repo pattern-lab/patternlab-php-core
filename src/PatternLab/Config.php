@@ -112,6 +112,7 @@ class Config {
 		self::$options["sourceDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["sourceDir"]);
 		self::$options["publicDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["publicDir"]);
 		self::$options["packagesDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["packagesDir"]);
+		self::$options["baseDir"]          = $baseDir;
 		self::$options["exportDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["exportDir"]);
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
