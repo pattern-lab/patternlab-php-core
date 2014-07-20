@@ -52,6 +52,7 @@ publicDir = "public"
 sourceDir = "source"
 
 // the packages directory
+coreDir     = "core"
 packagesDir = "packages"
 
 // the export directory
