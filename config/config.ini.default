@@ -42,18 +42,9 @@ styleGuideExcludes = ""
 // should the cache buster be on, set to false to set the cacheBuster value to 0
 cacheBusterOn = "true"
 
-// the pattern rending engine
-patternExtension = "mustache"
-
-// the public directory
-publicDir = "public"
-
-// the source directory
-sourceDir = "source"
-
-// the packages directory
+// project directories
 coreDir     = "core"
+exportDir   = "export"
 packagesDir = "packages"
-
-// the export directory
-exportDir = "export"
+publicDir   = "public"
+sourceDir   = "source"
