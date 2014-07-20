@@ -110,6 +110,7 @@ class Config {
 		
 		// set-up the various dirs
 		self::$options["baseDir"]          = $baseDir;
+		self::$options["coreDir"]          = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["coreDir"]);
 		self::$options["exportDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["exportDir"]);
 		self::$options["packagesDir"]      = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["packagesDir"]);
 		self::$options["publicDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["publicDir"]);
