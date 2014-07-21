@@ -1,6 +1,6 @@
 {
 	"name":             "pattern-lab/core",
-	"description":      "The core functionality for the PHP edition of Pattern Lab.",
+	"description":      "The core functionality for Pattern Lab.",
 	"keywords":         ["pattern lab", "styleguide", "style guide", "atomic", "atomic design"],
 	"homepage":         "http://patternlab.io",
 	"license":          "MIT",
