@@ -11,13 +11,6 @@ ie = "scss,DS_Store,less"
 // directories and files to ignore when building or watching the source dir, separate with a comma
 id = "scss,.svn,.sass-cache"
 
-
-// whether the qr code generator should be loaded automatically in the nav
-qrCodeGeneratorOn = "false"
-
-// pattern lab's xip host if you have it configured, to be used with the QR code generator
-xipHostname = "http://patternlab.*.xip.io"
-
 // whether the public directory should be cleaned when generating your site
 cleanPublic = "true"
 
