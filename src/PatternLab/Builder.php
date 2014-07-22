@@ -160,6 +160,11 @@ class Builder {
 		$patternSourceDir = Config::$options["patternSourceDir"];
 		$patternExtension = Config::$options["patternExtension"];
 		
+		// make sure the export dir exists
+		if ($exportFiles && !is_dir(Config::$options["exportDir"])) {
+			mkdir(Config::$options["exportDir"]);
+		}
+		
 		// make sure patterns exists
 		if (!is_dir($patternPublicDir)) {
 			mkdir($patternPublicDir);
@@ -249,6 +254,11 @@ class Builder {
 		$patternHead      = Template::$patternHead;
 		$patternFoot      = Template::$patternFoot;
 		$filesystemLoader = Template::$filesystemLoader;
+		
+		// make sure the pattern dir exists
+		if (!is_dir($patternPublicDir)) {
+			mkdir($patternPublicDir);
+		}
 		
 		// add view all to each list
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
