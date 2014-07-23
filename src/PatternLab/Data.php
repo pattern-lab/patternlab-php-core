@@ -54,6 +54,10 @@ class Data {
 		$sourceDir     = Config::$options["sourceDir"];
 		
 		// iterate over all of the other files in the source directory
+		if (!is_dir(Config::$options["sourceDir"]."/_data/")) {
+			Console::writeLine("<path>_data/</path><warning> doesn't exist so you won't have dynamic data...</warning>");
+			exit;
+		}
 		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
