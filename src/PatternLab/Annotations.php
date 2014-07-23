@@ -33,6 +33,10 @@ class Annotations {
 		self::$store["comments"] = array();
 		
 		// iterate over all of the files in the annotations dir
+		if (!is_dir(Config::$options["sourceDir"]."/_annotations")) {
+			Console::writeLine("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...</warning>");
+			exit;
+		}
 		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_annotations");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
