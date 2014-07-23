@@ -37,6 +37,11 @@ class Dispatcher {
 	*/
 	protected static function loadListeners() {
 		
+		if (!is_dir(Config::$options["packagesDir"])) {
+			Console::writeLine("<error>you haven't fully set-up Pattern Lab yet. please add a pattern engine...</error>");
+			exit;
+		}
+		
 		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["packagesDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
 		
 		// make sure dots are skipped
