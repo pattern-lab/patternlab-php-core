@@ -36,6 +36,11 @@ class InstallerUtil {
 			$source      = self::removeDots(key($fileItem));
 			$destination = self::removeDots($fileItem[$source]);
 			
+			// make sure the destination base exists
+			if (!is_dir($destinationBase)) {
+				mkdir($destinationBase);
+			}
+			
 			// depending on the source handle things differently. mirror if it ends in /*
 			if (($source == "*") && ($destination == "*")) {
 				if (!self::pathExists($packageName,$destinationBase."/")) {
