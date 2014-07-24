@@ -109,12 +109,14 @@ class Config {
 		}
 		
 		// set-up the various dirs
+		$baseFull                          = $baseDir.DIRECTORY_SEPARATOR;
 		self::$options["baseDir"]          = $baseDir;
-		self::$options["coreDir"]          = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["coreDir"]);
-		self::$options["exportDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["exportDir"]);
-		self::$options["packagesDir"]      = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["packagesDir"]);
-		self::$options["publicDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["publicDir"]);
-		self::$options["sourceDir"]        = $baseDir.DIRECTORY_SEPARATOR.self::cleanDir(self::$options["sourceDir"]);
+		self::$options["coreDir"]          = (is_dir($baseFull."_core")) ? $baseFull."_core" : $baseFull."core";
+		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? $baseFull.self::cleanDir(self::$options["exportDir"])   : $baseFull."exports";
+		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? $baseFull.self::cleanDir(self::$options["packagesDir"]) : $baseFull."packages";
+		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? $baseFull.self::cleanDir(self::$options["publicDir"])   : $baseFull."public";
+		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? $baseFull.self::cleanDir(self::$options["scriptsDir"])  : $baseFull."scripts";
+		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? $baseFull.self::cleanDir(self::$options["sourceDir"])   : $baseFull."source";
 		self::$options["patternExportDir"] = self::$options["exportDir"]."/patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
