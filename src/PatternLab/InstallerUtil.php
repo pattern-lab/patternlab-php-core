@@ -86,17 +86,29 @@ class InstallerUtil {
 		
 		if ($fs->exists($path)) {
 			
-			// see if the directory is essentially empty
-			$files = scandir($path);
-			foreach ($files as $key => $file) {
-				$ignore = array("..",".",".gitkeep","README",".DS_Store");
-				$file = explode("/",$file);
-				if (in_array($file[count($file)-1],$ignore)) {
-					unset($files[$key]);
+			// set if the prompt should fire
+			$prompt = true;
+			
+			// see if we're checking out a directory
+			if (is_dir($path)) {
+				
+				// see if the directory is essentially empty
+				$files = scandir($path);
+				foreach ($files as $key => $file) {
+					$ignore = array("..",".",".gitkeep","README",".DS_Store");
+					$file = explode("/",$file);
+					if (in_array($file[count($file)-1],$ignore)) {
+						unset($files[$key]);
+					}
 				}
+				
+				if (empty($files)) {
+					$prompt = false;
+				}
+				
 			}
 			
-			if (!empty($files)) {
+			if ($prompt) {
 				$stdin = fopen("php://stdin", "r");
 				Console::writeLine("<info>the path</info> <path>".$path."</path> <info>already exists. overwrite it with the contents of</info> <path>".$packageName."</path><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
 				$answer = strtolower(trim(fgets($stdin)));
