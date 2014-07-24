@@ -50,7 +50,7 @@ class Console {
 		$colorTheme["path"]     = "green";
 		$colorTheme["enter"]    = "blue";
 		$colorTheme["ok"]       = "green";
-		$colorTheme["options"]  = "orange";
+		$colorTheme["options"]  = "magenta";
 		$colorTheme["info"]     = "cyan";
 		$colorTheme["warning"]  = "yellow";
 		$colorTheme["error"]    = "red";
