@@ -92,7 +92,7 @@ class InstallerUtil {
 			
 			if (!empty($files)) {
 				$stdin = fopen("php://stdin", "r");
-				Console::writeLine("<info>the path</info> <path>".$path."</path> <info>already exists. overwrite it with the contents of</info> <path>".$packageName."</path><info>? Y/n > </info><nophpeol>");
+				Console::writeLine("<info>the path</info> <path>".$path."</path> <info>already exists. overwrite it with the contents of</info> <path>".$packageName."</path><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
 				$answer = strtolower(trim(fgets($stdin)));
 				fclose($stdin);
 				if ($answer == "y") {
