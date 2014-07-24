@@ -89,7 +89,7 @@ class InstallerUtil {
 			// set if the prompt should fire
 			$prompt = true;
 			
-			// see if we're checking out a directory
+			// are we checking a directory?
 			if (is_dir($path)) {
 				
 				// see if the directory is essentially empty
@@ -114,10 +114,10 @@ class InstallerUtil {
 				$answer = strtolower(trim(fgets($stdin)));
 				fclose($stdin);
 				if ($answer == "y") {
-					Console::writeLine("<ok>contents of</ok> <path>".$path."</path> <ok>being overwritten...</ok>", false, true);
+					Console::writeLine("<ok>contents of</ok> <path>".$path."</path> <ok>being overwritten...</ok>", false, false);
 					return false;
 				} else {
-					Console::writeLine("<warning>contents of</warning> <path>".$path."</path> <warning>weren't overwritten. some parts of the</warning> <path>".$packageName."</path> <warning>package may be missing...</warning>", false, true);
+					Console::writeLine("<warning>contents of</warning> <path>".$path."</path> <warning>weren't overwritten. some parts of the</warning> <path>".$packageName."</path> <warning>package may be missing...</warning>", false, false);
 					return true;
 				}
 			}
@@ -235,7 +235,7 @@ class InstallerUtil {
 					self::parseFileList($name,$path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
 				}
 				
-				// move assets to the source directory
+				// move assets to the scripts directory
 				if (isset($extra["assets"]["scriptsDir"])) {
 					self::parseFileList($name,$path,Config::$options["scriptsDir"],$extra["assets"]["scriptsDir"]);
 				}
