@@ -173,7 +173,15 @@ class Config {
 	public static function updateConfigOption($optionName,$optionValue) {
 		
 		// check if we should notify the user of a change
-		if (isset(Config::$options[$optionName])) {
+		if (strpos($optionValue,"<prompt>") !== false) {
+			$optionValue = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
+			$stdin = fopen("php://stdin", "r");
+			Console::writeLine($optionValue."<nophpeol>");
+			$userValue = strtolower(trim(fgets($stdin)));
+			fclose($stdin);
+			self::writeUpdateConfigOption($optionName,$userValue);
+			Console::writeLine("<ok>config option '".$optionName."' updated...</ok>", false, true);
+		} else if (isset(Config::$options[$optionName])) {
 			$stdin = fopen("php://stdin", "r");
 			Console::writeLine("<info>update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > </info><nophpeol>");
 			$answer = strtolower(trim(fgets($stdin)));
