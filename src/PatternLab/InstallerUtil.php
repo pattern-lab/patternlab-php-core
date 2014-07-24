@@ -124,7 +124,7 @@ class InstallerUtil {
 	 */
 	public static function postPackageInstall($event) {
 		
-		self::runTasks($event);
+		self::runTasks($event,"install");
 		
 	}
 	
@@ -134,7 +134,7 @@ class InstallerUtil {
 	 */
 	public static function postPackageUpdate($event) {
 		
-		self::runTasks($event);
+		self::runTasks($event,"update");
 		
 	}
 	
@@ -181,8 +181,9 @@ class InstallerUtil {
 	/**
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
 	 * @param  {Object}     a script event object from composer
+	 * @param  {String}     the type of event starting the runTasks command
 	 */
-	protected static function runTasks($event) {
+	protected static function runTasks($event,$type) {
 		
 		// initialize the console to print out any issues
 		Console::init();
@@ -192,7 +193,7 @@ class InstallerUtil {
 		Config::init($baseDir,false);
 		
 		// get package info
-		$package   = $event->getOperation()->getPackage();
+		$package   = ($type == "install") ? $event->getOperation()->getPackage() : $event->getOperation()->getTargetPackage();
 		$extra     = $package->getExtra();
 		$type      = $package->getType();
 		$name      = $package->getName();
