@@ -50,6 +50,7 @@ class Console {
 		$colorTheme["path"]     = "green";
 		$colorTheme["enter"]    = "blue";
 		$colorTheme["ok"]       = "green";
+		$colorTheme["options"]  = "orange";
 		$colorTheme["info"]     = "cyan";
 		$colorTheme["warning"]  = "yellow";
 		$colorTheme["error"]    = "red";
@@ -57,7 +58,6 @@ class Console {
 		self::$color->setTheme($colorTheme);
 		
 	}
-	
 	
 	public static function run() {
 		
