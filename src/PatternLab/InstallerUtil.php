@@ -222,7 +222,7 @@ class InstallerUtil {
 					self::parseFileList($name,$path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
 				}
 				
-				// move assets to the source directory
+				// move assets to the scripts directory
 				if (isset($extra["assets"]["scriptsDir"])) {
 					self::parseFileList($name,$path,Config::$options["scriptsDir"],$extra["assets"]["scriptsDir"]);
 				}
