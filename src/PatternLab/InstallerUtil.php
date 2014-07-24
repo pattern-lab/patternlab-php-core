@@ -86,26 +86,37 @@ class InstallerUtil {
 		
 		if ($fs->exists($path)) {
 			
-			// see if the directory is essentially empty
-			$files = scandir($path);
-			foreach ($files as $key => $file) {
-				$ignore = array("..",".",".gitkeep","README",".DS_Store");
-				$file = explode("/",$file);
-				if (in_array($file[count($file)-1],$ignore)) {
-					unset($files[$key]);
+			$prompt = true;
+			
+			// are we checking a directory?
+			if (is_dir($path)) {
+				
+				// see if the directory is essentially empty
+				$files = scandir($path);
+				foreach ($files as $key => $file) {
+					$ignore = array("..",".",".gitkeep","README",".DS_Store");
+					$file = explode("/",$file);
+					if (in_array($file[count($file)-1],$ignore)) {
+						unset($files[$key]);
+					}
 				}
+				
+				if (empty($files)) {
+					$prompt = false;
+				}
+				
 			}
 			
-			if (!empty($files)) {
+			if ($prompt) {
 				$stdin = fopen("php://stdin", "r");
 				Console::writeLine("<info>the path</info> <path>".$path."</path> <info>already exists. overwrite it with the contents of</info> <path>".$packageName."</path><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
 				$answer = strtolower(trim(fgets($stdin)));
 				fclose($stdin);
 				if ($answer == "y") {
-					Console::writeLine("<ok>contents of</ok> <path>".$path."</path> <ok>being overwritten...</ok>", false, true);
+					Console::writeLine("<ok>contents of</ok> <path>".$path."</path> <ok>being overwritten...</ok>", false, false);
 					return false;
 				} else {
-					Console::writeLine("<warning>contents of</warning> <path>".$path."</path> <warning>weren't overwritten. some parts of the</warning> <path>".$packageName."</path> <warning>package may be missing...</warning>", false, true);
+					Console::writeLine("<warning>contents of</warning> <path>".$path."</path> <warning>weren't overwritten. some parts of the</warning> <path>".$packageName."</path> <warning>package may be missing...</warning>", false, false);
 					return true;
 				}
 			}
@@ -124,7 +135,7 @@ class InstallerUtil {
 	 */
 	public static function postPackageInstall($event) {
 		
-		self::runTasks($event);
+		self::runTasks($event,"install");
 		
 	}
 	
@@ -134,7 +145,7 @@ class InstallerUtil {
 	 */
 	public static function postPackageUpdate($event) {
 		
-		self::runTasks($event);
+		self::runTasks($event,"update");
 		
 	}
 	
@@ -181,8 +192,9 @@ class InstallerUtil {
 	/**
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
 	 * @param  {Object}     a script event object from composer
+	 * @param  {String}     the type of task that is being run
 	 */
-	protected static function runTasks($event) {
+	protected static function runTasks($event,$type) {
 		
 		// initialize the console to print out any issues
 		Console::init();
@@ -192,7 +204,7 @@ class InstallerUtil {
 		Config::init($baseDir,false);
 		
 		// get package info
-		$package   = $event->getOperation()->getPackage();
+		$package   = ($type == "install") ? $event->getOperation()->getPackage() : $event->getOperation()->getTargetPackage();
 		$extra     = $package->getExtra();
 		$type      = $package->getType();
 		$name      = $package->getName();
