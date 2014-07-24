@@ -182,17 +182,17 @@ class Config {
 			$userValue = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			self::writeUpdateConfigOption($optionName,$userValue);
-			Console::writeLine("<ok>config option '".$optionName."' updated...</ok>", false, true);
+			Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
 		} else if (isset(Config::$options[$optionName])) {
 			$stdin = fopen("php://stdin", "r");
-			Console::writeLine("<info>update the config option '".$optionName."' with the value '".$optionValue."'? Y/n > </info><nophpeol>");
+			Console::writeLine("<info>update the config option </info><desc>".$optionName."</desc><info> with the value </info><desc>".$optionValue."</desc><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
 			$answer = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			if ($answer == "y") {
 				self::writeUpdateConfigOption($optionName,$optionValue);
-				Console::writeLine("<ok>config option '".$optionName."' updated...</ok>", false, true);
+				Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
 			} else {
-				Console::writeLine("<warning>config option '".$optionName."' not  updated...</warning>", false, true);
+				Console::writeLine("<warning>config option </warning><desc>".$optionName."</desc><warning> not  updated...</warning>", false, true);
 			}
 		} else {
 			self::writeUpdateConfigOption($optionName,$optionValue);
