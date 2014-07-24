@@ -31,7 +31,6 @@ styleGuideExcludes = ""
 cacheBusterOn = "true"
 
 // project directories
-coreDir     = "core"
 exportDir   = "export"
 packagesDir = "packages"
 publicDir   = "public"
