@@ -5,6 +5,9 @@
 
 v  = "0.7.12"
 
+// what to do when included config var conflicts, q = question, a = always override, n = never override
+overrideConfig = "q"
+
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"
 
@@ -13,13 +16,6 @@ id = "scss,.svn,.sass-cache"
 
 // whether the public directory should be cleaned when generating your site
 cleanPublic = "true"
-
-// the minimum and maximum for the viewport resizer
-ishMinimum = "240"
-ishMaximum = "2600"
-
-// which, if any, controls to hide in the nav, separate with a comma
-ishControlsHide = "hay"
 
 // the order of pattern states, css class names
 patternStates = "inprogress,inreview,complete"

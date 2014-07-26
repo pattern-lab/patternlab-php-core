@@ -174,28 +174,41 @@ class Config {
 	*/
 	public static function updateConfigOption($optionName,$optionValue) {
 		
-		// check if we should notify the user of a change
 		if (strpos($optionValue,"<prompt>") !== false) {
-			$optionValue = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
+			
+			// if this is a prompt always write out the query
+			$output = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue))."<nophpeol>";
+			
 			$stdin = fopen("php://stdin", "r");
-			Console::writeLine($optionValue."<nophpeol>");
-			$userValue = strtolower(trim(fgets($stdin)));
+			Console::writeLine($output);
+			$input = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
-			self::writeUpdateConfigOption($optionName,$userValue);
+			
+			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
-		} else if (isset(Config::$options[$optionName])) {
+			
+		} else if (!isset(Config::$options[$optionName]) || (Config::$options["overrideConfig"] == "a")) {
+			
+			// if the option isn't set or the config is always to override update the config
+			self::writeUpdateConfigOption($optionName,$optionValue);
+			
+		} else if (Config::$options["overrideConfig"] == "q") {
+			
+			// if the option is to query the user when the option is set do so
+			$output = "<info>update the config option </info><desc>".$optionName."</desc><info> with the value </info><desc>".$optionValue."</desc><info>?</info> <options>Y/n</options><info> > </info><nophpeol>";
+			
 			$stdin = fopen("php://stdin", "r");
-			Console::writeLine("<info>update the config option </info><desc>".$optionName."</desc><info> with the value </info><desc>".$optionValue."</desc><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
-			$answer = strtolower(trim(fgets($stdin)));
+			Console::writeLine($output);
+			$input = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
-			if ($answer == "y") {
+			
+			if (!$prompt && ($input == "y")) {
 				self::writeUpdateConfigOption($optionName,$optionValue);
 				Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
 			} else {
 				Console::writeLine("<warning>config option </warning><desc>".$optionName."</desc><warning> not  updated...</warning>", false, true);
 			}
-		} else {
-			self::writeUpdateConfigOption($optionName,$optionValue);
+			
 		}
 		
 	}
