@@ -44,18 +44,18 @@ class InstallerUtil {
 			// depending on the source handle things differently. mirror if it ends in /*
 			if (($source == "*") && ($destination == "*")) {
 				if (!self::pathExists($packageName,$destinationBase."/")) {
-					$fs->mirror($sourceBase."/assets/",$destinationBase."/");
+					$fs->mirror($sourceBase."/dist/",$destinationBase."/");
 				}
 			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
 				$destination = rtrim($destination,"/*");
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase."/assets/",$destinationBase."/".$destination);
+					$fs->mirror($sourceBase."/dist/",$destinationBase."/".$destination);
 				}
 			} else if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
 				$destination = rtrim($destination,"/*");
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase."/assets/".$source,$destinationBase."/".$destination);
+					$fs->mirror($sourceBase."/dist/".$source,$destinationBase."/".$destination);
 				}
 			} else {
 				$pathInfo       = explode("/",$destination);
@@ -65,7 +65,7 @@ class InstallerUtil {
 					$fs->mkdir($destinationBase."/".$destinationDir);
 				}
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->copy($sourceBase."/assets/".$source,$destinationBase."/".$destination,true);
+					$fs->copy($sourceBase."/dist/".$source,$destinationBase."/".$destination,true);
 				}
 			}
 			
@@ -221,22 +221,22 @@ class InstallerUtil {
 				$extra = $extra["patternlab"];
 				
 				// move assets to the base directory
-				if (isset($extra["assets"]["baseDir"])) {
+				if (isset($extra["dist"]["baseDir"])) {
 					self::parseFileList($name,$path,Config::$options["baseDir"],$extra["assets"]["baseDir"]);
 				}
 				
 				// move assets to the public directory
-				if (isset($extra["assets"]["publicDir"])) {
+				if (isset($extra["dist"]["publicDir"])) {
 					self::parseFileList($name,$path,Config::$options["publicDir"],$extra["assets"]["publicDir"]);
 				}
 				
 				// move assets to the source directory
-				if (isset($extra["assets"]["sourceDir"])) {
+				if (isset($extra["dist"]["sourceDir"])) {
 					self::parseFileList($name,$path,Config::$options["sourceDir"],$extra["assets"]["sourceDir"]);
 				}
 				
 				// move assets to the scripts directory
-				if (isset($extra["assets"]["scriptsDir"])) {
+				if (isset($extra["dist"]["scriptsDir"])) {
 					self::parseFileList($name,$path,Config::$options["scriptsDir"],$extra["assets"]["scriptsDir"]);
 				}
 				
