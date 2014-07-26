@@ -117,6 +117,7 @@ class Config {
 		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? $baseFull.self::cleanDir(self::$options["publicDir"])   : $baseFull."public";
 		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? $baseFull.self::cleanDir(self::$options["scriptsDir"])  : $baseFull."scripts";
 		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? $baseFull.self::cleanDir(self::$options["sourceDir"])   : $baseFull."source";
+		self::$options["dataDir"]          = self::$options["sourceDir"]."/_data";
 		self::$options["patternExportDir"] = self::$options["exportDir"]."/patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
