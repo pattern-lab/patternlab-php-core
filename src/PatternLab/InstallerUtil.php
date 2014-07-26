@@ -44,18 +44,18 @@ class InstallerUtil {
 			// depending on the source handle things differently. mirror if it ends in /*
 			if (($source == "*") && ($destination == "*")) {
 				if (!self::pathExists($packageName,$destinationBase."/")) {
-					$fs->mirror($sourceBase."/dist/",$destinationBase."/");
+					$fs->mirror($sourceBase,$destinationBase."/");
 				}
 			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
 				$destination = rtrim($destination,"/*");
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase."/dist/",$destinationBase."/".$destination);
+					$fs->mirror($sourceBase,$destinationBase."/".$destination);
 				}
 			} else if ($source[strlen($source)-1] == "*") {
 				$source      = rtrim($source,"/*");
 				$destination = rtrim($destination,"/*");
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase."/dist/".$source,$destinationBase."/".$destination);
+					$fs->mirror($sourceBase.$source,$destinationBase."/".$destination);
 				}
 			} else {
 				$pathInfo       = explode("/",$destination);
@@ -65,7 +65,7 @@ class InstallerUtil {
 					$fs->mkdir($destinationBase."/".$destinationDir);
 				}
 				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->copy($sourceBase."/dist/".$source,$destinationBase."/".$destination,true);
+					$fs->copy($sourceBase.$source,$destinationBase."/".$destination,true);
 				}
 			}
 			
@@ -209,7 +209,7 @@ class InstallerUtil {
 		$extra     = $package->getExtra();
 		$type      = $package->getType();
 		$name      = $package->getName();
-		$path      = Config::$options["packagesDir"]."/".$name;
+		$path      = Config::$options["packagesDir"]."/".$name."/dist/";
 		
 		// make sure we're only evaluating pattern lab packages
 		if (strpos($type,"patternlab-") !== false) {
