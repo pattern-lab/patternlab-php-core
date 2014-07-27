@@ -14,7 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Data;
 use \PatternLab\PatternEngine;
-use \PatternLab\Template\Helper;
+use \PatternLab\Template;
 
 class Render {
 	
