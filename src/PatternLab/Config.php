@@ -160,7 +160,11 @@ class Config {
 		self::$options["enableCSS"] = false;
 		
 		// which of these should be exposed in the front-end?
-		self::$options["exposedOptions"] = array("cacheBuster", "ishMinimum", "ishMaximum");
+		self::$options["exposedOptions"] = array();
+		self::setExposedOption("cacheBuster");
+		self::setExposedOption("ishFontSize");
+		self::setExposedOption("ishMaximum");
+		self::setExposedOption("ishMinimum");
 		
 	}
 	
