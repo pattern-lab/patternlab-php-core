@@ -122,7 +122,7 @@ class Builder {
 		$ishControls                    = array();
 		$ishControls["ishControlsHide"] = Config::$options["ishControlsHide"];
 		$ishControls["mqs"]             = $this->gatherMQs();
-		$output .= "var ishControls = ".json_encode($ishControls).";";
+		$output      .= "var ishControls = ".json_encode($ishControls).";";
 		
 		// load and write out the items for the navigation
 		$niExporter   = new NavItemsExporter();
