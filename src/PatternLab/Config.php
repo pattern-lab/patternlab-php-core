@@ -71,7 +71,13 @@ class Config {
 		}
 		
 		// set the default config using the pattern lab config
-		$defaultOptions = self::$options = parse_ini_file(self::$plConfigPath);
+		if (!self::$options = @parse_ini_file(self::$plConfigPath)) {
+			Console::writeLine("<error>Config parse error in</error> <path>".self::$plConfigPath."</path><error>...</error>"); 
+			exit;
+		}
+		
+		// make sure these are copied
+		$defaultOptions = self::$options;
 		
 		// check to see if the user config exists, if not create it
 		if ($verbose) {
@@ -81,7 +87,10 @@ class Config {
 		if (!file_exists(self::$userConfigPath)) {
 			$migrate = true;
 		} else {
-			self::$options = parse_ini_file(self::$userConfigPath);
+			if (!self::$options = @parse_ini_file(self::$userConfigPath)) {
+				Console::writeLine("<error>Config parse error in</error> <path>".self::$userConfigPath."</path><error>...</error>"); 
+				exit;
+			}
 		}
 		
 		// compare version numbers
