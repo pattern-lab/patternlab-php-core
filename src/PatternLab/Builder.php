@@ -112,11 +112,12 @@ class Builder {
 		$output = "";
 		
 		// load and write out the config options
-		$config                      = array();
-		$config["cacheBuster"]       = Config::$options["cacheBuster"];
-		$config["ishminimum"]        = Config::$options["ishMinimum"];
-		$config["ishmaximum"]        = Config::$options["ishMaximum"];
-		$output .= "var config = ".json_encode($config).";";
+		$config                         = array();
+		$exposedOptions                 = Config::$options["exposedOptions"];
+		foreach ($exposedOptions as $exposedOption) {
+			$config[$exposedOption]     = Config::$options[$exposedOption];
+		}
+		$output     .= "var config = ".json_encode($config).";";
 		
 		// load the ish Controls
 		$ishControls                    = array();

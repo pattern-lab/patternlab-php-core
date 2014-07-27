@@ -159,6 +159,9 @@ class Config {
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		self::$options["enableCSS"] = false;
 		
+		// which of these should be exposed in the front-end?
+		self::$options["exposedOptions"] = array("cacheBuster", "ishMinimum", "ishMaximum");
+		
 	}
 	
 	/**
@@ -219,6 +222,23 @@ class Config {
 				Console::writeLine("<warning>config option </warning><desc>".$optionName."</desc><warning> not  updated...</warning>", false, true);
 			}
 			
+		}
+		
+	}
+	
+	/**
+	* Add an option to the exposedOptions array so it can be exposed on the front-end
+	* @param  {String}       the name of the option to be added to the exposedOption arrays
+	* 
+	* @return {Boolean}      whether the set was successful
+	*/
+	public static function setExposedOption($optionName) {
+		
+		if (isset(self::$options[$optionName])) {
+			self::$options["exposedOptions"][] = $optionName;
+			return true;
+		} else {
+			return false;
 		}
 		
 	}
