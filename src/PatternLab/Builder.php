@@ -111,16 +111,9 @@ class Builder {
 		
 		// load and write out the config options
 		$config                      = array();
-		$config["autoreloadnav"]     = Config::$options["autoReloadNav"];
-		$config["autoreloadport"]    = Config::$options["autoReloadPort"];
 		$config["cacheBuster"]       = Config::$options["cacheBuster"];
-		$config["ipaddress"]         = getHostByName(getHostName());
-		$config["pagefollownav"]     = Config::$options["pageFollowNav"];
-		$config["pagefollowport"]    = Config::$options["pageFollowPort"];
-		$config["xiphostname"]       = Config::$options["xipHostname"];
 		$config["ishminimum"]        = Config::$options["ishMinimum"];
 		$config["ishmaximum"]        = Config::$options["ishMaximum"];
-		$config["qrcodegeneratoron"] = Config::$options["qrCodeGeneratorOn"];
 		file_put_contents($dataDir."/config.js","var config = ".json_encode($config).";");
 		
 		// load the ish Controls
