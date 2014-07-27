@@ -109,35 +109,40 @@ class Builder {
 			mkdir($dataDir);
 		}
 		
+		$output = "";
+		
 		// load and write out the config options
 		$config                      = array();
 		$config["cacheBuster"]       = Config::$options["cacheBuster"];
 		$config["ishminimum"]        = Config::$options["ishMinimum"];
 		$config["ishmaximum"]        = Config::$options["ishMaximum"];
-		file_put_contents($dataDir."/config.js","var config = ".json_encode($config).";");
+		$output .= "var config = ".json_encode($config).";";
 		
 		// load the ish Controls
 		$ishControls                    = array();
 		$ishControls["ishControlsHide"] = Config::$options["ishControlsHide"];
 		$ishControls["mqs"]             = $this->gatherMQs();
-		file_put_contents($dataDir."/ish-controls.js","var ishControls = ".json_encode($ishControls).";");
+		$output .= "var ishControls = ".json_encode($ishControls).";";
 		
 		// load and write out the items for the navigation
 		$niExporter   = new NavItemsExporter();
 		$navItems     = $niExporter->run();
-		file_put_contents($dataDir."/nav-items.js","var navItems = ".json_encode($navItems).";");
+		$output      .= "var navItems = ".json_encode($navItems).";";
 		
 		// load and write out the items for the pattern paths
 		$patternPaths = array();
 		$ppdExporter  = new PatternPathDestsExporter();
 		$patternPaths = $ppdExporter->run();
-		file_put_contents($dataDir."/pattern-paths.js","var patternPaths = ".json_encode($patternPaths).";");
+		$output      .= "var patternPaths = ".json_encode($patternPaths).";";
 		
 		// load and write out the items for the view all paths
 		$viewAllPaths = array();
 		$vapExporter  = new ViewAllPathsExporter();
 		$viewAllPaths = $vapExporter->run($navItems);
-		file_put_contents($dataDir."/viewall-paths.js","var viewAllPaths = ".json_encode($viewAllPaths).";");
+		$output      .= "var viewAllPaths = ".json_encode($viewAllPaths).";";
+		
+		// write out the data
+		file_put_contents($dataDir."/patternlab-data.js",$output);
 		
 	}
 	
