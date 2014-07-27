@@ -5,7 +5,7 @@
 
 v  = "0.7.12"
 
-// what to do when included config var conflicts, q = question, a = always override, n = never override
+// what to do when included config var conflicts, q for question, a for always override, n for never override
 overrideConfig = "q"
 
 // file extensions to ignore when building or watching the source dir, separate with a comma
