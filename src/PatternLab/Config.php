@@ -17,7 +17,7 @@ use \PatternLab\FileUtil;
 
 class Config {
 	
-	public    static $options            = array();
+	protected static $options            = array();
 	protected static $userConfig         = "config.ini";
 	protected static $userConfigDir      = "";
 	protected static $userConfigDirClean = "config";
