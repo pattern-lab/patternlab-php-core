@@ -27,6 +27,21 @@ class Config {
 	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes");
 	protected static $dirAdded           = false;
 	
+	/**
+	* Clean a given dir from the config file
+	* @param  {String}       directory to be cleaned
+	*
+	* @return {String}       cleaned directory
+	*/
+	protected static function cleanDir($dir) {
+		
+		$dir = trim($dir);
+		$dir = ($dir[0] == DIRECTORY_SEPARATOR) ? ltrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		
+		return $dir;
+		
+	}
 	
 	/**
 	* Get the value associated with an option from the Config
@@ -190,23 +205,48 @@ class Config {
 	}
 	
 	/**
-	* Clean a given dir from the config file
-	* @param  {String}       directory to be cleaned
-	*
-	* @return {String}       cleaned directory
+	* Add an option and associated value to the base Config
+	* @param  {String}       the name of the option to be added
+	* @param  {String}       the value of the option to be added
+	* 
+	* @return {Boolean}      whether the set was successful
 	*/
-	protected static function cleanDir($dir) {
+	public static function setOption($optionName = "", $optionValue = "") {
 		
-		$dir = trim($dir);
-		$dir = ($dir[0] == DIRECTORY_SEPARATOR) ? ltrim($dir, DIRECTORY_SEPARATOR) : $dir;
-		$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		if (empty($optionName) || empty($optionValue)) {
+			return false;
+		}
 		
-		return $dir;
+		if (!array_key_exists($optionName,self::$options)) {
+			self::$options[$optionName] = $optionValue;
+			return true;
+		}
+		
+		return false;
 		
 	}
 	
 	/**
-	* Update a single config option
+	* Add an option to the exposedOptions array so it can be exposed on the front-end
+	* @param  {String}       the name of the option to be added to the exposedOption arrays
+	* 
+	* @return {Boolean}      whether the set was successful
+	*/
+	public static function setExposedOption($optionName = "") {
+		
+		if (!empty($optionName) && isset(self::$options[$optionName])) {
+			if (!in_array($optionName,self::$options["exposedOptions"])) {
+				self::$options["exposedOptions"][] = $optionName;
+			}
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Update a single config option based on a change in composer.json
 	* @param  {String}       the name of the option to be changed
 	* @param  {String}       the new value of the option to be changed
 	*/
@@ -248,47 +288,6 @@ class Config {
 			}
 			
 		}
-		
-	}
-	
-	/**
-	* Add an option and associated value to the base Config
-	* @param  {String}       the name of the option to be added
-	* @param  {String}       the value of the option to be added
-	* 
-	* @return {Boolean}      whether the set was successful
-	*/
-	public static function setOption($optionName = "", $optionValue = "") {
-		
-		if (empty($optionName) || empty($optionValue)) {
-			return false;
-		}
-		
-		if (!array_key_exists($optionName,self::$options)) {
-			self::$options[$optionName] = $optionValue;
-			return true;
-		}
-		
-		return false;
-		
-	}
-	
-	/**
-	* Add an option to the exposedOptions array so it can be exposed on the front-end
-	* @param  {String}       the name of the option to be added to the exposedOption arrays
-	* 
-	* @return {Boolean}      whether the set was successful
-	*/
-	public static function setExposedOption($optionName = "") {
-		
-		if (!empty($optionName) && isset(self::$options[$optionName])) {
-			if (!in_array($optionName,self::$options["exposedOptions"])) {
-				self::$options["exposedOptions"][] = $optionName;
-			}
-			return true;
-		}
-		
-		return false;
 		
 	}
 	
