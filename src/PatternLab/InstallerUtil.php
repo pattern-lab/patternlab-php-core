@@ -213,7 +213,8 @@ class InstallerUtil {
 		$extra     = $package->getExtra();
 		$type      = $package->getType();
 		$name      = $package->getName();
-		$path      = Config::getOption("packagesDir")."/".$name."/dist/";
+		$pathBase  = Config::getOption("packagesDir")."/".$name.
+		$pathDist  = $pathBase."/dist/";
 		
 		// make sure we're only evaluating pattern lab packages
 		if (strpos($type,"patternlab-") !== false) {
