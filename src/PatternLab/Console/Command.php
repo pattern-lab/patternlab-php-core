@@ -10,6 +10,8 @@
 
 namespace PatternLab\Console;
 
+use \PatternLab\Timer;
+
 class Command {
 	
 	/**

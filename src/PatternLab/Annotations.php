@@ -17,6 +17,7 @@ use \PatternLab\Console;
 use \PatternLab\Dispatcher;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
+use \PatternLab\Timer;
 
 class Annotations {
 	

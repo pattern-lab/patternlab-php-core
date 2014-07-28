@@ -13,6 +13,7 @@
 namespace PatternLab\PatternData\Rules;
 
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class PatternTypeRule extends \PatternLab\PatternData\Rule {
 	

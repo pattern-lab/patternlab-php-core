@@ -12,6 +12,8 @@
 
 namespace PatternLab\PatternEngine;
 
+use \PatternLab\Timer;
+
 class Util {
 	
 	protected $patternPaths  = array();

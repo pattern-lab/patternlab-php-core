@@ -12,7 +12,8 @@
 
 namespace PatternLab\PatternData;
 
-use Symfony\Component\EventDispatcher;
+use \PatternLab\Timer;
+use \Symfony\Component\EventDispatcher;
 
 class Event extends EventDispatcher\Event {
 	

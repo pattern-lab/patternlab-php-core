@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Rules;
 use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\JSON;
+use \PatternLab\Timer;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 

@@ -10,6 +10,7 @@
 
 namespace PatternLab\PatternData;
 
+use \PatternLab\Timer;
 class Exporter {
 	
 	public function __construct($options) {

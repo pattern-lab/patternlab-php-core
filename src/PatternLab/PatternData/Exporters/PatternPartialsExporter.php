@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Exporters;
 use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 	

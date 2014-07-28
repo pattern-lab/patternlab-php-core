@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Exporters;
 
 use \PatternLab\Config;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class PatternPathSrcExporter extends \PatternLab\PatternData\Exporter {
 	

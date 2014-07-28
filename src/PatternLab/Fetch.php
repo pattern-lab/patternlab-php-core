@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Console;
+use \PatternLab\Timer;
 
 class Fetch {
 	

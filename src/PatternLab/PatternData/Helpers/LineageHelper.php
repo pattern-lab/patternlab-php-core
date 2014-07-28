@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Helpers;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class LineageHelper extends \PatternLab\PatternData\Helper {
 	

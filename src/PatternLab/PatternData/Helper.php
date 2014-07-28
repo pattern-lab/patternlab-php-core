@@ -10,6 +10,8 @@
 
 namespace PatternLab\PatternData;
 
+use \PatternLab\Timer;
+
 class Helper {
 	
 	public function __construct($options) {

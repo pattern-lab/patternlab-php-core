@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \PatternLab\Config;
+use \PatternLab\Timer;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Dispatcher {

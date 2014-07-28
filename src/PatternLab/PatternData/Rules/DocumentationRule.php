@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Rules;
 use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\Parsers\Documentation;
+use \PatternLab\Timer;
 
 class DocumentationRule extends \PatternLab\PatternData\Rule {
 	

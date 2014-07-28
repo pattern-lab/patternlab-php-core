@@ -18,6 +18,7 @@ use \PatternLab\Console;
 use \PatternLab\Console\Command;
 use \PatternLab\FileUtil;
 use \PatternLab\Generator;
+use \PatternLab\Timer;
 
 class ExportCommand extends Command {
 	

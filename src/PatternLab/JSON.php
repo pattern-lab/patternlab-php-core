@@ -12,8 +12,9 @@
 
 namespace PatternLab;
 
-use \Seld\JsonLint;
 use \PatternLab\Console;
+use \PatternLab\Timer;
+use \Seld\JsonLint;
 
 class JSON {
 	

@@ -14,6 +14,7 @@ use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
 use \PatternLab\Fetch;
+use \PatternLab\Timer;
 
 class FetchCommand extends Command {
 	

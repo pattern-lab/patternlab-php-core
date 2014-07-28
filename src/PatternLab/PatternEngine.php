@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Console;
+use \PatternLab\Timer;
 
 class PatternEngine {
 	

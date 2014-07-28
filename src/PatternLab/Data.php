@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Dispatcher;
+use \PatternLab\Timer;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 

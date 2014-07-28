@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Exporters;
 
 use \PatternLab\Data;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class DataMergeExporter extends \PatternLab\PatternData\Exporter {
 	

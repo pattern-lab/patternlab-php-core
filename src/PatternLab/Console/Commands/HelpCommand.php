@@ -12,6 +12,7 @@ namespace PatternLab\Console\Commands;
 
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
+use \PatternLab\Timer;
 
 class HelpCommand extends Command {
 	

@@ -16,6 +16,7 @@ namespace PatternLab;
 use \Colors\Color;
 use \PatternLab\Console\Event as ConsoleEvent;
 use \PatternLab\Dispatcher;
+use \PatternLab\Timer;
 
 class Console {
 	

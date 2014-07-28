@@ -14,6 +14,7 @@ namespace PatternLab\PatternData\Exporters;
 
 use \PatternLab\Data;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class DataLinkExporter extends \PatternLab\PatternData\Exporter {
 	

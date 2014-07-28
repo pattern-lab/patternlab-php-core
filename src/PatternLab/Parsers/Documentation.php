@@ -13,6 +13,7 @@
 namespace PatternLab\Parsers;
 
 use \Michelf\MarkdownExtra;
+use \PatternLab\Timer;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 

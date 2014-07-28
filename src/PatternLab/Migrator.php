@@ -21,6 +21,8 @@
 
 namespace PatternLab;
 
+use \PatternLab\Timer;
+
 class Migrator {
 	
 	/**

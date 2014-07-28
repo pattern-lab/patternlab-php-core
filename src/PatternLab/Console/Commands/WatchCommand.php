@@ -14,6 +14,7 @@ use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
 use \PatternLab\Generator;
+use \PatternLab\Timer;
 use \PatternLab\Watcher;
 
 class WatchCommand extends Command {

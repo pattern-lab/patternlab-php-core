@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Data;
 use \PatternLab\PatternEngine;
 use \PatternLab\Template;
+use \PatternLab\Timer;
 
 class Render {
 	

@@ -24,6 +24,7 @@ use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternData\Helpers\LineageHelper;
 use \PatternLab\PatternData\Helpers\PatternCodeHelper;
 use \PatternLab\PatternData\Helpers\PatternStateHelper;
+use \PatternLab\Timer;
 
 class PatternData {
 	

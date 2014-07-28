@@ -24,6 +24,7 @@ use \PatternLab\Data;
 use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
 use \PatternLab\Util;
+use \PatternLab\Timer;
 
 class Watcher extends Builder {
 	

@@ -13,6 +13,7 @@
 namespace PatternLab\PatternEngine;
 
 use \PatternLab\Config;
+use \PatternLab\Timer;
 
 class Rule {
 	

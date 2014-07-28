@@ -18,6 +18,7 @@ use \PatternLab\PatternData;
 use \PatternLab\PatternEngine;
 use \PatternLab\Render;
 use \PatternLab\Template;
+use \PatternLab\Timer;
 
 class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 	

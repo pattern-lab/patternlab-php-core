@@ -23,6 +23,7 @@ use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternEngine;
 use \PatternLab\Render;
 use \PatternLab\Template;
+use \PatternLab\Timer;
 
 class Builder {
 	

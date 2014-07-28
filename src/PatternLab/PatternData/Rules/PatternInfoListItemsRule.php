@@ -16,6 +16,7 @@ use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\PatternData;
 use \PatternLab\JSON;
+use \PatternLab\Timer;
 use \Symfony\Component\Yaml\Yaml;
 
 class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {

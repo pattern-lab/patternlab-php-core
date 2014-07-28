@@ -15,6 +15,7 @@ namespace PatternLab\PatternData\Helpers;
 
 use \PatternLab\Config;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class PatternStateHelper extends \PatternLab\PatternData\Helper {
 	

@@ -10,6 +10,8 @@
 
 namespace PatternLab\PatternData;
 
+use \PatternLab\Timer;
+
 class Rule {
 	
 	protected $depthProp;

@@ -14,6 +14,7 @@ namespace PatternLab\PatternData\Rules;
 
 use \PatternLab\Config;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 
 class PatternRule extends \PatternLab\PatternData\Rule {
 	

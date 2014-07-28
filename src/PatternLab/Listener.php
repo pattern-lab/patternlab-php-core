@@ -13,6 +13,8 @@
 
 namespace PatternLab;
 
+use \PatternLab\Timer;
+
 class Listener {
 	
 	public $listeners = array();
