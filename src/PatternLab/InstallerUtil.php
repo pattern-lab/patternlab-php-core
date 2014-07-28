@@ -270,6 +270,16 @@ class InstallerUtil {
 			
 			// see if the package has a listener
 			self::scanForListener($pathBase);
+			
+			// see if the package is a pattern engine
+			if ($type == "patternlab-patternengine") {
+				self::scanForPatternEngineRule($pathBase);
+			}
+			
+		}
+		
+	}
+	
 	/**
 	 * Scan the package for a listener
 	 * @param  {String}     the path for the package
@@ -315,6 +325,49 @@ class InstallerUtil {
 		}
 		
 	}
+	
+	/**
+	 * Scan the package for a pattern engine rule
+	 * @param  {String}     the path for the package
+	 */
+	protected static function scanForPatternEngineRule($pathPackage) {
+		
+		// get listener list path
+		$pathList = Config::getOption("packagesDir")."/patternengines.json";
+		
+		// make sure patternengines.json exists. if not create it
+		if (!file_exists($pathList)) {
+			file_put_contents($pathList, "{ \"patternengines\": [ ] }");
+		}
+		
+		// load pattern engine list
+		$patternEngineList = json_decode(file_get_contents($pathList),true);
+		
+		// grab the list of files in the package
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathPackage), \RecursiveIteratorIterator::CHILD_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		
+		// go through the package items
+		foreach($objects as $name => $object) {
+			
+			if ($object->getFilename() == "PatternEngineRule.php") {
+				
+				// create the name
+				$dirs              = explode("/",$object->getPath());
+				$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
+				
+				// make sure it's not already in the list
+				if (!in_array($patternEngineName ,$patternEngineList)) {
+					$patternEngineList["patternengines"][] = $patternEngineName;
+				}
+				
+				// write out the pattern engine list
+				file_put_contents($pathList,json_encode($patternEngineList));
+				
+			}
+			
 		}
 		
 	}
