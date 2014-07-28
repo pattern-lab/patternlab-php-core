@@ -27,7 +27,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 	public function run() {
 		
 		// check on the states of the patterns
-		$patternStates    = Config::$options["patternStates"];
+		$patternStates    = Config::getOption("patternStates");
 		$patternStateLast = count($patternStates) - 1;
 		
 		// run through each item in the store and only look at patterns

@@ -33,11 +33,11 @@ class Annotations {
 		self::$store["comments"] = array();
 		
 		// iterate over all of the files in the annotations dir
-		if (!is_dir(Config::$options["sourceDir"]."/_annotations")) {
+		if (!is_dir(Config::getOption("sourceDir")."/_annotations")) {
 			Console::writeLine("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...</warning>");
 			exit;
 		}
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_annotations");
+		$directoryIterator = new \RecursiveDirectoryIterator(Config::getOption("sourceDir")."/_annotations");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -76,8 +76,8 @@ class Annotations {
 		}
 		
 		// read in the old style annotations.js, modify the data and generate JSON array to merge
-		if (file_exists(Config::$options["sourceDir"]."/_annotations/annotations.js")) {
-			$text = file_get_contents(Config::$options["sourceDir"]."/_annotations/annotations.js");
+		if (file_exists(Config::getOption("sourceDir")."/_annotations/annotations.js")) {
+			$text = file_get_contents(Config::getOption("sourceDir")."/_annotations/annotations.js");
 			$text = str_replace("var comments = ","",$text);
 			$text = rtrim($text,";");
 			$data = json_decode($text,true);

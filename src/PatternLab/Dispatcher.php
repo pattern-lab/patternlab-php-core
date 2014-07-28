@@ -37,12 +37,16 @@ class Dispatcher {
 	*/
 	protected static function loadListeners() {
 		
-		if (!is_dir(Config::$options["packagesDir"])) {
+		// default var
+		$packagesDir = Config::getOption("packagesDir");
+		
+		// see if the package dir exists. if it doesn't it means composer hasn't been run
+		if (!is_dir($packagesDir)) {
 			Console::writeLine("<error>you haven't fully set-up Pattern Lab yet. please add a pattern engine...</error>");
 			exit;
 		}
 		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["packagesDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($packagesDir), \RecursiveIteratorIterator::CHILD_FIRST);
 		
 		// make sure dots are skipped
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);

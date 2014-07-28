@@ -27,7 +27,7 @@ class ViewAllPathsExporter extends \PatternLab\PatternData\Exporter {
 		
 		// default vars
 		$viewAllPaths       = array();
-		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
+		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
 			

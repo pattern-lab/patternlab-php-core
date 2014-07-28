@@ -63,7 +63,7 @@ class Watcher extends Builder {
 		}
 		
 		if ($noCacheBuster) {
-			Config::$options["cacheBuster"] = 0;
+			Config::updateOption("cacheBuster",0);
 		}
 		
 		$c  = false;           // track that one loop through the pattern file listing has completed
@@ -75,8 +75,8 @@ class Watcher extends Builder {
 		Console::writeLine("watching your site for changes...");
 		
 		// default vars
-		$publicDir = Config::$options["publicDir"];
-		$sourceDir = Config::$options["sourceDir"];
+		$publicDir = Config::getOption("publicDir");
+		$sourceDir = Config::getOption("sourceDir");
 		
 		// run forever
 		while (true) {

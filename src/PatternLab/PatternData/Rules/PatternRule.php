@@ -22,7 +22,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		parent::__construct($options);
 		
 		$this->depthProp  = 3; // 3 means that depth won't be checked
-		$this->extProp    = Config::$options["patternExtension"];
+		$this->extProp    = Config::getOption("patternExtension");
 		$this->isDirProp  = false;
 		$this->isFileProp = true;
 		$this->searchProp = "";
@@ -42,8 +42,8 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		$dirSep              = PatternData::$dirSep;
 		
 		// set-up the names
-		$patternFull      = $name;                                                              // 00-colors.mustache
-		$pattern          = str_replace(".".Config::$options["patternExtension"],"",$patternFull); // 00-colors
+		$patternFull      = $name;                                                     // 00-colors.mustache
+		$pattern          = str_replace(".".$this->extProp,"",$patternFull);           // 00-colors
 		$patternState     = "";
 		
 		// check for pattern state
@@ -54,11 +54,11 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		// finish setting up vars
-		$patternDash      = $this->getPatternName(str_replace("_","",$pattern),false);       // colors
-		$patternClean     = str_replace("-"," ",$patternDash);                               // colors (dashes replaced with spaces)
-		$patternPartial   = $patternTypeDash."-".$patternDash;                               // atoms-colors
-		$patternPath      = str_replace(".".Config::$options["patternExtension"],"",$pathName); // 00-atoms/01-global/00-colors
-		$patternPathDash  = str_replace($dirSep,"-",$patternPath);                           // 00-atoms-01-global-00-colors (file path)
+		$patternDash      = $this->getPatternName(str_replace("_","",$pattern),false); // colors
+		$patternClean     = str_replace("-"," ",$patternDash);                         // colors (dashes replaced with spaces)
+		$patternPartial   = $patternTypeDash."-".$patternDash;                         // atoms-colors
+		$patternPath      = str_replace(".".$this->extProp,"",$pathName);              // 00-atoms/01-global/00-colors
+		$patternPathDash  = str_replace($dirSep,"-",$patternPath);                     // 00-atoms-01-global-00-colors (file path)
 		
 		// should this pattern get rendered?
 		$hidden           = ($patternFull[0] == "_");

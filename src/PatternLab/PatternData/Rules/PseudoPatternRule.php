@@ -55,7 +55,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		
 		// finish setting up vars
 		$patternBits         = explode("~",$patternFull);
-		$patternBase         = $patternBits[0].".".Config::$options["patternExtension"];        // 00-homepage.mustache
+		$patternBase         = $patternBits[0].".".Config::getOption("patternExtension");       // 00-homepage.mustache
 		$patternBaseDash     = $this->getPatternName($patternBits[0],false);                    // homepage
 		$patternBaseOrig     = $patternTypeDash."-".$patternBaseDash;                           // pages-homepage
 		$patternBaseData     = $patternBits[0].".".$ext;                                        // 00-homepage.json
@@ -109,8 +109,8 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		$patternDataBase = array();
-		if (file_exists(Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData)) {
-			$data = file_get_contents(Config::$options["patternSourceDir"]."/".$path."/".$patternBaseData);
+		if (file_exists(Config::getOption("patternSourceDir")."/".$path."/".$patternBaseData)) {
+			$data = file_get_contents(Config::getOption("patternSourceDir")."/".$path."/".$patternBaseData);
 			if ($ext == "json") {
 				$patternDataBase = json_decode($data,true);
 				if ($jsonErrorMessage = JSON::hasError()) {
@@ -134,7 +134,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		// get the data for the pseudo-pattern
-		$data = file_get_contents(Config::$options["patternSourceDir"]."/".$pathName);
+		$data = file_get_contents(Config::getOption("patternSourceDir")."/".$pathName);
 		if ($ext == "json") {
 			$patternData = json_decode($data,true);
 			if ($jsonErrorMessage = JSON::hasError()) {

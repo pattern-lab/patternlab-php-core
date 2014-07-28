@@ -26,8 +26,13 @@ class FileUtil {
 	* @param  {String}       the public file
 	*/
 	protected static function moveFile($s,$p) {
-		if (file_exists(Config::$options["sourceDir"]."/".$s)) {
-			copy(Config::$options["sourceDir"]."/".$s,Config::$options["publicDir"]."/".$p);
+		
+		// default vars
+		$sourceDir = Config::getOption("sourceDir");
+		$publicDir = Config::getOption("publicDir");
+		
+		if (file_exists($sourceDir."/".$s)) {
+			copy($sourceDir."/".$s,$publicDir."/".$p);
 		}
 	}
 
@@ -53,7 +58,7 @@ class FileUtil {
 	* @return {Boolean}      whether the directory should be ignored
 	*/
 	public static function ignoreDir($fileName) {
-		$id = Config::$options["id"];
+		$id = Config::getOption("id");
 		foreach ($id as $dir) {
 			$pos = strpos(DIRECTORY_SEPARATOR.$fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
 			if ($pos !== false) {
@@ -108,15 +113,18 @@ class FileUtil {
 	*/
 	public static function cleanExport() {
 		
-		if (is_dir(Config::$options["exportDir"])) {
+		// default var
+		$exportDir = Config::getOption("exportDir");
+		
+		if (is_dir($exportDir)) {
 			
-			$files = scandir(Config::$options["exportDir"]);
+			$files = scandir($exportDir);
 			foreach ($files as $file) {
 				if (($file == "..") || ($file == ".")) {
 					array_shift($files);
 				} else {
 					$key = array_keys($files,$file);
-					$files[$key[0]] = Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file;
+					$files[$key[0]] = $exportDir.DIRECTORY_SEPARATOR.$file;
 				}
 			}
 			
@@ -132,10 +140,13 @@ class FileUtil {
 	*/
 	public static function cleanPublic() {
 		
+		// default var
+		$patternPublicDir = Config::getOption("patternPublicDir");
+		
 		// make sure patterns exists before trying to clean it
-		if (is_dir(Config::$options["patternPublicDir"])) {
+		if (is_dir($patternPublicDir)) {
 			
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternPublicDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($patternPublicDir), \RecursiveIteratorIterator::CHILD_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -156,13 +167,13 @@ class FileUtil {
 		}
 		
 		// scan source/ & public/ to figure out what directories might need to be cleaned up
-		$publicDir  = Config::$options["publicDir"];
-		$sourceDir  = Config::$options["sourceDir"];
+		$publicDir  = Config::getOption("publicDir");
+		$sourceDir  = Config::getOption("sourceDir");
 		$publicDirs = glob($publicDir."/*",GLOB_ONLYDIR);
-		$sourceDirs = glob(Config::$options["sourceDir"]."/*",GLOB_ONLYDIR);
+		$sourceDirs = glob($sourceDir."/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
-		$ignoreDirs = array("styleguide","snapshots");
+		$ignoreDirs = array("styleguide");
 		foreach ($ignoreDirs as $ignoreDir) {
 			$key = array_search($publicDir."/".$ignoreDir,$publicDirs);
 			if ($key !== false){
@@ -210,34 +221,39 @@ class FileUtil {
 	*/
 	public static function exportStatic() {
 		
-		if (!is_dir(Config::$options["exportDir"])) {
-			mkdir(Config::$options["exportDir"]);
+		// default vars
+		$exportDir = Config::getOption("exportDir");
+		$publicDir = Config::getOption("publicDir");
+		$sourceDir = Config::getOption("sourceDir");
+		
+		if (!is_dir($exportDir)) {
+			mkdir($exportDir);
 		}
 		
-		if (is_dir(Config::$options["publicDir"])) {
+		if (is_dir($publicDir)) {
 			
 			// decide which files in public should def. be ignored
 			$ignore = array("annotations","data","patterns","styleguide","index.html","latest-change.txt",".DS_Store",".svn","README");
 			
-			$files = scandir(Config::$options["publicDir"]);
+			$files = scandir($publicDir);
 			foreach ($files as $key => $file) {
 				if (($file == "..") || ($file == ".")) {
 					unset($files[$key]);
 				} else if (in_array($file,$ignore)) {
 					unset($files[$key]);
-				} else if (is_dir(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file) && !is_dir(Config::$options["sourceDir"].DIRECTORY_SEPARATOR.$file)) {
+				} else if (is_dir($publicDir.DIRECTORY_SEPARATOR.$file) && !is_dir($sourceDir.DIRECTORY_SEPARATOR.$file)) {
 					unset($files[$key]);
-				} else if (is_file(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file) && !is_file(Config::$options["sourceDir"].DIRECTORY_SEPARATOR.$file)) {
+				} else if (is_file($publicDir.DIRECTORY_SEPARATOR.$file) && !is_file($sourceDir.DIRECTORY_SEPARATOR.$file)) {
 					unset($files[$key]);
 				}
 			}
 			
 			$fs = new Filesystem();
 			foreach ($files as $file) {
-				if (is_dir(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file)) {
-					$fs->mirror(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file,Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file);
-				} else if (is_file(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file)) {
-					$fs->copy(Config::$options["publicDir"].DIRECTORY_SEPARATOR.$file,Config::$options["exportDir"].DIRECTORY_SEPARATOR.$file);
+				if (is_dir($publicDir.DIRECTORY_SEPARATOR.$file)) {
+					$fs->mirror($publicDir.DIRECTORY_SEPARATOR.$file,$exportDir.DIRECTORY_SEPARATOR.$file);
+				} else if (is_file($publicDir.DIRECTORY_SEPARATOR.$file)) {
+					$fs->copy($publicDir.DIRECTORY_SEPARATOR.$file,$exportDir.DIRECTORY_SEPARATOR.$file);
 				}
 			}
 			

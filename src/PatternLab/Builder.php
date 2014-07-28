@@ -51,7 +51,7 @@ class Builder {
 		$mqs = array();
 		
 		// iterate over all of the other files in the source directory
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]);
+		$directoryIterator = new \RecursiveDirectoryIterator(Config::getOption("sourceDir"));
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -84,16 +84,19 @@ class Builder {
 	*/
 	protected function generateAnnotations() {
 		
+		// default var
+		$publicDir = Config::getOption("publicDir");
+		
 		// encode the content so it can be written out
-		$json = json_encode(Annotations::$store);
+		$json      = json_encode(Annotations::$store);
 		
 		// make sure annotations/ exists
-		if (!is_dir(Config::$options["publicDir"]."/annotations")) {
-			mkdir(Config::$options["publicDir"]."/annotations");
+		if (!is_dir($publicDir."/annotations")) {
+			mkdir($publicDir."/annotations");
 		}
 		
 		// write out the new annotations.js file
-		file_put_contents(Config::$options["publicDir"]."/annotations/annotations.js","var comments = ".$json.";");
+		file_put_contents($publicDir."/annotations/annotations.js","var comments = ".$json.";");
 		
 	}
 	
@@ -102,7 +105,8 @@ class Builder {
 	*/
 	protected function generateIndex() {
 		
-		$dataDir = Config::$options["publicDir"]."/styleguide/data";
+		// default var
+		$dataDir = Config::getOption("publicDir")."/styleguide/data";
 		
 		// double-check that the data directory exists
 		if (!is_dir($dataDir)) {
@@ -113,15 +117,15 @@ class Builder {
 		
 		// load and write out the config options
 		$config                         = array();
-		$exposedOptions                 = Config::$options["exposedOptions"];
+		$exposedOptions                 = Config::getOption("exposedOptions");
 		foreach ($exposedOptions as $exposedOption) {
-			$config[$exposedOption]     = Config::$options[$exposedOption];
+			$config[$exposedOption]     = Config::getOption($exposedOption);
 		}
 		$output     .= "var config = ".json_encode($config).";";
 		
 		// load the ish Controls
 		$ishControls                    = array();
-		$ishControls["ishControlsHide"] = Config::$options["ishControlsHide"];
+		$ishControls["ishControlsHide"] = Config::getOption("ishControlsHide");
 		$ishControls["mqs"]             = $this->gatherMQs();
 		$output      .= "var ishControls = ".json_encode($ishControls).";";
 		
@@ -155,13 +159,15 @@ class Builder {
 		
 		// set-up common vars
 		$exportFiles      = (isset($options["exportFiles"]) && $options["exportFiles"]);
-		$patternPublicDir = !$exportFiles ? Config::$options["patternPublicDir"] : Config::$options["patternExportDir"];
-		$patternSourceDir = Config::$options["patternSourceDir"];
-		$patternExtension = Config::$options["patternExtension"];
+		$exportDir        = Config::getOption("exportDir");
+		$patternPublicDir = !$exportFiles ? Config::getOption("patternPublicDir") : Config::getOption("patternExportDir");
+		$patternSourceDir = Config::getOption("patternSourceDir");
+		$patternExtension = Config::getOption("patternExtension");
+		
 		
 		// make sure the export dir exists
-		if ($exportFiles && !is_dir(Config::$options["exportDir"])) {
-			mkdir(Config::$options["exportDir"]);
+		if ($exportFiles && !is_dir($exportDir)) {
+			mkdir($exportDir);
 		}
 		
 		// make sure patterns exists
@@ -212,12 +218,16 @@ class Builder {
 	*/
 	protected function generateStyleguide() {
 		
-		if (!is_dir(Config::$options["publicDir"]."/styleguide/")) {
-			mkdir(Config::$options["publicDir"]."/styleguide/");
+		// default var
+		$publicDir = Config::getOption("publicDir");
+		
+		// check directories i need
+		if (!is_dir($publicDir."/styleguide/")) {
+			mkdir($publicDir."/styleguide/");
 		}
 		
-		if (!is_dir(Config::$options["publicDir"]."/styleguide/html/")) {
-			mkdir(Config::$options["publicDir"]."/styleguide/html/");
+		if (!is_dir($publicDir."/styleguide/html/")) {
+			mkdir($publicDir."/styleguide/html/");
 		}
 			
 		// grab the partials into a data object for the style guide
@@ -237,7 +247,7 @@ class Builder {
 		
 		$styleGuidePage             = $header.$code.$footer;
 		
-		file_put_contents(Config::$options["publicDir"]."/styleguide/html/styleguide.html",$styleGuidePage);
+		file_put_contents($publicDir."/styleguide/html/styleguide.html",$styleGuidePage);
 		
 	}
 	
@@ -247,7 +257,7 @@ class Builder {
 	protected function generateViewAllPages() {
 		
 		// default vars
-		$patternPublicDir = Config::$options["patternPublicDir"];
+		$patternPublicDir = Config::getOption("patternPublicDir");
 		$htmlHead         = Template::$htmlHead;
 		$htmlFoot         = Template::$htmlFoot;
 		$patternHead      = Template::$patternHead;
@@ -345,7 +355,7 @@ class Builder {
 		
 		$this->cssRuleSaver = new \CSSRuleSaver\CSSRuleSaver;
 		
-		foreach(glob(Config::$options["sourceDir"]."/css/*.css") as $filename) {
+		foreach(glob(Config::getOption("sourceDir")."/css/*.css") as $filename) {
 			$this->cssRuleSaver->loadCSS($filename);
 		}
 		

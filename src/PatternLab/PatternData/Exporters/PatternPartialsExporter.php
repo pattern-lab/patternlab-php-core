@@ -36,7 +36,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		
 		// default vars
 		$patternPartials    = array();
-		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
+		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			

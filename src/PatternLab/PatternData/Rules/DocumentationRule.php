@@ -51,7 +51,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		if (!$hidden) {
 			
 			// default vars
-			$patternSourceDir = Config::$options["patternSourceDir"];
+			$patternSourceDir = Config::getOption("patternSourceDir");
 			
 			// parse data
 			$text = file_get_contents($patternSourceDir."/".$pathName);

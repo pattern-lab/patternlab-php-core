@@ -95,7 +95,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		}
 		
 		// default vars
-		$styleGuideExcludes = Config::$options["styleGuideExcludes"];
+		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 		// review each subtype. add a view all link or remove the subtype as necessary
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
