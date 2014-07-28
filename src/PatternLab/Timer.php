@@ -22,7 +22,7 @@ class Timer {
 	/**
 	* Check the current timer
 	*/
-	public static function check() {
+	public static function check($text = "") {
 		
 		// make sure start time is set
 		if (empty(self::$startTime)) {
@@ -33,6 +33,12 @@ class Timer {
 		// make sure check time is set
 		if (empty(self::$checkTime)) {
 			self::$checkTime = self::$startTime;
+		}
+		
+		// format any extra text
+		$insert = "";
+		if (!empty($text)) {
+			$insert = "<info>".$text." >> </info>";
 		}
 		
 		// get the current time
@@ -54,7 +60,7 @@ class Timer {
 		self::$checkTime = $checkTime;
 		
 		// write out time/mem stats
-		Console::writeLine("currently taken <".$timeTag.">".$totalTime."</".$timeTag."> seconds and used <info>".$mem."MB</info> of memory...");
+		Console::writeLine($insert."currently taken <".$timeTag.">".$totalTime."</".$timeTag."> seconds and used <info>".$mem."MB</info> of memory...");
 		
 	}
 	
