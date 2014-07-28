@@ -16,17 +16,65 @@ use \PatternLab\Console;
 
 class Timer {
 	
-	protected static $starttime;
+	protected static $startTime;
+	protected static $checkTime;
+	
+	/**
+	* Check the current timer
+	*/
+	public static function check() {
+		
+		// make sure start time is set
+		if (empty(self::$startTime)) {
+			Console::writeLine("<warning>the timer wasn't started...</warning>");
+			exit;
+		}
+		
+		// make sure check time is set
+		if (empty(self::$checkTime)) {
+			self::$checkTime = self::$startTime;
+		}
+		
+		// get the current time
+		$checkTime = self::getTime();
+		
+		// get the data for the output
+		$totalTime = ($checkTime - self::$startTime);
+		$mem       = round((memory_get_peak_usage(true)/1024)/1024,2);
+		
+		// figure out what tag to show
+		$timeTag = "info";
+		if (($checkTime - self::$checkTime) > 0.2) {
+			$timeTag = "error";
+		} else if (($checkTime - self::$checkTime) > 0.1) {
+			$timeTag = "warning";
+		}
+		
+		// set the checkTime for the next check comparison
+		self::$checkTime = $checkTime;
+		
+		// write out time/mem stats
+		Console::writeLine("currently taken <".$timeTag.">".$totalTime."</".$timeTag."> seconds and used <info>".$mem."MB</info> of memory...");
+		
+	}
+	
+	/*
+	* Get the time stamp
+	*/
+	protected static function getTime() {
+		$mtime = microtime();
+		$mtime = explode(" ",$mtime); 
+		$mtime = $mtime[1] + $mtime[0]; 
+		return $mtime;
+	}
 	
 	/**
 	* Start the timer
 	*/
 	public static function start() {
 		
-		$mtime = microtime();
-		$mtime = explode(" ",$mtime); 
-		$mtime = $mtime[1] + $mtime[0]; 
-		self::$starttime = $mtime;
+		// get the current time
+		self::$startTime = self::getTime();
 		
 	}
 	
@@ -35,27 +83,32 @@ class Timer {
 	*/
 	public static function stop() {
 		
-		if (empty(self::$starttime)) {
+		// make sure start time is set
+		if (empty(self::$startTime)) {
 			Console::writeLine("<warning>the timer wasn't started...</warning>");
 			exit;
 		}
 		
-		$mtime     = microtime();
-		$mtime     = explode(" ",$mtime);
-		$mtime     = $mtime[1] + $mtime[0];
-		$endtime   = $mtime;
-		$totaltime = ($endtime - self::$starttime);
+		// get the current time
+		$endTime = self::getTime();
+		
+		// get the data for the output
+		$totalTime = ($endTime - self::$startTime);
 		$mem = round((memory_get_peak_usage(true)/1024)/1024,2);
 		
+		// figure out what tag to show
 		$timeTag = "info";
-		if ($totaltime > 0.5) {
+		if ($totalTime > 0.9) {
 			$timeTag = "error";
-		} else if ($totaltime > 0.3) {
+		} else if ($totalTime > 0.6) {
 			$timeTag = "warning";
 		}
 		
-		Console::writeLine("site generation took <".$timeTag.">".$totaltime."</".$timeTag."> seconds and used <info>".$mem."MB</info> of memory...");
+		// write out time/mem stats
+		Console::writeLine("site generation took <".$timeTag.">".$totalTime."</".$timeTag."> seconds and used <info>".$mem."MB</info> of memory...");
 		
 	}
+	
+
 	
 }
