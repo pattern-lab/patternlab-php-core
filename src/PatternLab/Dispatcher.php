@@ -46,21 +46,21 @@ class Dispatcher {
 			exit;
 		}
 		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($packagesDir), \RecursiveIteratorIterator::CHILD_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach($objects as $name => $object) {
+		// make sure the listener data exists
+		if (file_exists($packagesDir."/listeners.json")) {
 			
-			if ($object->getFilename() == "PatternLabListener.php") {
-				$dirs              = explode("/",$object->getPath());
-				$listenerName      = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				$listener          = new $listenerName();
+			// get listener list data
+			$listenerList = json_decode(file_get_contents($packagesDir."/listeners.json"), true);
+			
+			// get the listener info
+			foreach ($listenerList["listeners"] as $listenerName) {
+				
+				$listener = new $listenerName();
 				foreach ($listener->listeners as $event => $eventProps) {
 					$eventPriority = (isset($eventProps["priority"])) ? $eventProps["priority"] : 0;
 					self::$instance->addListener($event, array($listener, $eventProps["callable"]), $eventPriority);
 				}
+				
 			}
 			
 		}
