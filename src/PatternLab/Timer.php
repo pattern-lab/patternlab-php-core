@@ -98,9 +98,9 @@ class Timer {
 		
 		// figure out what tag to show
 		$timeTag = "info";
-		if ($totalTime > 0.9) {
+		if ($totalTime > 0.5) {
 			$timeTag = "error";
-		} else if ($totalTime > 0.6) {
+		} else if ($totalTime > 0.3) {
 			$timeTag = "warning";
 		}
 		
