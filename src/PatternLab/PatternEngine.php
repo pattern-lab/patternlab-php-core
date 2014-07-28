@@ -48,14 +48,28 @@ class PatternEngine {
 	*/
 	public static function loadRules() {
 		
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("packagesDir")), \RecursiveIteratorIterator::CHILD_FIRST);
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		foreach($objects as $name => $object) {
-			if (strpos($name,"PatternEngineRule.php") !== false) {
-				$dirs              = explode("/",$object->getPath());
-				$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				self::$rules[]     = new $patternEngineName();
+		// default var
+		$packagesDir = Config::getOption("packagesDir");
+		
+		// see if the package dir exists. if it doesn't it means composer hasn't been run
+		if (!is_dir($packagesDir)) {
+			Console::writeLine("<error>you haven't fully set-up Pattern Lab yet. please add a pattern engine...</error>");
+			exit;
+		}
+		
+		// make sure the pattern engine data exists
+		if (file_exists($packagesDir."/patternengines.json")) {
+			
+			// get pattern engine list data
+			$patternEngineList = json_decode(file_get_contents($packagesDir."/patternengines.json"), true);
+			
+			// get the pattern engine info
+			foreach ($patternEngineList["patternengines"] as $patternEngineName) {
+				
+				self::$rules[] = new $patternEngineName();
+				
 			}
+			
 		}
 		
 	}
