@@ -239,11 +239,13 @@ class Config {
 	public static function setExposedOption($optionName) {
 		
 		if (isset(self::$options[$optionName])) {
-			self::$options["exposedOptions"][] = $optionName;
+			if (!in_array($optionName,self::$options["exposedOptions"])) {
+				self::$options["exposedOptions"][] = $optionName;
+			}
 			return true;
-		} else {
-			return false;
 		}
+		
+		return false;
 		
 	}
 	
