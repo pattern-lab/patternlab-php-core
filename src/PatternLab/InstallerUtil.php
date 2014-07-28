@@ -351,7 +351,7 @@ class InstallerUtil {
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		// go through the package items
-		foreach($objects as $name => $object) {
+		foreach ($objects as $name => $object) {
 			
 			if ($object->getFilename() == "PatternEngineRule.php") {
 				
