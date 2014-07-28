@@ -77,14 +77,14 @@ class PatternData {
 		Dispatcher::$instance->dispatch("patternData.rulesLoaded",$event);
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
-		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["patternSourceDir"]), \RecursiveIteratorIterator::SELF_FIRST);
+		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("patternSourceDir")), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		// sort the returned objects
 		$patternObjects = iterator_to_array($patternObjects);
 		ksort($patternObjects);
 		
-		$patternSourceDir = Config::$options["patternSourceDir"];
+		$patternSourceDir = Config::getOption("patternSourceDir");
 		
 		foreach ($patternObjects as $name => $object) {
 			

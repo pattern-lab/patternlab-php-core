@@ -17,7 +17,7 @@ use \PatternLab\FileUtil;
 
 class Config {
 	
-	protected static $options            = array();
+	public static $options            = array();
 	protected static $userConfig         = "config.ini";
 	protected static $userConfigDir      = "";
 	protected static $userConfigDirClean = "config";
@@ -265,12 +265,12 @@ class Config {
 			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
 			
-		} else if (!isset(Config::$options[$optionName]) || (Config::$options["overrideConfig"] == "a")) {
+		} else if (!isset(self::$options[$optionName]) || (self::$options["overrideConfig"] == "a")) {
 			
 			// if the option isn't set or the config is always to override update the config
 			self::writeUpdateConfigOption($optionName,$optionValue);
 			
-		} else if (Config::$options["overrideConfig"] == "q") {
+		} else if (self::$options["overrideConfig"] == "q") {
 			
 			// if the option is to query the user when the option is set do so
 			$output = "<info>update the config option </info><desc>".$optionName."</desc><info> with the value </info><desc>".$optionValue."</desc><info>?</info> <options>Y/n</options><info> > </info><nophpeol>";

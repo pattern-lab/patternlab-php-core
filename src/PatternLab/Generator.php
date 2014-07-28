@@ -20,6 +20,7 @@ use \PatternLab\Data;
 use \PatternLab\Dispatcher;
 use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
+use \PatternLab\Timer;
 use \PatternLab\Util;
 
 class Generator extends Builder {
@@ -41,15 +42,6 @@ class Generator extends Builder {
 	*/
 	public function generate($options = array()) {
 		
-		$timePL = true; // track how long it takes to generate a PL site
-		
-		if ($timePL) {
-			$mtime = microtime(); 
-			$mtime = explode(" ",$mtime); 
-			$mtime = $mtime[1] + $mtime[0]; 
-			$starttime = $mtime;
-		}
-		
 		// double-checks options was properly set
 		if (empty($options)) {
 			Console::writeLine("<error>need to pass options to generate...</error>");
@@ -63,7 +55,7 @@ class Generator extends Builder {
 		$exportClean   = (isset($options["exportClean"]))   ? $options["exportClean"] : false;
 		
 		if ($noCacheBuster) {
-			Config::$options["cacheBuster"] = 0;
+			Config::updateOption("cacheBuster",0);
 		}
 		
 		// gather up all of the data to be used in patterns
@@ -79,7 +71,7 @@ class Generator extends Builder {
 		Annotations::gather();
 		
 		// clean the public directory to remove old files
-		if ((Config::$options["cleanPublic"] == "true") && $moveStatic) {
+		if ((Config::getOption("cleanPublic") == "true") && $moveStatic) {
 			FileUtil::cleanPublic();
 		}
 		
@@ -100,10 +92,10 @@ class Generator extends Builder {
 		if ($moveStatic) {
 			
 			// common values
-			$publicDir = Config::$options["publicDir"];
-			$sourceDir = Config::$options["sourceDir"];
-			$ignoreExt = Config::$options["ie"];
-			$ignoreDir = Config::$options["id"];
+			$publicDir = Config::getOption("publicDir");
+			$sourceDir = Config::getOption("sourceDir");
+			$ignoreExt = Config::getOption("ie");
+			$ignoreDir = Config::getOption("id");
 			
 			// iterate over all of the other files in the source directory
 			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir), \RecursiveIteratorIterator::SELF_FIRST);
@@ -142,16 +134,7 @@ class Generator extends Builder {
 		
 		Console::writeLine("your site has been generated...");
 		
-		// print out how long it took to generate the site
-		if ($timePL) {
-			$mtime = microtime();
-			$mtime = explode(" ",$mtime);
-			$mtime = $mtime[1] + $mtime[0];
-			$endtime = $mtime;
-			$totaltime = ($endtime - $starttime);
-			$mem = round((memory_get_peak_usage(true)/1024)/1024,2);
-			Console::writeLine("site generation took ".$totaltime." seconds and used ".$mem."MB of memory...");
-		}
+		Timer::stop();
 		
 	}
 	

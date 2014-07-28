@@ -28,8 +28,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		
 		// set-up default vars
 		$foundLineages    = array();
-		$patternSourceDir = Config::$options["patternSourceDir"];
-		$patternExtension = Config::$options["patternExtension"];
+		$patternSourceDir = Config::getOption("patternSourceDir");
+		$patternExtension = Config::getOption("patternExtension");
 		
 		// check for the regular lineages in only normal patterns
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {

@@ -36,7 +36,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		// default vars
 		$options                 = array();
 		$options["patternPaths"] = $this->patternPaths;
-		$patternExtension        = Config::$options["patternExtension"];
+		$patternExtension        = Config::getOption("patternExtension");
 		$htmlHead                = Template::$htmlHead;
 		$htmlFoot                = Template::$htmlFoot;
 		$patternHead             = Template::$patternHead;

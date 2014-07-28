@@ -31,21 +31,21 @@ class Template {
 	public static function init() {
 		
 		// make sure config vars exist
-		if (!isset(Config::$options["patternExtension"])) {
+		if (!Config::getOption("patternExtension")) {
 			Console::writeLine("<error>the pattern extension config option needs to be set...</error>");
 			exit;
 		}
 		
-		if (!isset(Config::$options["styleguideKit"])) {
+		if (!Config::getOption("styleguideKit")) {
 			Console::writeLine("<error>the styleguideKit config option needs to be set...</error>");
 			exit;
 		}
 		
 		// set-up config vars
-		$patternExtension        = Config::$options["patternExtension"];
-		$pluginDir               = Config::$options["packagesDir"];
-		$sourceDir               = Config::$options["sourceDir"];
-		$styleguideKit           = Config::$options["styleguideKit"];
+		$patternExtension        = Config::getOption("patternExtension");
+		$pluginDir               = Config::getOption("packagesDir");
+		$sourceDir               = Config::getOption("sourceDir");
+		$styleguideKit           = Config::getOption("styleguideKit");
 		
 		// load pattern-lab's resources
 		$partialPath             = $pluginDir."/".$styleguideKit."/views/partials";

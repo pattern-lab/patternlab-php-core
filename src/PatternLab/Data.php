@@ -51,14 +51,14 @@ class Data {
 		$dataYAML      = array();
 		$listItemsJSON = array();
 		$listItemsYAML = array();
-		$sourceDir     = Config::$options["sourceDir"];
+		$sourceDir     = Config::getOption("sourceDir");
 		
 		// iterate over all of the other files in the source directory
-		if (!is_dir(Config::$options["sourceDir"]."/_data/")) {
+		if (!is_dir($sourceDir."/_data/")) {
 			Console::writeLine("<path>_data/</path><warning> doesn't exist so you won't have dynamic data...</warning>");
 			exit;
 		}
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/");
+		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_data/");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -130,7 +130,7 @@ class Data {
 			}
 		}
 		
-		self::$store["cacheBuster"]     = Config::$options["cacheBuster"];
+		self::$store["cacheBuster"]     = Config::getOption("cacheBuster");
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
 		
@@ -147,13 +147,15 @@ class Data {
 	*/
 	protected static function getListItems($filepath,$ext = "json") {
 		
+		// default vars
+		$sourceDir     = Config::getOption("sourceDir");
 		$listItems     = array();
 		$listItemsData = array();
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(Config::$options["sourceDir"]."/".$filepath)) {
+		if (file_exists($sourceDir."/".$filepath)) {
 			
-			$file = file_get_contents(Config::$options["sourceDir"]."/".$filepath);
+			$file = file_get_contents($sourceDir."/".$filepath);
 			
 			if ($ext == "json") {
 				$listItemsData = json_decode($file, true);
