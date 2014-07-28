@@ -27,6 +27,27 @@ class Config {
 	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes");
 	protected static $dirAdded           = false;
 	
+	
+	/**
+	* Get the value associated with an option from the Config
+	* @param  {String}       the name of the option to be checked
+	* 
+	* @return {String/Boolean} the value of the get or false if it wasn't found
+	*/
+	public static function getOption($optionName = "") {
+		
+		if (empty($optionName)) {
+			return false;
+		}
+		
+		if (array_key_exists($optionName,self::$options)) {
+			return self::$options[$optionName];
+		}
+		
+		return false;
+		
+	}
+	
 	/**
 	* Adds the config options to a var to be accessed from the rest of the system
 	* If it's an old config or no config exists this will update and generate it.
@@ -231,17 +252,61 @@ class Config {
 	}
 	
 	/**
+	* Add an option and associated value to the base Config
+	* @param  {String}       the name of the option to be added
+	* @param  {String}       the value of the option to be added
+	* 
+	* @return {Boolean}      whether the set was successful
+	*/
+	public static function setOption($optionName = "", $optionValue = "") {
+		
+		if (empty($optionName) || empty($optionValue)) {
+			return false;
+		}
+		
+		if (!array_key_exists($optionName,self::$options)) {
+			self::$options[$optionName] = $optionValue;
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	* Add an option to the exposedOptions array so it can be exposed on the front-end
 	* @param  {String}       the name of the option to be added to the exposedOption arrays
 	* 
 	* @return {Boolean}      whether the set was successful
 	*/
-	public static function setExposedOption($optionName) {
+	public static function setExposedOption($optionName = "") {
 		
-		if (isset(self::$options[$optionName])) {
+		if (!empty($optionName) && isset(self::$options[$optionName])) {
 			if (!in_array($optionName,self::$options["exposedOptions"])) {
 				self::$options["exposedOptions"][] = $optionName;
 			}
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Update an option and associated value to the base Config
+	* @param  {String}       the name of the option to be updated
+	* @param  {String}       the value of the option to be updated
+	* 
+	* @return {Boolean}      whether the update was successful
+	*/
+	public static function updateOption($optionName = "", $optionValue = "") {
+		
+		if (empty($optionName) || empty($optionValue)) {
+			return false;
+		}
+		
+		if (array_key_exists($optionName,self::$options)) {
+			self::$options[$optionName] = $optionValue;
 			return true;
 		}
 		
