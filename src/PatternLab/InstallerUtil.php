@@ -227,27 +227,27 @@ class InstallerUtil {
 				
 				// move assets to the base directory
 				if (isset($extra["dist"]["baseDir"])) {
-					self::parseFileList($name,$path,Config::getOption("baseDir"),$extra["assets"]["baseDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("baseDir"),$extra["assets"]["baseDir"]);
 				}
 				
 				// move assets to the public directory
 				if (isset($extra["dist"]["publicDir"])) {
-					self::parseFileList($name,$path,Config::getOption("publicDir"),$extra["assets"]["publicDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("publicDir"),$extra["assets"]["publicDir"]);
 				}
 				
 				// move assets to the source directory
 				if (isset($extra["dist"]["sourceDir"])) {
-					self::parseFileList($name,$path,Config::getOption("sourceDir"),$extra["assets"]["sourceDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("sourceDir"),$extra["assets"]["sourceDir"]);
 				}
 				
 				// move assets to the scripts directory
 				if (isset($extra["dist"]["scriptsDir"])) {
-					self::parseFileList($name,$path,Config::getOption("scriptsDir"),$extra["assets"]["scriptsDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("scriptsDir"),$extra["assets"]["scriptsDir"]);
 				}
 				
 				// move assets to the data directory
 				if (isset($extra["dist"]["dataDir"])) {
-					self::parseFileList($name,$path,Config::getOption("dataDir"),$extra["assets"]["scriptsDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("dataDir"),$extra["assets"]["scriptsDir"]);
 				}
 				
 				// see if we need to modify the config
