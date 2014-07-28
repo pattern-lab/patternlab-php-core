@@ -268,6 +268,53 @@ class InstallerUtil {
 				
 			}
 			
+			// see if the package has a listener
+			self::scanForListener($pathBase);
+	/**
+	 * Scan the package for a listener
+	 * @param  {String}     the path for the package
+	 */
+	protected static function scanForListener($pathPackage) {
+		
+		// get listener list path
+		$pathList = Config::getOption("packagesDir")."/listeners.json";
+		
+		// make sure listeners.json exists. if not create it
+		if (!file_exists($pathList)) {
+			file_put_contents($pathList, "{ \"listeners\": [ ] }");
+		}
+		
+		// load listener list
+		$listenerList = json_decode(file_get_contents($pathList),true);
+		
+		// grab the list of files in the package
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathPackage), \RecursiveIteratorIterator::CHILD_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		
+		// go through the package items
+		foreach($objects as $name => $object) {
+			
+			if ($object->getFilename() == "PatternLabListener.php") {
+				
+				// create the name
+				$dirs         = explode("/",$object->getPath());
+				$listenerName = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
+				
+				// make sure it's not already in the list
+				if (!in_array($listenerName,$listenerList)) {
+					$listenerList["listeners"][] = $listenerName;
+				}
+				
+				// write out the listener list
+				file_put_contents($pathList,json_encode($listenerList));
+				
+			}
+			
+		}
+		
+	}
 		}
 		
 	}
