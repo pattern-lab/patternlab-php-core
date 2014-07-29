@@ -31,7 +31,8 @@ class DataLinkExporter extends \PatternLab\PatternData\Exporter {
 			
 			if ($patternStoreData["category"] == "pattern") {
 				
-				Data::$store["link"][$patternStoreKey] = "../../".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
+				$value = "../../".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
+				Data::setOptionLink($patternStoreKey, $value);
 				
 			}
 			

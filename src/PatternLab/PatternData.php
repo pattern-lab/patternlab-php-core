@@ -366,6 +366,33 @@ class PatternData {
 	}
 	
 	/**
+	* Set a pattern option value for an option element that has an array
+	* @param  {String}        the name of the pattern
+	* @param  {String}        the name of the option to set
+	* @param  {String}        the name of the value to give to it
+	* @param  {String}        the key to be added to the array
+	*
+	* @return {Boolean}       if it was set or not
+	*/
+	public static function setPatternOptionArray($patternStoreKey,$optionName,$optionValue,$optionKey = "") {
+		
+		if (isset(self::$store[$patternStoreKey]) && isset(self::$store[$patternStoreKey][$optionName]) && is_array(self::$store[$patternStoreKey][$optionName])) {
+			
+			if (empty($optionKey)) {
+				self::$store[$patternStoreKey][$optionName][] = $optionValue;
+			} else {
+				self::$store[$patternStoreKey][$optionName][$optionKey] = $optionValue;
+			}
+			
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	* Set a pattern sub option value
 	* @param  {String}        the name of the pattern
 	* @param  {String}        the name of the option to check

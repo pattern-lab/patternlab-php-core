@@ -21,17 +21,8 @@ use \Symfony\Component\Yaml\Yaml;
 
 class Data {
 	
-	public    static $store        = array();
+	protected static $store        = array();
 	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
-	
-	/**
-	* Grab a copy of the $store
-	*
-	* @return {Array}        a copy of the store
-	*/
-	public static function copy() {
-		return self::$store;
-	}
 	
 	/**
 	* Gather data from any JSON and YAML files in source/_data
@@ -140,6 +131,15 @@ class Data {
 	}
 	
 	/**
+	* Grab a copy of the $store
+	*
+	* @return {Array}        the store
+	*/
+	public static function get() {
+		return self::$store;
+	}
+	
+	/**
 	* Generate the listItems array
 	* @param  {String}       the filename for the pattern to be parsed
 	* @param  {String}       the extension so that a flag switch can be used to parse data
@@ -209,6 +209,21 @@ class Data {
 	}
 	
 	/**
+	* Return the value for an option
+	*
+	* @return {String}        the value of the option requested
+	*/
+	public static function getOption($optionName) {
+		
+		if (isset(self::$store[$optionName])) {
+			return self::$store[$optionName];
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	* Get the final data array specifically for a pattern
 	* @param  {String}       the filename for the pattern to be parsed
 	* @param  {Array}        any extra data that should be added to the pattern specific data that's being returned
@@ -254,12 +269,73 @@ class Data {
 	}
 	
 	/**
+	* Initialize a pattern specific data store under the patternSpecific option
+	* @param  {String}       the pattern to create an array for
+	*/
+	public static function initPattern($optionName) {
+		
+		if (!isset(self::$store["patternSpecific"])) {
+			self::$store["patternSpecific"] = array();
+		}
+		
+		if ((!isset(self::$store["patternSpecific"][$optionName])) || (!is_array(self::$store["patternSpecific"][$optionName]))) {
+			self::$store["patternSpecific"][$optionName] = array();
+		}
+		
+	}
+	
+	/**
 	* Print out the data var. For debugging purposes
 	*
 	* @return {String}       the formatted version of the d object
 	*/
 	public static function printData() {
 		print_r(self::$store);
+	}
+	
+	/**
+	* Set an option on a sub element of the data array
+	* @param  {String}       name of the option
+	* @param  {String}       value for the option
+	*/
+	public static function setOptionLink($optionName,$optionValue) {
+		
+		if (!isset(self::$store["link"])) {
+			self::$store["link"] = array();
+		}
+		
+		self::$store["link"][$optionName] = $optionValue;
+		
+	}
+	
+	/**
+	* Set the pattern data option
+	* @param  {String}       name of the pattern
+	* @param  {String}       value for the pattern's data attribute
+	*/
+	public static function setPatternData($optionName,$optionValue) {
+		
+		if (isset(self::$store["patternSpecific"][$optionName])) {
+			self::$store["patternSpecific"][$optionName]["data"] = $optionValue;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Set the pattern listitems option
+	* @param  {String}       name of the pattern
+	* @param  {String}       value for the pattern's listItem attribute
+	*/
+	public static function setPatternListItems($optionName,$optionValue) {
+		
+		if (isset(self::$store["patternSpecific"][$optionName])) {
+			self::$store["patternSpecific"][$optionName]["listItems"] = $optionValue;
+		}
+		
+		return false;
+		
 	}
 	
 }
