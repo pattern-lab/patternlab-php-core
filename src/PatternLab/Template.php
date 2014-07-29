@@ -63,8 +63,8 @@ class Template {
 		$options                 = array();
 		$options["templatePath"] = $pluginDir."/".$styleguideKit."/views";
 		$options["partialsPath"] = $pluginDir."/".$styleguideKit."/views/partials";
-		self::$filesystemLoader  = PatternEngine::$instance->getFileSystemLoader($options);
-		self::$htmlLoader        = PatternEngine::$instance->getVanillaLoader();
+		self::$filesystemLoader  = PatternEngine::getInstance()->getFileSystemLoader($options);
+		self::$htmlLoader        = PatternEngine::getInstance()->getVanillaLoader();
 		
 	}
 	

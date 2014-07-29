@@ -18,8 +18,15 @@ use \PatternLab\Timer;
 
 class PatternEngine {
 	
-	public static $rules = array();
-	public static $instance;
+	protected static $rules = array();
+	protected static $instance;
+	
+	/**
+	* Get an instance of the Pattern Engine
+	*/
+	public static function getInstance() {
+		return self::$instance;
+	}
 	
 	/**
 	* Load a new instance of the Pattern Loader
