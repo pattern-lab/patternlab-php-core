@@ -17,7 +17,7 @@ use \PatternLab\Timer;
 
 class Listener {
 	
-	public $listeners = array();
+	protected $listeners = array();
 	
 	/**
 	* Add listeners to an array that can be iterated over and added to the dispatcher
