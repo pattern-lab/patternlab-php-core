@@ -89,7 +89,7 @@ class Builder {
 		$publicDir = Config::getOption("publicDir");
 		
 		// encode the content so it can be written out
-		$json      = json_encode(Annotations::$store);
+		$json      = json_encode(Annotations::get());
 		
 		// make sure annotations/ exists
 		if (!is_dir($publicDir."/annotations")) {

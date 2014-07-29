@@ -21,7 +21,7 @@ use \PatternLab\Timer;
 
 class Annotations {
 	
-	public static $store = array();
+	protected static $store = array();
 	
 	/**
 	* Gather data from annotations.js and *.md files found in source/_annotations
@@ -90,6 +90,10 @@ class Annotations {
 		// merge in any data from the old file
 		self::$store["comments"] = array_merge(self::$store["comments"],$data["comments"]);
 		
+	}
+	
+	public static function get() {
+		return self::$store;
 	}
 	
 }
