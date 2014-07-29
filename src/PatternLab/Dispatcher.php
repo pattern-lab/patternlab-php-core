@@ -63,10 +63,13 @@ class Dispatcher {
 			// get the listener info
 			foreach ($listenerList["listeners"] as $listenerName) {
 				
-				$listener = new $listenerName();
-				foreach ($listener->listeners as $event => $eventProps) {
-					$eventPriority = (isset($eventProps["priority"])) ? $eventProps["priority"] : 0;
-					self::$instance->addListener($event, array($listener, $eventProps["callable"]), $eventPriority);
+				if ($listenerName[0] != "_") {
+					$listener  = new $listenerName();
+					$listeners = $listener->getListeners();
+					foreach ($listeners as $event => $eventProps) {
+						$eventPriority = (isset($eventProps["priority"])) ? $eventProps["priority"] : 0;
+						self::$instance->addListener($event, array($listener, $eventProps["callable"]), $eventPriority);
+					}
 				}
 				
 			}
