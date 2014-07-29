@@ -85,8 +85,9 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "pathDash"         => $patternPathDash,
 								  "isDir"            => $this->isDirProp,
 								  "isFile"           => $this->isFileProp,
-								  "patternPartialExampleAdditions" => array(),
-								  "patternPartialDescAdditions"    => array());
+								  "partialViewDescAdditions"    => array(),
+								  "partialViewExampleAdditions" => array(),
+								  "codeViewDescAdditions"       => array());
 		
 		// add any subtype info if necessary
 		if ($depth == 2) {
