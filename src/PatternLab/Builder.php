@@ -242,9 +242,9 @@ class Builder {
 		$partials["patternLabHead"] = Render::Header(Template::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
 		$partials["patternLabFoot"] = Render::Footer(Template::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
 		
-		$header                     = Render::Header(Template::$patternHead,$partials);
-		$code                       = Template::$filesystemLoader->render("viewall",$partials);
-		$footer                     = Render::Footer(Template::$patternFoot,$partials);
+		$header                     = Render::Header(Template::getPatternHead(),$partials);
+		$code                       = Template::getFilesystemLoader()->render("viewall",$partials);
+		$footer                     = Render::Footer(Template::getPatternFoot(),$partials);
 		
 		$styleGuidePage             = $header.$code.$footer;
 		
@@ -259,11 +259,11 @@ class Builder {
 		
 		// default vars
 		$patternPublicDir = Config::getOption("patternPublicDir");
-		$htmlHead         = Template::$htmlHead;
-		$htmlFoot         = Template::$htmlFoot;
-		$patternHead      = Template::$patternHead;
-		$patternFoot      = Template::$patternFoot;
-		$filesystemLoader = Template::$filesystemLoader;
+		$htmlHead         = Template::getHTMLHead();
+		$htmlFoot         = Template::getHTMLFoot();
+		$patternHead      = Template::getPatternHead();
+		$patternFoot      = Template::getPatternFoot();
+		$filesystemLoader = Template::getFilesystemLoader();
 		
 		// make sure the pattern dir exists
 		if (!is_dir($patternPublicDir)) {

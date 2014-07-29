@@ -18,13 +18,13 @@ use \PatternLab\Timer;
 
 class Template {
 	
-	public static $htmlHead;
-	public static $htmlFoot;
-	public static $patternHead;
-	public static $patternFoot;
-	public static $filesystemLoader;
-	public static $htmlLoader;
-	public static $patternLoader;
+	protected static $htmlHead;
+	protected static $htmlFoot;
+	protected static $patternHead;
+	protected static $patternFoot;
+	protected static $filesystemLoader;
+	protected static $htmlLoader;
+	protected static $patternLoader;
 	
 	/**
 	* Set-up default vars
@@ -66,6 +66,62 @@ class Template {
 		self::$filesystemLoader  = PatternEngine::$instance->getFileSystemLoader($options);
 		self::$htmlLoader        = PatternEngine::$instance->getVanillaLoader();
 		
+	}
+	
+	/*
+	 * Get the html header
+	 */
+	public static function getHTMLHead() {
+		return self::$htmlHead;
+	}
+	
+	/*
+	 * Get the html foot
+	 */
+	public static function getHTMLFoot() {
+		return self::$htmlFoot;
+	}
+	
+	/*
+	 * Get the pattern header
+	 */
+	public static function getPatternHead() {
+		return self::$patternHead;
+	}
+	
+	/*
+	 * Get the pattern footer
+	 */
+	public static function getPatternFoot() {
+		return self::$patternFoot;
+	}
+	
+	/*
+	 * Get the file system loader
+	 */
+	public static function getFilesystemLoader() {
+		return self::$filesystemLoader;
+	}
+	
+	/*
+	 * Get the html loader
+	 */
+	public static function getHTMLLoader() {
+		return self::$htmlLoader;
+	}
+	
+	/*
+	 * Get the pattern loader
+	 */
+	public static function getPatternLoader() {
+		return self::$patternLoader;
+	}
+	
+	/*
+	 * Get the pattern loader
+	 */
+	public static function setPatternLoader($instance) {
+		self::$patternLoader = $instance;
 	}
 	
 }

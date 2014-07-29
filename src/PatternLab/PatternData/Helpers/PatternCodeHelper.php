@@ -38,13 +38,13 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$options                 = array();
 		$options["patternPaths"] = $this->patternPaths;
 		$patternExtension        = Config::getOption("patternExtension");
-		$htmlHead                = Template::$htmlHead;
-		$htmlFoot                = Template::$htmlFoot;
-		$patternHead             = Template::$patternHead;
-		$patternFoot             = Template::$patternFoot;
+		$htmlHead                = Template::getHTMLHead();
+		$htmlFoot                = Template::getHTMLFoot();
+		$patternHead             = Template::getPatternHead();
+		$patternFoot             = Template::getPatternFoot();
 		
 		// load the pattern loader
-		Template::$patternLoader = PatternEngine::$instance->getPatternLoader($options);
+		Template::setPatternLoader(PatternEngine::$instance->getPatternLoader($options));
 		
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
