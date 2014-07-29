@@ -20,14 +20,14 @@ use \PatternLab\Timer;
 
 class Console {
 	
-	public  static $commands         = array();
-	public  static $commandInstances = array();
-	public  static $options          = array();
-	public  static $optionsShort     = "";
-	public  static $optionsLong      = array();
-	private static $color;
-	private static $self             = "";
-	private static $zTracker         = 1;
+	protected static $commands         = array();
+	protected static $commandInstances = array();
+	protected static $options          = array();
+	protected static $optionsShort     = "";
+	protected static $optionsLong      = array();
+	private   static $color;
+	private   static $self             = "";
+	private   static $zTracker         = 1;
 	
 	public static function init() {
 		
