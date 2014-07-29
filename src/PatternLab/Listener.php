@@ -31,4 +31,11 @@ class Listener {
 		
 	}
 	
+	/**
+	* Get the list of listeners
+	*/
+	public function getListeners() {
+		return $this->listeners;
+	}
+	
 }
