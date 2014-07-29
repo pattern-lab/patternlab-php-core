@@ -28,16 +28,41 @@ use \PatternLab\Timer;
 
 class PatternData {
 	
-	public static $store               = array();
-	public static $patternSubtype      = "";
-	public static $patternSubtypeClean = "";
-	public static $patternSubtypeDash  = "";
-	public static $patternSubtypeSet   = false;
-	public static $patternType         = "";
-	public static $patternTypeClean    = "";
-	public static $patternTypeDash     = "";
-	public static $rules               = array();
-	public static $dirSep              = DIRECTORY_SEPARATOR;
+	protected static $store               = array();
+	protected static $patternSubtype      = "";
+	protected static $patternSubtypeClean = "";
+	protected static $patternSubtypeDash  = "";
+	protected static $patternSubtypeSet   = false;
+	protected static $patternType         = "";
+	protected static $patternTypeClean    = "";
+	protected static $patternTypeDash     = "";
+	protected static $rules               = array();
+	protected static $dirSep              = DIRECTORY_SEPARATOR;
+	
+	/**
+	* Return if a specific option is set
+	* @param  {String}     the option to check
+	*/
+	public static function checkOption($optionName) {
+		
+		return isset(self::$store[$optionName]);
+		
+	}
+	
+	/**
+	* Return if a specific option for a pattern is set
+	* @param  {String}     the pattern to check
+	* @param  {String}     the option to check
+	*/
+	public static function checkPatternOption($patternStoreKey,$optionName) {
+		
+		if (isset(self::$store[$patternStoreKey])) {
+			return isset(self::$store[$patternStoreKey][$optionName]);
+		}
+		
+		return false;
+		
+	}
 	
 	/**
 	* Check to see if the given pattern type has a pattern subtype associated with it
@@ -150,6 +175,144 @@ class PatternData {
 	}
 	
 	/**
+	* Return the overall store of PatternData
+	*/
+	public static function get() {
+		
+		return self::$store;
+		
+	}
+	
+	/**
+	* Return the overall store of PatternData
+	*/
+	public static function getDirSep() {
+		return self::$dirSep;
+	}
+	
+	/**
+	* Return a specific item from the store
+	* @param  {String}     the option to check
+	*/
+	public static function getOption($optionName) {
+		
+		if (isset(self::$store[$optionName])) {
+			return self::$store[$optionName];
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return a specific item from a pattern in the store data
+	* @param  {String}        the name of the pattern
+	* @param  {String}        the name of the option to get
+	*
+	* @return {String|Boolean} the value of false if it wasn't found
+	*/
+	public static function getPatternOption($patternStoreKey,$optionName) {
+		
+		if (isset(self::$store[$patternStoreKey][$optionName])) {
+			return self::$store[$patternStoreKey][$optionName];
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern sub type
+	*/
+	public static function getPatternSubtype() {
+		
+		if (isset(self::$patternSubtype)) {
+			return self::$patternSubtype;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern sub type clean
+	*/
+	public static function getPatternSubtypeClean() {
+		
+		if (isset(self::$patternSubtypeClean)) {
+			return self::$patternSubtypeClean;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern sub type dash
+	*/
+	public static function getPatternSubtypeDash() {
+		
+		if (isset(self::$patternSubtypeDash)) {
+			return self::$patternSubtypeDash;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern sub type set
+	*/
+	public static function getPatternSubtypeSet() {
+		
+		if (isset(self::$patternSubtypeSet)) {
+			return self::$patternSubtypeSet;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern type
+	*/
+	public static function getPatternType() {
+		
+		if (isset(self::$patternType)) {
+			return self::$patternType;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern type clean
+	*/
+	public static function getPatternTypeClean() {
+		
+		if (isset(self::$patternTypeClean)) {
+			return self::$patternTypeClean;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern type dash
+	*/
+	public static function getPatternTypeDash() {
+		
+		if (isset(self::$patternTypeDash)) {
+			return self::$patternTypeDash;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	* Load all of the rules related to Pattern Data
 	*/
 	public static function loadRules($options) {
@@ -160,6 +323,131 @@ class PatternData {
 				self::$rules[] = new $ruleClass($options);
 			}
 		}
+	}
+	
+	/**
+	* Set an options value
+	* @param  {String}        the name of the option to set
+	* @param  {String}        the name of the value to give to it
+	*
+	* @return {Boolean}       if it was set or not
+	*/
+	public static function setOption($optionName,$optionValue) {
+		
+		if (isset(self::$store)) {
+			self::$store[$optionName] = $optionValue;
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Set a pattern option value
+	* @param  {String}        the name of the pattern
+	* @param  {String}        the name of the option to set
+	* @param  {String}        the name of the value to give to it
+	*
+	* @return {Boolean}       if it was set or not
+	*/
+	public static function setPatternOption($patternStoreKey,$optionName,$optionValue) {
+		
+		if (isset(self::$store[$patternStoreKey])) {
+			
+			self::$store[$patternStoreKey][$optionName] = $optionValue;
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Set a pattern sub option value
+	* @param  {String}        the name of the pattern
+	* @param  {String}        the name of the option to check
+	* @param  {String}        the name of the pattern sub key
+	* @param  {String}        the name of the option to set
+	* @param  {String}        the name of the value to give to it
+	*
+	* @return {Boolean}       if it was set or not
+	*/
+	public static function setPatternSubOption($patternStoreKey,$optionName,$patternSubStoreKey,$optionSubName,$optionSubValue) {
+	
+		if (isset(self::$store[$patternStoreKey]) && isset(self::$store[$patternStoreKey][$optionName]) && isset(self::$store[$patternStoreKey][$optionName][$patternSubStoreKey])) {
+			
+			self::$store[$patternStoreKey][$optionName][$patternLineageKey][$optionSubName] = $optionSubValue;
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Return the pattern sub type
+	*/
+	public static function setPatternSubtype($optionValue) {
+		
+		self::$patternSubtype = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern sub type clean
+	*/
+	public static function setPatternSubtypeClean($optionValue) {
+		
+		self::$patternSubtypeClean = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern sub type dash
+	*/
+	public static function setPatternSubtypeDash($optionValue) {
+		
+		self::$patternSubtypeDash = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern sub type set
+	*/
+	public static function setPatternSubtypeSet($optionValue) {
+		
+		self::$patternSubtypeSet = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern type
+	*/
+	public static function setPatternType($optionValue) {
+		
+		self::$patternType = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern type clean
+	*/
+	public static function setPatternTypeClean($optionValue) {
+		
+		self::$patternTypeClean = $optionValue;
+		
+	}
+	
+	/**
+	* Return the pattern type dash
+	*/
+	public static function setPatternTypeDash($optionValue) {
+		
+		self::$patternTypeDash = $optionValue;
+		
 	}
 	
 }

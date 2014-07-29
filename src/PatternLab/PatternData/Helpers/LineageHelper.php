@@ -33,7 +33,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		$patternExtension = Config::getOption("patternExtension");
 		
 		// check for the regular lineages in only normal patterns
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
 				
@@ -49,7 +50,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					
 					foreach ($foundLineages as $lineage) {
 						
-						if (isset(PatternData::$store[$lineage])) {
+						if (PatternData::getOption($lineage)) {
 							
 							$patternLineages[] = array("lineagePattern" => $lineage,
 													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html");
@@ -65,7 +66,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					}
 					
 					// add the lineages to the PatternData::$store
-					PatternData::$store[$patternStoreKey]["lineages"] = $patternLineages;
+					PatternData::setPatternOption($patternStoreKey,"lineages",$patternLineages);
 					
 				}
 				
@@ -74,26 +75,29 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		}
 		
 		// handle all of those pseudo patterns
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (isset($patternStoreData["pseudo"]))) {
 				
 				// add the lineages to the PatternData::$store
 				$patternStoreKeyOriginal = $patternStoreData["original"];
-				PatternData::$store[$patternStoreKey]["lineages"] = PatternData::$store[$patternStoreKeyOriginal]["lineages"];
+				PatternData::setPatternOption($patternStoreKey,"lineages",PatternData::getPatternOption($patternStoreKeyOriginal,"lineages"));
 				
 			}
 			
 		}
 		
 		// check for the reverse lineages and skip pseudo patterns
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
 				
 				$patternLineagesR = array();
 				
-				foreach (PatternData::$store as $haystackKey => $haystackData) {
+				$storeTake2 = PatternData::get();
+				foreach ($storeTake2 as $haystackKey => $haystackData) {
 					
 					if (($haystackData["category"] == "pattern") && (isset($haystackData["lineages"]))) {
 						
@@ -113,9 +117,9 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 							
 								if (!$foundAlready) {
 									
-									if (isset(PatternData::$store[$haystackKey])) {
+									if (PatternData::getOption($haystackKey)) {
 										
-										$path = PatternData::$store[$haystackKey]["pathDash"];
+										$path = PatternData::getPatternOption($haystackKey,"pathDash");
 										$patternLineagesR[] = array("lineagePattern" => $haystackKey, 
 																	"lineagePath"    => "../../patterns/".$path."/".$path.".html");
 																
@@ -131,20 +135,21 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					
 				}
 				
-				PatternData::$store[$patternStoreKey]["lineagesR"] = $patternLineagesR;
+				PatternData::setPatternOption($patternStoreKey,"lineagesR",$patternLineagesR);
 				
 			}
 			
 		}
 		
 		// handle all of those pseudo patterns
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (isset($patternStoreData["pseudo"]))) {
 				
 				// add the lineages to the PatternData::$store
 				$patternStoreKeyOriginal = $patternStoreData["original"];
-				PatternData::$store[$patternStoreKey]["lineagesR"] = PatternData::$store[$patternStoreKeyOriginal]["lineagesR"];
+				PatternData::setPatternOption($patternStoreKey,"lineagesR",PatternData::getPatternOption($patternStoreKeyOriginal,"lineagesR"));
 				
 			}
 			

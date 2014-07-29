@@ -33,10 +33,10 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
 		// load default vars
-		$patternType            = PatternData::$patternType;
-		$patternTypeDash        = PatternData::$patternTypeDash;
-		$patternTypeClean       = PatternData::$patternTypeClean;
-		$dirSep                 = PatternData::$dirSep;
+		$patternType            = PatternData::getPatternType();
+		$patternTypeDash        = PatternData::getPatternTypeDash();
+		$patternTypeClean       = PatternData::getPatternTypeClean();
+		$dirSep                 = PatternData::getDirSep();
 		
 		// set-up the names
 		$patternSubtype         = $name;                                        // 02-blocks
@@ -65,13 +65,14 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 										"isFile"     => $this->isFileProp);
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		PatternData::$store[$patternStoreKey] = isset(PatternData::$store[$patternStoreKey]) ? array_replace_recursive($patternStoreData,PatternData::$store[$patternStoreKey]) : $patternStoreData;
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 		// starting a new set of pattern types. it might not have any pattern subtypes
-		PatternData::$patternSubtype      = $patternSubtype;
-		PatternData::$patternSubtypeClean = $patternSubtypeClean;
-		PatternData::$patternSubtypeDash  = $patternSubtypeDash;
-		PatternData::$patternSubtypeSet   = true;
+		PatternData::setPatternSubtype($patternSubtype);
+		PatternData::setPatternSubtypeClean($patternSubtypeClean);
+		PatternData::setPatternSubtypeDash($patternSubtypeDash);
+		PatternData::setPatternSubtypeSet(true);
 		
 	}
 	

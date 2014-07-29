@@ -26,7 +26,8 @@ class DataLinkExporter extends \PatternLab\PatternData\Exporter {
 	
 	public function run() {
 		
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if ($patternStoreData["category"] == "pattern") {
 				

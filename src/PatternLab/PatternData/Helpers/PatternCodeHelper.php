@@ -46,7 +46,8 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		// load the pattern loader
 		Template::setPatternLoader(PatternEngine::$instance->getPatternLoader($options));
 		
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
 				
@@ -75,15 +76,15 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? Render::Footer($htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData))) : "";
 				
 				// figure out the source path for the pattern to render
-				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::$store[$patternStoreData["original"]]["pathName"] : $patternStoreData["pathName"];
+				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
 				
 				$header  = (!$this->exportClean) ? Render::Header($patternHead,$data) : "";
 				$code    = Render::Pattern($srcPath,$data);
 				$footer  = (!$this->exportClean) ? Render::Footer($patternFoot,$data) : "";
 				
-				PatternData::$store[$patternStoreKey]["header"] = $header;
-				PatternData::$store[$patternStoreKey]["code"]   = $code;
-				PatternData::$store[$patternStoreKey]["footer"] = $footer;
+				PatternData::setPatternOption($patternStoreKey,"header",$header);
+				PatternData::setPatternOption($patternStoreKey,"code",$code);
+				PatternData::setPatternOption($patternStoreKey,"footer",$footer);
 				
 			}
 			

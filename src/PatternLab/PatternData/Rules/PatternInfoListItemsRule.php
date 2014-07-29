@@ -37,7 +37,7 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
 		// load default vars
-		$patternTypeDash = PatternData::$patternTypeDash;
+		$patternTypeDash = PatternData::getPatternTypeDash();
 		
 		// set-up the names
 		$patternFull     = $name;                                          // foo.listitems.json
@@ -61,7 +61,8 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 		$patternStoreKey = $patternPartial;
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		PatternData::$store[$patternStoreKey] = isset(PatternData::$store[$patternStoreKey]) ? array_replace_recursive(PatternData::$store[$patternStoreKey],$patternStoreData) : $patternStoreData;
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	

@@ -177,7 +177,8 @@ class Builder {
 		}
 		
 		// loop over the pattern data store to render the individual patterns
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"])) {
 				
@@ -239,8 +240,8 @@ class Builder {
 		$patternData = array();
 		
 		// add the pattern lab specific mark-up
-		$partials["patternLabHead"] = Render::Header(Template::$htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
-		$partials["patternLabFoot"] = Render::Footer(Template::$htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+		$partials["patternLabHead"] = Render::Header(Template::getHTMLHead(),array("cacheBuster" => $partials["cacheBuster"]));
+		$partials["patternLabFoot"] = Render::Footer(Template::getHTMLFoot(),array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
 		
 		$header                     = Render::Header(Template::getPatternHead(),$partials);
 		$code                       = Template::getFilesystemLoader()->render("viewall",$partials);
@@ -271,7 +272,8 @@ class Builder {
 		}
 		
 		// add view all to each list
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if ($patternStoreData["category"] == "patternSubtype") {
 				

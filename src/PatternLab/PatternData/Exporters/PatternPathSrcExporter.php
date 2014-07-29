@@ -29,7 +29,8 @@ class PatternPathSrcExporter extends \PatternLab\PatternData\Exporter {
 		
 		$patternPathDests = array();
 		
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
 				

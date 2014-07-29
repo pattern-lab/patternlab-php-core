@@ -33,7 +33,7 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
 		// load default vars
-		$dirSep                 = PatternData::$dirSep;
+		$dirSep              = PatternData::getDirSep();
 		
 		// set-up the names
 		$patternType         = $name;                                        // 00-atoms
@@ -47,22 +47,24 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 		$patternStoreKey     = $patternTypeDash."-pltype";
 		
 		// add a new patternType to the nav
-		PatternData::$store[$patternStoreKey] = array("category"  => "patternType",
-													  "name"      => $patternType,
-													  "nameDash"  => $patternTypeDash,
-													  "nameClean" => $patternTypeClean,
-													  "depth"     => $depth,
-													  "ext"       => $ext,
-													  "path"      => $path,
-													  "pathName"  => $patternTypePath,
-													  "pathDash"  => $patternTypePathDash,
-													  "isDir"     => $this->isDirProp,
-													  "isFile"    => $this->isFileProp);
+		$patternData = array("category"  => "patternType",
+							 "name"      => $patternType,
+							 "nameDash"  => $patternTypeDash,
+							 "nameClean" => $patternTypeClean,
+							 "depth"     => $depth,
+							 "ext"       => $ext,
+							 "path"      => $path,
+							 "pathName"  => $patternTypePath,
+							 "pathDash"  => $patternTypePathDash,
+							 "isDir"     => $this->isDirProp,
+							 "isFile"    => $this->isFileProp);
+		
+		PatternData::setOption($patternStoreKey,$patternData);
 		
 		// starting a new set of pattern types. it might not have any pattern subtypes
-		PatternData::$patternType      = $patternType;
-		PatternData::$patternTypeClean = $patternTypeClean;
-		PatternData::$patternTypeDash  = $patternTypeDash;
+		PatternData::setPatternType($patternType);
+		PatternData::setPatternTypeClean($patternTypeClean);
+		PatternData::setPatternTypeDash($patternTypeDash);
 		
 	}
 	

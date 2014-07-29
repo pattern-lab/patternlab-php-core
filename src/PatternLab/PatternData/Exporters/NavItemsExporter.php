@@ -36,7 +36,8 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		$navItems["patternTypes"] = array();
 		
 		// iterate over the different categories and add them to the navigation
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if ($patternStoreData["category"] == "patternType") {
 				

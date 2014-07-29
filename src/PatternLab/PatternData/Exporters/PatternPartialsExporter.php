@@ -39,7 +39,8 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		$patternPartials    = array();
 		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
-		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
+		$store = PatternData::get();
+		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"]) && ($patternStoreData["depth"] == 2) && (!in_array($patternStoreData["type"],$styleGuideExcludes))) {
 				

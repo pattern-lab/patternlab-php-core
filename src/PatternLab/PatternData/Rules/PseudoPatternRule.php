@@ -37,11 +37,11 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
 		// load default vars
-		$patternSubtype     = PatternData::$patternSubtype;
-		$patternSubtypeDash = PatternData::$patternSubtypeDash;
-		$patternType        = PatternData::$patternType;
-		$patternTypeDash    = PatternData::$patternTypeDash;
-		$dirSep             = PatternData::$dirSep;
+		$patternSubtype     = PatternData::getPatternSubtype();
+		$patternSubtypeDash = PatternData::getPatternSubtypeDash();
+		$patternType        = PatternData::getPatternType();
+		$patternTypeDash    = PatternData::getPatternTypeDash();
+		$dirSep             = PatternData::getDirSep();
 		
 		// set-up the names
 		$patternFull        = $name;                                                           // 00-colors.mustache
@@ -159,7 +159,8 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		$patternStoreData["data"] = array_replace_recursive($patternDataBase, $patternData);
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		PatternData::$store[$patternStoreKey] = isset(PatternData::$store[$patternStoreKey]) ? array_replace_recursive($patternStoreData,PatternData::$store[$patternStoreKey]) : $patternStoreData;
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	

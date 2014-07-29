@@ -35,9 +35,9 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
 		// load default vars
-		$patternType        = PatternData::$patternType;
-		$patternTypeDash    = PatternData::$patternTypeDash;
-		$dirSep             = PatternData::$dirSep;
+		$patternType        = PatternData::getPatternType();
+		$patternTypeDash    = PatternData::getPatternTypeDash();
+		$dirSep             = PatternData::getDirSep();
 		
 		// set-up the names
 		$docFull    = $name;                                                 // 00-colors.md
@@ -89,7 +89,8 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 									  "full"       => $doc);
 			
 			// if the pattern data store already exists make sure this data overwrites it
-			PatternData::$store[$patternStoreKey] = isset(PatternData::$store[$patternStoreKey]) ? array_replace_recursive(PatternData::$store[$patternStoreKey],$patternStoreData) : $patternStoreData;
+			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+			PatternData::setOption($patternStoreKey, $patternStoreData); 
 			
 		}
 		
