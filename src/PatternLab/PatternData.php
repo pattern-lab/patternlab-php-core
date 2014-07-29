@@ -84,23 +84,24 @@ class PatternData {
 	*/
 	public static function gather($options = array()) {
 		
-		// set a default var
-		$exportClean = (isset($options["exportClean"])) ? $options["exportClean"] : false;
-		$exportFiles = (isset($options["exportClean"])) ? $options["exportFiles"] : false;
+		// set default vars
+		$exportClean        = (isset($options["exportClean"])) ? $options["exportClean"] : false;
+		$exportFiles        = (isset($options["exportClean"])) ? $options["exportFiles"] : false;
+		$dispatcherInstance = Dispatcher::getInstance();
 		
 		// cleaning the var for use below, i know this is stupid
 		$options = array();
 		
 		// dispatch that the data gather has started
 		$event = new PatternDataEvent($options);
-		Dispatcher::$instance->dispatch("patternData.gatherStart",$event);
+		$dispatcherInstance->dispatch("patternData.gatherStart",$event);
 		
 		// load up the rules for parsing patterns and the directories
 		self::loadRules($options);
 		
 		// dispatch that the rules are loaded
 		$event = new PatternDataEvent($options);
-		Dispatcher::$instance->dispatch("patternData.rulesLoaded",$event);
+		$dispatcherInstance->dispatch("patternData.rulesLoaded",$event);
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("patternSourceDir")), \RecursiveIteratorIterator::SELF_FIRST);
@@ -134,7 +135,7 @@ class PatternData {
 		
 		// dispatch that the data is loaded
 		$event = new PatternDataEvent($options);
-		Dispatcher::$instance->dispatch("patternData.dataLoaded",$event);
+		$dispatcherInstance->dispatch("patternData.dataLoaded",$event);
 		
 		// make sure all of the appropriate pattern data is pumped into $this->d for rendering patterns
 		$dataLinkExporter       = new DataLinkExporter();
@@ -160,7 +161,7 @@ class PatternData {
 		
 		// dispatch that the code helper is about to start
 		$event = new PatternDataEvent($options);
-		Dispatcher::$instance->dispatch("patternData.codeHelperStart",$event);
+		$dispatcherInstance->dispatch("patternData.codeHelperStart",$event);
 		
 		// render out all of the patterns and store the generated info in PatternData::$store
 		$options["exportFiles"]  = $exportFiles;
@@ -170,7 +171,7 @@ class PatternData {
 		
 		// dispatch that the gather has ended
 		$event = new PatternDataEvent($options);
-		Dispatcher::$instance->dispatch("patternData.gatherEnd",$event);
+		$dispatcherInstance->dispatch("patternData.gatherEnd",$event);
 		
 	}
 	

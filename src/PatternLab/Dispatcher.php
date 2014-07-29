@@ -18,7 +18,14 @@ use \Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Dispatcher {
 	
-	public static $instance;
+	protected static $instance;
+	
+	/**
+	* Get instance when requested
+	*/
+	public static function getInstance() {
+		return self::$instance;
+	}
 	
 	/**
 	* Check to see if the given pattern type has a pattern subtype associated with it
