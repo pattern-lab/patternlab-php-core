@@ -233,7 +233,7 @@ class Data {
 	public static function getPatternSpecificData($patternPartial,$extraData = array()) {
 		
 		// if there is pattern-specific data make sure to override the default in $this->d
-		$d = self::copy();
+		$d = self::get();
 		
 		if (isset($d["patternSpecific"]) && array_key_exists($patternPartial,$d["patternSpecific"])) {
 			

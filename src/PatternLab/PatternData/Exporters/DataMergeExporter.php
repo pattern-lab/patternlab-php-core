@@ -33,8 +33,7 @@ class DataMergeExporter extends \PatternLab\PatternData\Exporter {
 			if ($patternStoreData["category"] == "pattern") {
 				
 				if (isset($patternStoreData["data"]) || isset($patternStoreData["listItems"])) {
-					Data::initPattern($patternStoreKey)
-					
+					Data::initPattern($patternStoreKey);
 				}
 				
 				if (isset($patternStoreData["data"])) {
@@ -50,7 +49,8 @@ class DataMergeExporter extends \PatternLab\PatternData\Exporter {
 		}
 		
 		// walk across the data and change link.pattern-partial to real source
-		array_walk_recursive(Data::get(),'\PatternLab\Util::compareReplace');
+		$data = Data::get();
+		array_walk_recursive($data,'\PatternLab\Util::compareReplace');
 		
 	}
 	

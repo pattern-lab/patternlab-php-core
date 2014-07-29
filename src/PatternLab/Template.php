@@ -115,9 +115,9 @@ class Template {
 	 */
 	public static function getPatternLoader() {
 		
-		if (empty($patternLoader)) {
+		if (empty(self::$patternLoader)) {
 			Console::writeLine("<error>pattern loader needs to be set before you can get it...</error>");
-			Console::writeLine("<error>Try this first:</error> <info>Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));</info>")
+			Console::writeLine('<error>try this first:</error> <info>Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));</info>');
 			exit;
 		}
 		
