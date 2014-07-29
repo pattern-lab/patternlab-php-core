@@ -92,6 +92,9 @@ class Annotations {
 		
 	}
 	
+	/**
+	* Get the data in the store
+	*/
 	public static function get() {
 		return self::$store;
 	}
