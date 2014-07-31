@@ -281,7 +281,7 @@ class Config {
 			$input = strtolower(trim(fgets($stdin)));
 			fclose($stdin);
 			
-			if (!$prompt && ($input == "y")) {
+			if ($input == "y") {
 				self::writeUpdateConfigOption($optionName,$optionValue);
 				Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
 			} else {
