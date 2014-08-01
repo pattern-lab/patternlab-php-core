@@ -21,6 +21,20 @@ use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class InstallerUtil {
 	
 	/**
+	* Common init sequence
+	*/
+	protected static function init() {
+		
+		// initialize the console to print out any issues
+		Console::init();
+		
+		// initialize the config for the pluginDir
+		$baseDir = __DIR__."/../../../../../";
+		Config::init($baseDir,false);
+		
+	}
+	
+	/**
 	 * Move the files from the package to their location in the public dir or source dir
 	 * @param  {String}    the name of the package
 	 * @param  {String}    the base directory for the source of the files
@@ -157,12 +171,8 @@ class InstallerUtil {
 	 */
 	public static function preInstallCmd($event) {
 		
-		// initialize the console to print out any issues
-		Console::init();
-		
-		// initialize the config
-		$baseDir = __DIR__."/../../../../../";
-		Config::init($baseDir,false);
+		// run the console and config inits
+		self::init();
 		
 		// default vars
 		$sourceDir   = Config::getOption("sourceDir");
@@ -202,12 +212,8 @@ class InstallerUtil {
 	 */
 	protected static function runTasks($event,$type) {
 		
-		// initialize the console to print out any issues
-		Console::init();
-		
-		// initialize the config for the pluginDir
-		$baseDir = __DIR__."/../../../../../";
-		Config::init($baseDir,false);
+		// run the console and config inits
+		self::init();
 		
 		// get package info
 		$package   = ($type == "install") ? $event->getOperation()->getPackage() : $event->getOperation()->getTargetPackage();
