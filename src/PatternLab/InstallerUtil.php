@@ -190,6 +190,31 @@ class InstallerUtil {
 	}
 	
 	/**
+	 * Make sure pattern engines and listeners are removed on uninstall
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function prePackageUninstallCmd($event) {
+		
+		// run the console and config inits
+		self::init();
+		
+		// get package info
+		$package   = $event->getOperation()->getPackage();
+		$type      = $package->getType();
+		$name      = $package->getName();
+		$pathBase  = Config::getOption("packagesDir")."/".$name;
+		
+		// see if the package has a listener and remove it
+		self::scanForListener($pathBase,true);
+		
+		// see if the package is a pattern engine and remove the rule
+		if ($type == "patternlab-patternengine") {
+			self::scanForPatternEngineRule($pathBase,true);
+		}
+		
+	}
+	
+	/**
 	 * Remove dots from the path to make sure there is no file system traversal when looking for or writing files
 	 * @param  {String}    the path to check and remove dots
 	 *
