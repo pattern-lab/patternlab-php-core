@@ -316,7 +316,7 @@ class InstallerUtil {
 	 * Scan the package for a listener
 	 * @param  {String}     the path for the package
 	 */
-	protected static function scanForListener($pathPackage) {
+	protected static function scanForListener($pathPackage,$remove = false) {
 		
 		// get listener list path
 		$pathList = Config::getOption("packagesDir")."/listeners.json";
@@ -344,9 +344,12 @@ class InstallerUtil {
 				$dirs         = explode("/",$object->getPath());
 				$listenerName = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
 				
-				// make sure it's not already in the list
-				if (!in_array($listenerName,$listenerList)) {
+				// check to see what we should do with the listener info
+				if (!$remove && !in_array($listenerName,$listenerList["listeners"])) {
 					$listenerList["listeners"][] = $listenerName;
+				} else if ($remove && in_array($listenerName,$listenerList["listeners"])) {
+					$key = array_search($listenerName, $listenerList["listeners"]);
+					unset($listenerList["listeners"][$key]);
 				}
 				
 				// write out the listener list
@@ -362,7 +365,7 @@ class InstallerUtil {
 	 * Scan the package for a pattern engine rule
 	 * @param  {String}     the path for the package
 	 */
-	protected static function scanForPatternEngineRule($pathPackage) {
+	protected static function scanForPatternEngineRule($pathPackage,$remove = false) {
 		
 		// get listener list path
 		$pathList = Config::getOption("packagesDir")."/patternengines.json";
@@ -390,9 +393,12 @@ class InstallerUtil {
 				$dirs              = explode("/",$object->getPath());
 				$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
 				
-				// make sure it's not already in the list
-				if (!in_array($patternEngineName ,$patternEngineList)) {
+				// check what we should do with the pattern engine info
+				if (!$remove && !in_array($patternEngineName, $patternEngineList["patternengines"])) {
 					$patternEngineList["patternengines"][] = $patternEngineName;
+				} else if ($remove && in_array($patternEngineName, $patternEngineList["patternengines"])) {
+					$key = array_search($patternEngineName, $patternEngineList["patternengines"]);
+					unset($patternEngineList["patternengines"][$key]);
 				}
 				
 				// write out the pattern engine list
