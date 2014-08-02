@@ -31,8 +31,3 @@ exportDir   = "export"
 packagesDir = "packages"
 publicDir   = "public"
 sourceDir   = "source"
-
-// ish options
-ishFontSize = "16px"
-ishMaximum  = "2400"
-ishMinimum  = "240"
