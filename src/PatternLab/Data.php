@@ -37,6 +37,12 @@ class Data {
 	*/
 	public static function gather($options = array()) {
 		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// dispatch that the data gather has started
+		$dispatcherInstance->dispatch("data.gatherStart");
+		
 		// default vars
 		$found         = false;
 		$dataJSON      = array();
@@ -126,7 +132,7 @@ class Data {
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
 		
-		Dispatcher::getInstance()->dispatch("data.dataLoadEnd");
+		$dispatcherInstance->dispatch("data.gatherEnd");
 		
 	}
 	
@@ -147,6 +153,12 @@ class Data {
 	* @return {Array}        the final set of list items
 	*/
 	protected static function getListItems($filepath,$ext = "json") {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// dispatch that the data gather has started
+		$dispatcherInstance->dispatch("data.getListItemsStart");
 		
 		// default vars
 		$sourceDir     = Config::getOption("sourceDir");
@@ -203,6 +215,8 @@ class Data {
 			}
 			
 		}
+		
+		$dispatcherInstance->dispatch("data.getListItemsEnd");
 		
 		return $listItems;
 		

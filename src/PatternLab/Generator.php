@@ -90,43 +90,7 @@ class Generator extends Builder {
 		
 		// move all of the files unless pattern only is set
 		if ($moveStatic) {
-			
-			// common values
-			$publicDir = Config::getOption("publicDir");
-			$sourceDir = Config::getOption("sourceDir");
-			$ignoreExt = Config::getOption("ie");
-			$ignoreDir = Config::getOption("id");
-			
-			// iterate over all of the other files in the source directory
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir), \RecursiveIteratorIterator::SELF_FIRST);
-			
-			// make sure dots are skipped
-			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-			
-			foreach($objects as $name => $object) {
-				
-				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
-				
-				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$ignoreExt)) && (!in_array($object->getFilename(),$ignoreDir))) {
-					
-					// catch directories that have the ignored dir in their path
-					$ignored = FileUtil::ignoreDir($fileName);
-					
-					// check to see if it's a new directory
-					if (!$ignored && $object->isDir() && !is_dir($publicDir."/".$fileName)) {
-						mkdir($publicDir."/".$fileName);
-					}
-					
-					// check to see if it's a new file or a file that has changed
-					if (!$ignored && $object->isFile() && (!file_exists($publicDir."/".$fileName))) {
-						FileUtil::moveStaticFile($fileName);
-					}
-					
-				}
-				
-			}
-			
+			$this->moveStatic();
 		}
 		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
@@ -135,6 +99,58 @@ class Generator extends Builder {
 		Console::writeLine("your site has been generated...");
 		
 		Timer::stop();
+		
+	}
+	
+	/**
+	* Move static files from source/ to public/
+	*/
+	protected function moveStatic() {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the start of the operation
+		$dispatcherInstance->dispatch("generator.moveStaticStart");
+		
+		// common values
+		$publicDir = Config::getOption("publicDir");
+		$sourceDir = Config::getOption("sourceDir");
+		$ignoreExt = Config::getOption("ie");
+		$ignoreDir = Config::getOption("id");
+		
+		// iterate over all of the other files in the source directory
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir), \RecursiveIteratorIterator::SELF_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		
+		foreach($objects as $name => $object) {
+			
+			// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+			$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
+			
+			if (($fileName[0] != "_") && (!in_array($object->getExtension(),$ignoreExt)) && (!in_array($object->getFilename(),$ignoreDir))) {
+				
+				// catch directories that have the ignored dir in their path
+				$ignored = FileUtil::ignoreDir($fileName);
+				
+				// check to see if it's a new directory
+				if (!$ignored && $object->isDir() && !is_dir($publicDir."/".$fileName)) {
+					mkdir($publicDir."/".$fileName);
+				}
+				
+				// check to see if it's a new file or a file that has changed
+				if (!$ignored && $object->isFile() && (!file_exists($publicDir."/".$fileName))) {
+					FileUtil::moveStaticFile($fileName);
+				}
+				
+			}
+			
+		}
+		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("generator.moveStaticEnd");
 		
 	}
 	

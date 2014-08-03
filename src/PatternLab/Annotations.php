@@ -31,6 +31,12 @@ class Annotations {
 	*/
 	public static function gather() {
 		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// dispatch that the data gather has started
+		$dispatcherInstance->dispatch("annotations.gatherStart");
+		
 		// set-up the comments store
 		self::$store["comments"] = array();
 		
@@ -90,6 +96,8 @@ class Annotations {
 		
 		// merge in any data from the old file
 		self::$store["comments"] = array_merge(self::$store["comments"],$data["comments"]);
+		
+		$dispatcherInstance->dispatch("annotations.gatherEnd");
 		
 	}
 	

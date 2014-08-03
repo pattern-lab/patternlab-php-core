@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Console;
+use \PatternLab\Dispatcher;
 use \PatternLab\Timer;
 use \Symfony\Component\Filesystem\Filesystem;
 use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -141,6 +142,12 @@ class FileUtil {
 	*/
 	public static function cleanPublic() {
 		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// dispatch that the data gather has started
+		$dispatcherInstance->dispatch("fileUtil.cleanPublicStart");
+		
 		// default var
 		$patternPublicDir = Config::getOption("patternPublicDir");
 		
@@ -214,6 +221,8 @@ class FileUtil {
 			rmdir($dir);
 			
 		}
+		
+		$dispatcherInstance->dispatch("fileUtil.cleanPublicEnd");
 		
 	}
 	

@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Annotations;
 use \PatternLab\Config;
 use \PatternLab\Data;
+use \PatternLab\Dispatcher;
 use \PatternLab\Parsers\Documentation;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
 use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
@@ -85,6 +86,12 @@ class Builder {
 	*/
 	protected function generateAnnotations() {
 		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the start of the operation
+		$dispatcherInstance->dispatch("builder.generateAnnotationsStart");
+		
 		// default var
 		$publicDir = Config::getOption("publicDir");
 		
@@ -99,12 +106,21 @@ class Builder {
 		// write out the new annotations.js file
 		file_put_contents($publicDir."/annotations/annotations.js","var comments = ".$json.";");
 		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("builder.generateAnnotationsEnd");
+		
 	}
 	
 	/**
 	* Generates the data that powers the index page
 	*/
 	protected function generateIndex() {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the start of the operation
+		$dispatcherInstance->dispatch("builder.generateIndexStart");
 		
 		// default var
 		$dataDir = Config::getOption("publicDir")."/styleguide/data";
@@ -150,6 +166,9 @@ class Builder {
 		// write out the data
 		file_put_contents($dataDir."/patternlab-data.js",$output);
 		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("builder.generateIndexEnd");
+		
 	}
 	
 	/**
@@ -157,6 +176,12 @@ class Builder {
 	* @param   {Array}     various options that might affect the export. primarily the location.
 	*/
 	protected function generatePatterns($options = array()) {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the beginning of the operation
+		$dispatcherInstance->dispatch("builder.generatePatternsStart");
 		
 		// set-up common vars
 		$exportFiles      = (isset($options["exportFiles"]) && $options["exportFiles"]);
@@ -213,12 +238,21 @@ class Builder {
 			
 		}
 		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("builder.generatePatternsEnd");
+		
 	}
 	
 	/**
 	* Generates the style guide view
 	*/
 	protected function generateStyleguide() {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the beginning of the operation
+		$dispatcherInstance->dispatch("builder.generateStyleguideStart");
 		
 		// default var
 		$publicDir = Config::getOption("publicDir");
@@ -251,12 +285,21 @@ class Builder {
 		
 		file_put_contents($publicDir."/styleguide/html/styleguide.html",$styleGuidePage);
 		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("builder.generateStyleguideEnd");
+		
 	}
 	
 	/**
 	* Generates the view all pages
 	*/
 	protected function generateViewAllPages() {
+		
+		// set-up the dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		
+		// note the beginning of the operation
+		$dispatcherInstance->dispatch("builder.generateViewAllPagesStart");
 		
 		// default vars
 		$patternPublicDir = Config::getOption("patternPublicDir");
@@ -344,6 +387,9 @@ class Builder {
 			}
 			
 		}
+		
+		// note the end of the operation
+		$dispatcherInstance->dispatch("builder.generateViewAllPagesEnd");
 		
 	}
 	
