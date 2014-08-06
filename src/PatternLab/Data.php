@@ -55,6 +55,7 @@ class Data {
 		if (!is_dir($sourceDir."/_data/")) {
 			Console::writeLine("<path>_data/</path><warning> doesn't exist so you won't have dynamic data...</warning>");
 			exit;
+			mkdir($sourceDir."/_data/");
 		}
 		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_data/");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
