@@ -35,8 +35,10 @@ class ConfigCommand extends Command {
 		
 		if (Console::findCommandOption("list")) {
 			
+			// get all of the options
 			$options = Config::get();
 			
+			// sort 'em alphabetically
 			ksort($options);
 			
 			// find length of longest option
@@ -45,7 +47,7 @@ class ConfigCommand extends Command {
 				$lengthLong = (strlen($optionName) > $lengthLong) ? strlen($optionName) : $lengthLong;
 			}
 			
-			// iterate over each option
+			// iterate over each option and spit it out
 			foreach ($options as $optionName => $optionValue) {
 				$optionValue = (is_array($optionValue)) ? implode(", ",$optionValue) : $optionValue;
 				$optionValue = (!$optionValue) ? "false" : $optionValue;
@@ -55,8 +57,11 @@ class ConfigCommand extends Command {
 			
 		} else if (Console::findCommandOption("get")) {
 			
+			// figure out which optino was passed
 			$searchOption = Console::findCommandOptionValue("get");
 			$optionValue  = Config::getOption($searchOption);
+			
+			// write it out
 			if (!$optionValue) {
 				Console::writeError("the search config option you provided, <info>".$searchOption."</info>, does not exists in the config...");
 			} else {
