@@ -89,6 +89,9 @@ class ConfigCommand extends Command {
 			
 		} else {
 			
+			// no acceptable options were passed so write out the help
+			Console::writeHelpCommand($this->command);
+			
 		}
 		
 	}
