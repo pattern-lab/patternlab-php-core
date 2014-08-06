@@ -408,6 +408,53 @@ class Console {
 	}
 	
 	/**
+	* Make sure the space is properly set between long command options and short command options
+	* @param  {Integer}       the longest length of the command's options
+	* @param  {Integer}       the character length of the given option
+	*/
+	public static function getSpacer($lengthLong,$itemLongLength) {
+		$i            = 0;
+		$spacer       = " ";
+		$spacerLength = $lengthLong - $itemLongLength;
+		while ($i < $spacerLength) {
+			$spacer .= " ";
+			$i++;
+		}
+		return $spacer;
+	}
+	
+	/**
+	* Modify a line to include the given tag by default
+	* @param  {String}        the content to be written out
+	*/
+	public static function addTags($line,$tag) {
+		$lineFinal = "<".$tag.">".preg_replace("/<[A-z0-9-_]{1,}>[^<]{1,}<\/[A-z0-9-_]{1,}>/","</".$tag.">$0<".$tag.">",$line)."</".$tag.">";
+		return $lineFinal;
+	}
+	
+	/**
+	* Write out a line to the console with error tags
+	* @param  {String}        the content to be written out
+	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
+	* @param  {Boolean}       if there should be two breaks added to the end of the line
+	*/
+	public static function writeError($line,$doubleSpace = false,$doubleBreak = false) {
+		$lineFinal = self::addTags($line,"error");
+		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
+	}
+	
+	/**
+	* Write out a line to the console with info tags
+	* @param  {String}        the content to be written out
+	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
+	* @param  {Boolean}       if there should be two breaks added to the end of the line
+	*/
+	public static function writeInfo($line,$doubleSpace = false,$doubleBreak = false) {
+		$lineFinal = self::addTags($line,"info");
+		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
+	}
+	
+	/**
 	* Write out a line to the console
 	* @param  {String}        the content to be written out
 	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
@@ -425,13 +472,14 @@ class Console {
 	}
 	
 	/**
-	* Write out a line to the console with info tags
+	* Write out a line to the console with error tags
+	* @param  {String}        the tag to add to the line
 	* @param  {String}        the content to be written out
 	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
 	* @param  {Boolean}       if there should be two breaks added to the end of the line
 	*/
-	public static function writeInfo($line,$doubleSpace = false,$doubleBreak = false) {
-		$lineFinal = self::addTags($line,"info");
+	public static function writeTag($tag,$line,$doubleSpace = false,$doubleBreak = false) {
+		$lineFinal = self::addTags($line,$tag);
 		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
 	}
 	
@@ -444,55 +492,6 @@ class Console {
 	public static function writeWarning($line,$doubleSpace = false,$doubleBreak = false) {
 		$lineFinal = self::addTags($line,"warning");
 		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
-	}
-	
-	/**
-	* Write out a line to the console with error tags
-	* @param  {String}        the content to be written out
-	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
-	* @param  {Boolean}       if there should be two breaks added to the end of the line
-	*/
-	public static function writeError($line,$doubleSpace = false,$doubleBreak = false) {
-		$lineFinal = self::addTags($line,"error");
-		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
-	}
-	
-	/**
-	* Write out a line to the console with error tags
-	* @param  {String}        the tag to add to the line
-	* @param  {String}        the content to be written out
-	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
-	* @param  {Boolean}       if there should be two breaks added to the end of the line
-	*/
-	public static function writeTag($tag,$line,$doubleSpace = false,$doubleBreak = false) {
-		$lineFinal = self::addTags($line,$tag);
-		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
-	}
-	
-	
-	/**
-	* Modify a line to include the given tag by default
-	* @param  {String}        the content to be written out
-	*/
-	public static function addTags($line,$tag) {
-		$lineFinal = "<".$tag.">".preg_replace("/<[A-z0-9-_]{1,}>[^<]{1,}<\/[A-z0-9-_]{1,}>/","</".$tag.">$0<".$tag.">",$line)."</".$tag.">";
-		return $lineFinal;
-	}
-	
-	/**
-	* Make sure the space is properly set between long command options and short command options
-	* @param  {Integer}       the longest length of the command's options
-	* @param  {Integer}       the character length of the given option
-	*/
-	public static function getSpacer($lengthLong,$itemLongLength) {
-		$i            = 0;
-		$spacer       = " ";
-		$spacerLength = $lengthLong - $itemLongLength;
-		while ($i < $spacerLength) {
-			$spacer .= " ";
-			$i++;
-		}
-		return $spacer;
 	}
 	
 }
