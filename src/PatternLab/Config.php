@@ -25,7 +25,7 @@ class Config {
 	protected static $userConfigDirDash  = "_config";
 	protected static $userConfigPath     = "";
 	protected static $plConfigPath       = "../../config/config.ini.default";
-	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes");
+	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes","ishControlsHide");
 	protected static $dirAdded           = false;
 	
 	/**
