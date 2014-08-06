@@ -408,8 +408,10 @@ class Console {
 	}
 	
 	/**
-	* Write out a line of the help
-	* @param  {Boolean}       handle double-break
+	* Write out a line to the console
+	* @param  {String}        the content to be written out
+	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
+	* @param  {Boolean}       if there should be two breaks added to the end of the line
 	*/
 	public static function writeLine($line,$doubleSpace = false,$doubleBreak = false) {
 		$break = ($doubleBreak) ? PHP_EOL.PHP_EOL : PHP_EOL;
