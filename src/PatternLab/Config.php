@@ -185,16 +185,6 @@ class Config {
 				$values = explode(",",$value);
 				array_walk($values,'PatternLab\Util::trim');
 				self::$options[$key] = $values;
-			} else if ($key == "ishControlsHide") {
-				self::$options[$key] = new \stdClass();
-				$class = self::$options[$key];
-				if ($value != "") {
-					$values = explode(",",$value);
-					foreach($values as $value2) {
-						$value2 = trim($value2);
-						$class->$value2 = true;
-					}
-				}
 			}
 			
 		}
