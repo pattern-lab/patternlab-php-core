@@ -31,6 +31,8 @@ class Annotations {
 	*/
 	public static function gather() {
 		
+		// set-up default var
+		$sourceDir = Config::getOption("sourceDir");
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
 		
@@ -44,8 +46,9 @@ class Annotations {
 		if (!is_dir(Config::getOption("sourceDir")."/_annotations")) {
 			Console::writeLine("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...</warning>");
 			exit;
+		if (!is_dir($sourceDir."/_annotations")) {
 		}
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::getOption("sourceDir")."/_annotations");
+		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_annotations");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -84,8 +87,8 @@ class Annotations {
 		}
 		
 		// read in the old style annotations.js, modify the data and generate JSON array to merge
-		if (file_exists(Config::getOption("sourceDir")."/_annotations/annotations.js")) {
-			$text = file_get_contents(Config::getOption("sourceDir")."/_annotations/annotations.js");
+		if (file_exists($sourceDir."/_annotations/annotations.js")) {
+			$text = file_get_contents($sourceDir."/_annotations/annotations.js");
 			$text = str_replace("var comments = ","",$text);
 			$text = rtrim($text,";");
 			$data = json_decode($text,true);
