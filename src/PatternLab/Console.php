@@ -495,4 +495,39 @@ class Console {
 		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
 	}
 	
+	/**
+	* Prompt the user for some input
+	* @param  {String}        the text for the prompt
+	* @param  {String}        the text for the options
+	* @param  {Boolean}       if we should lowercase the input before sending it back
+	* @param  {String}        the tag that should be used when drawing the content
+	*
+	* @return {String}        trimmed input given by the user
+	*/
+	public static function promptInput($prompt = "", $options = "", $lowercase = true, $tag = "info") {
+		
+		// check prompt
+		if (empty($prompt)) {
+			Console::writeError("an input prompt requires prompt text...");
+		}
+		
+		// if there are suggested options add them
+		if (!empty($options)) {
+			$prompt .= " <options>".$options."</options> >";
+		}
+		
+		// make sure no end-of-line is added
+		$prompt .= " <nophpeol>";
+		
+		// open the terminal and wait for feedback
+		$stdin = fopen("php://stdin", "r");
+		Console::writeTag($output,$tag);
+		$input = trim(fgets($stdin));
+		fclose($stdin);
+		
+		// check to see if it should be lowercased before sending back
+		return ($lowercase) ? strtolower($input) : $input;
+		
+	}
+	
 }
