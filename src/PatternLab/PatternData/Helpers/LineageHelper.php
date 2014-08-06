@@ -58,7 +58,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 						} else {
 							
 							if (strpos($lineage, '/') === false) {
-								Console::writeLine("<warning>you may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern...</warning>");
+								Console::writeWarning("you may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern...");
 							}
 							
 						}

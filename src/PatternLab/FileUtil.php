@@ -49,7 +49,7 @@ class FileUtil {
 		self::moveFile($fileName,str_replace($find, $replace, $fileName));
 		Util::updateChangeTime();
 		if ($copy != "") {
-			Console::writeLine($fileName." ".$copy."...");
+			Console::writeInfo($fileName." ".$copy."...");
 		}
 	}
 

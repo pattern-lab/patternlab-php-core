@@ -44,8 +44,7 @@ class Generator extends Builder {
 		
 		// double-checks options was properly set
 		if (empty($options)) {
-			Console::writeLine("<error>need to pass options to generate...</error>");
-			exit;
+			Console::writeError("need to pass options to generate...");
 		}
 		
 		// set the default vars

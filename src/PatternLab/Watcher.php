@@ -47,8 +47,7 @@ class Watcher extends Builder {
 		
 		// double-checks options was properly set
 		if (empty($options)) {
-			Console::writeLine("<error>need to pass options to generate...</error>");
-			exit;
+			Console::writeError("need to pass options to generate...");
 		}
 		
 		// set default attributes

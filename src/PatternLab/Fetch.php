@@ -26,8 +26,7 @@ class Fetch {
 	public function fetch($package = "") {
 		
 		if (empty($package)) {
-			Console::writeLine("<error>please provide a path for the package before trying to fetch it...</error>");
-			exit;
+			Console::writeError("please provide a path for the package before trying to fetch it...");
 		}
 		
 		// run composer

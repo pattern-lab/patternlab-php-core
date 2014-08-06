@@ -125,14 +125,14 @@ class InstallerUtil {
 			
 			if ($prompt) {
 				$stdin = fopen("php://stdin", "r");
-				Console::writeLine("<info>the path</info> <path>".$path."</path> <info>already exists. overwrite it with the contents of</info> <path>".$packageName."</path><info>?</info> <options>Y/n</options><info> > </info><nophpeol>");
+				Console::writeInfo("the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>?</info> <options>Y/n</options><info> > </info><nophpeol>");
 				$answer = strtolower(trim(fgets($stdin)));
 				fclose($stdin);
 				if ($answer == "y") {
-					Console::writeLine("<ok>contents of</ok> <path>".$path."</path> <ok>being overwritten...</ok>", false, false);
+					Console::writeTag("ok","contents of <path>".$path."</path> being overwritten...", false, false);
 					return false;
 				} else {
-					Console::writeLine("<warning>contents of</warning> <path>".$path."</path> <warning>weren't overwritten. some parts of the</warning> <path>".$packageName."</path> <warning>package may be missing...</warning>", false, false);
+					Console::writeWarning("contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...", false, false);
 					return true;
 				}
 			}

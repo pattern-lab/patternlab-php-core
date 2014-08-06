@@ -53,8 +53,7 @@ class Data {
 		
 		// iterate over all of the other files in the source directory
 		if (!is_dir($sourceDir."/_data/")) {
-			Console::writeLine("<path>_data/</path><warning> doesn't exist so you won't have dynamic data...</warning>");
-			exit;
+			Console::writeWarning("<path>_data/</path> doesn't exist so you won't have dynamic data...");
 			mkdir($sourceDir."/_data/");
 		}
 		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_data/");
@@ -124,7 +123,7 @@ class Data {
 		if (is_array(self::$store)) {
 			foreach (self::$reservedKeys as $reservedKey) {
 				if (array_key_exists($reservedKey,self::$store)) {
-					Console::writeLine("<warning>\"".$reservedKey."\" is a reserved key in Pattern Lab. the data using that key will be overwritten. please choose a new key...</warning>");
+					Console::writeWarning("\"".$reservedKey."\" is a reserved key in Pattern Lab. the data using that key will be overwritten. please choose a new key...");
 				}
 			}
 		}

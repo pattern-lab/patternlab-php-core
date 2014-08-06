@@ -26,8 +26,7 @@ class Timer {
 		
 		// make sure start time is set
 		if (empty(self::$startTime)) {
-			Console::writeLine("<warning>the timer wasn't started...</warning>");
-			exit;
+			Console::writeError("the timer wasn't started...");
 		}
 		
 		// make sure check time is set
@@ -91,8 +90,7 @@ class Timer {
 		
 		// make sure start time is set
 		if (empty(self::$startTime)) {
-			Console::writeLine("<warning>the timer wasn't started...</warning>");
-			exit;
+			Console::writeError("the timer wasn't started...");
 		}
 		
 		// get the current time

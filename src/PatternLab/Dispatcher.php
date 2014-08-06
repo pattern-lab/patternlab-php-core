@@ -50,8 +50,7 @@ class Dispatcher {
 		
 		// see if the package dir exists. if it doesn't it means composer hasn't been run
 		if (!is_dir($packagesDir)) {
-			Console::writeLine("<error>you haven't fully set-up Pattern Lab yet. please add a pattern engine...</error>");
-			exit;
+			Console::writeError("you haven't fully set-up Pattern Lab yet. please add a pattern engine...");
 		}
 		
 		// make sure the listener data exists

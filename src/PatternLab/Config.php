@@ -82,7 +82,7 @@ class Config {
 		
 		// make sure a base dir was supplied
 		if (empty($baseDir)) {
-			Console::writeLine("<error>need a base directory to initialize the config class...</error>"); exit;
+			Console::writeError("need a base directory to initialize the config class...");
 		}
 		
 		// normalize the baseDir
@@ -113,13 +113,12 @@ class Config {
 		
 		// double-check the default config file exists
 		if (!file_exists(self::$plConfigPath)) {
-			Console::writeLine("<error>make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically...</error>"); exit;
+			Console::writeError("make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically...");
 		}
 		
 		// set the default config using the pattern lab config
 		if (!self::$options = @parse_ini_file(self::$plConfigPath)) {
-			Console::writeLine("<error>Config parse error in</error> <path>".self::$plConfigPath."</path><error>...</error>"); 
-			exit;
+			Console::writeError("Config parse error in <path>".self::$plConfigPath."</path>..."); 
 		}
 		
 		// make sure these are copied
@@ -134,8 +133,7 @@ class Config {
 			$migrate = true;
 		} else {
 			if (!self::$options = @parse_ini_file(self::$userConfigPath)) {
-				Console::writeLine("<error>Config parse error in</error> <path>".self::$userConfigPath."</path><error>...</error>"); 
-				exit;
+				Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>..."); 
 			}
 		}
 		
@@ -145,11 +143,11 @@ class Config {
 		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
 			if ($verbose) {
-				Console::writeLine("<info>upgrading your version of pattern lab...</info>");
+				Console::writeInfo("upgrading your version of pattern lab...");
 			}
 			if ($migrate) {
 				if (!@copy(self::$plConfigPath, self::$userConfigPath)) {
-					Console::writeLine("<error>make sure that Pattern Lab can write a new config to ".self::$userConfigPath."...</error>");
+					Console::writeError("make sure that Pattern Lab can write a new config to ".self::$userConfigPath."...");
 					exit;
 				}
 			} else {
@@ -159,7 +157,7 @@ class Config {
 		
 		// making sure the config isn't empty
 		if (empty(self::$options) && $verbose) {
-			Console::writeLine("<error>a set of configuration options is required to use Pattern Lab...");
+			Console::writeError("a set of configuration options is required to use Pattern Lab...");
 			exit;
 		}
 		
@@ -263,7 +261,7 @@ class Config {
 			fclose($stdin);
 			
 			self::writeUpdateConfigOption($optionName,$input);
-			Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
+			Console::writeTag("ok","config option ".$optionName." updated...", false, true);
 			
 		} else if (!isset(self::$options[$optionName]) || (self::$options["overrideConfig"] == "a")) {
 			
@@ -279,9 +277,9 @@ class Config {
 			
 			if ($input == "y") {
 				self::writeUpdateConfigOption($optionName,$optionValue);
-				Console::writeLine("<ok>config option ".$optionName." updated...</ok>", false, true);
+				Console::writeInfo("config option ".$optionName." updated...", false, true);
 			} else {
-				Console::writeLine("<warning>config option </warning><desc>".$optionName."</desc><warning> not  updated...</warning>", false, true);
+				Console::writeWarning("config option <desc>".$optionName."</desc> not  updated...", false, true);
 			}
 			
 		}

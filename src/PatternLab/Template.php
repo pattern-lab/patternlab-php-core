@@ -33,13 +33,11 @@ class Template {
 		
 		// make sure config vars exist
 		if (!Config::getOption("patternExtension")) {
-			Console::writeLine("<error>the pattern extension config option needs to be set...</error>");
-			exit;
+			Console::writeError("the pattern extension config option needs to be set...");
 		}
 		
 		if (!Config::getOption("styleguideKit")) {
-			Console::writeLine("<error>the styleguideKit config option needs to be set...</error>");
-			exit;
+			Console::writeError("the styleguideKit config option needs to be set...");
 		}
 		
 		// set-up config vars
@@ -116,9 +114,8 @@ class Template {
 	public static function getPatternLoader() {
 		
 		if (empty(self::$patternLoader)) {
-			Console::writeLine("<error>pattern loader needs to be set before you can get it...</error>");
-			Console::writeLine('<error>try this first:</error> <info>Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));</info>');
-			exit;
+			Console::writeTag("error","pattern loader needs to be set before you can get it...");
+			Console::writeError("try this first: <info>Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));</info>");
 		}
 		
 		return self::$patternLoader;

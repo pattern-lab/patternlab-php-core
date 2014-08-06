@@ -65,8 +65,7 @@ class Util {
 		if (is_dir(Config::getOption("publicDir"))) {
 			file_put_contents(Config::getOption("publicDir")."/latest-change.txt",time());
 		} else {
-			Console::writeLine("<error>the public directory for Pattern Lab doesn't exist...</error>");
-			exit;
+			Console::writeError("the public directory for Pattern Lab doesn't exist...");
 		}
 		
 	}
