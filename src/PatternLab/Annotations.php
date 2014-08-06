@@ -47,6 +47,7 @@ class Annotations {
 			Console::writeLine("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...</warning>");
 			exit;
 		if (!is_dir($sourceDir."/_annotations")) {
+			mkdir($sourceDir."/_annotations");
 		}
 		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_annotations");
 		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
