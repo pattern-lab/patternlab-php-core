@@ -433,7 +433,7 @@ class Console {
 	}
 	
 	/**
-	* Write out a line to the console with error tags
+	* Write out a line to the console with error tags. It forces an exit of the script
 	* @param  {String}        the content to be written out
 	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
 	* @param  {Boolean}       if there should be two breaks added to the end of the line
@@ -441,6 +441,7 @@ class Console {
 	public static function writeError($line,$doubleSpace = false,$doubleBreak = false) {
 		$lineFinal = self::addTags($line,"error");
 		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
+		exit;
 	}
 	
 	/**
