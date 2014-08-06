@@ -130,7 +130,7 @@ class InstallerUtil {
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
 				
-				if ($answer == "y") {
+				if ($input == "y") {
 					Console::writeTag("ok","contents of <path>".$path."</path> being overwritten...", false, false);
 					return false;
 				} else {
