@@ -45,6 +45,15 @@ class Config {
 	}
 	
 	/**
+	* Get the options set in the config
+	* 
+	* @return {Array}        the options from the config
+	*/
+	public static function get() {
+		return self::$options;
+	}
+	
+	/**
 	* Get the value associated with an option from the Config
 	* @param  {String}       the name of the option to be checked
 	* 
