@@ -274,7 +274,7 @@ class Config {
 			
 			// prompt for input
 			$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$optionValue."</desc>?";
-			$options = "Y/n"
+			$options = "Y/n";
 			$input   = Console::promptInput($prompt,$options);
 			
 			if ($input == "y") {

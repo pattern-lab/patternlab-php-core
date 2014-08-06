@@ -521,7 +521,7 @@ class Console {
 		
 		// open the terminal and wait for feedback
 		$stdin = fopen("php://stdin", "r");
-		Console::writeTag($output,$tag);
+		Console::writeTag($tag,$prompt);
 		$input = trim(fgets($stdin));
 		fclose($stdin);
 		

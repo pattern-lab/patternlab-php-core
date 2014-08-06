@@ -31,7 +31,7 @@ class Fetch {
 		}
 		
 		// run composer
-		$composerPath = Config::$option["coreDir"].DIRECTORY_SEPARATOR."bin/composer.phar";
+		$composerPath = Config::getOption("coreDir").DIRECTORY_SEPARATOR."bin/composer.phar";
 		passthru("php ".$composerPath." require ".$package);
 		
 	}
