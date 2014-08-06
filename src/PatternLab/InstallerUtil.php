@@ -124,10 +124,12 @@ class InstallerUtil {
 			}
 			
 			if ($prompt) {
-				$stdin = fopen("php://stdin", "r");
-				Console::writeInfo("the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>?</info> <options>Y/n</options><info> > </info><nophpeol>");
-				$answer = strtolower(trim(fgets($stdin)));
-				fclose($stdin);
+				
+				// prompt for input using the supplied query
+				$prompt  = "the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>?";
+				$options = "Y/n";
+				$input   = Console::promptInput($prompt,$options);
+				
 				if ($answer == "y") {
 					Console::writeTag("ok","contents of <path>".$path."</path> being overwritten...", false, false);
 					return false;
@@ -135,6 +137,7 @@ class InstallerUtil {
 					Console::writeWarning("contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...", false, false);
 					return true;
 				}
+				
 			}
 			
 			return false;

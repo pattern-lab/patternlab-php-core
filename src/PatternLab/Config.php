@@ -252,13 +252,10 @@ class Config {
 		
 		if (strpos($optionValue,"<prompt>") !== false) {
 			
-			// if this is a prompt always write out the query
-			$output = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue))."<nophpeol>";
-			
-			$stdin = fopen("php://stdin", "r");
-			Console::writeLine($output);
-			$input = strtolower(trim(fgets($stdin)));
-			fclose($stdin);
+			// prompt for input using the supplied query
+			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
+			$options = "";
+			$input   = Console::promptInput($prompt,$options,false);
 			
 			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeTag("ok","config option ".$optionName." updated...", false, true);
