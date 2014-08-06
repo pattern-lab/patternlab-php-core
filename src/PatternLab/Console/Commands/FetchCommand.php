@@ -24,17 +24,41 @@ class FetchCommand extends Command {
 		
 		$this->command = "fetch:";
 		
-		Console::setCommand($this->command,"Fetch a package","The fetch command grabs a package from GitHub and installs the package and any package dependencies.","f:");
-		Console::setCommandSample($this->command,"To fetch a package:","<package-name>");
+		Console::setCommand($this->command,"Fetch a package","The fetch command loads a package and its dependencies from Packagist.","f:");
+		Console::setCommandSample($this->command,"To fetch a package from Packagist:","<package-name>");
 		
 	}
 	
 	public function run() {
 		
-		// run the fetch command
-		$p = Console::findCommandValue("f|fetch");
-		$f = new Fetch();
-		$f->fetch($p);
+		// find the value given to the command
+		$package = Console::findCommandValue("f|fetch");
+		
+		if ($package) {
+			
+			// if <prompt> was passed ask the user for the package name
+			if ($package == "prompt") {
+				$prompt  = "what is the name of the package you want to fetch?";
+				$options = "(ex. pattern-lab/plugin-kss)";
+				$package = Console::promptInput($prompt,$options);
+			}
+			
+			// make sure it looks like a valid package
+			if (strpos($package,"/") === false) {
+				Console::writeError("that wasn't a valid package name. it should look like <info>pattern-lab/plugin-kss</info>...");
+			}
+			
+			// run composer via fetch
+			$f = new Fetch();
+			$f->fetch($package);
+			
+		} else {
+			
+			Console::writeHelpCommand($this->command);
+			
+		}
+		
+		
 		
 	}
 	
