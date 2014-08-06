@@ -272,13 +272,10 @@ class Config {
 			
 		} else if (self::$options["overrideConfig"] == "q") {
 			
-			// if the option is to query the user when the option is set do so
-			$output = "<info>update the config option </info><desc>".$optionName."</desc><info> with the value </info><desc>".$optionValue."</desc><info>?</info> <options>Y/n</options><info> > </info><nophpeol>";
-			
-			$stdin = fopen("php://stdin", "r");
-			Console::writeLine($output);
-			$input = strtolower(trim(fgets($stdin)));
-			fclose($stdin);
+			// prompt for input
+			$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$optionValue."</desc>?";
+			$options = "Y/n"
+			$input   = Console::promptInput($prompt,$options);
 			
 			if ($input == "y") {
 				self::writeUpdateConfigOption($optionName,$optionValue);
