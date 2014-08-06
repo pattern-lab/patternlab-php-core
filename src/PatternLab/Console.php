@@ -427,7 +427,7 @@ class Console {
 	* @param  {Integer}       the longest length of the command's options
 	* @param  {Integer}       the character length of the given option
 	*/
-	protected static function getSpacer($lengthLong,$itemLongLength) {
+	public static function getSpacer($lengthLong,$itemLongLength) {
 		$i            = 0;
 		$spacer       = " ";
 		$spacerLength = $lengthLong - $itemLongLength;
