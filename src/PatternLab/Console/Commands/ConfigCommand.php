@@ -63,7 +63,7 @@ class ConfigCommand extends Command {
 			
 			// write it out
 			if (!$optionValue) {
-				Console::writeError("the search config option you provided, <info>".$searchOption."</info>, does not exists in the config...");
+				Console::writeError("the --get value you provided, <info>".$searchOption."</info>, does not exists in the config...");
 			} else {
 				$optionValue = (is_array($optionValue)) ? implode(", ",$optionValue) : $optionValue;
 				$optionValue = (!$optionValue) ? "false" : $optionValue;
@@ -76,7 +76,7 @@ class ConfigCommand extends Command {
 			$updateOption = Console::findCommandOptionValue("set");
 			$updateOptionBits = explode("=",$updateOption);
 			if (count($updateOptionBits) == 1) {
-				Console::writeError("the --set option should look like <info>optionName=\"optionValue\"</info>. nothing was updated...");
+				Console::writeError("the --set value should look like <info>optionName=\"optionValue\"</info>. nothing was updated...");
 			} 
 			
 			// set the name and value that were passed
@@ -87,7 +87,7 @@ class ConfigCommand extends Command {
 			$currentValue = Config::getOption($updateName);
 			
 			if (!$currentValue) {
-				Console::writeError("the search config option you provided, <info>".$updateName."</info>, does not exists in the config...");
+				Console::writeError("the --set option you provided, <info>".$updateName."</info>, does not exists in the config. nothing will be updated...");
 			} else {
 				Config::updateConfigOption($updateName,$updateValue);
 			}
