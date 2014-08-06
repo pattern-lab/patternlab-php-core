@@ -24,7 +24,7 @@ class ConfigCommand extends Command {
 		
 		$this->command = "config";
 		
-		Console::setCommand($this->command,"Configure Pattern Lab","The config command allows for the review and update of Pattern Lab config options.","c");
+		Console::setCommand($this->command,"Configure Pattern Lab","The --config command allows for the review and update of existing Pattern Lab config options.","c");
 		Console::setCommandOption($this->command,"list","List the current config options.","To list the current configuration:");
 		Console::setCommandOption($this->command,"get:","Get the value for a specific config option.","To get a configuration option:");
 		Console::setCommandOption($this->command,"set","Set the value for a specific config option.","To set a configuration option:");
