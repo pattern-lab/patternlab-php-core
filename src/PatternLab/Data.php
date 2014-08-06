@@ -331,6 +331,7 @@ class Data {
 		
 		if (isset(self::$store["patternSpecific"][$optionName])) {
 			self::$store["patternSpecific"][$optionName]["data"] = $optionValue;
+			return true;
 		}
 		
 		return false;
@@ -346,6 +347,7 @@ class Data {
 		
 		if (isset(self::$store["patternSpecific"][$optionName])) {
 			self::$store["patternSpecific"][$optionName]["listItems"] = $optionValue;
+			return true;
 		}
 		
 		return false;
