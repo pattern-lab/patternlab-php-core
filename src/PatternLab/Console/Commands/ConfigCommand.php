@@ -50,7 +50,7 @@ class ConfigCommand extends Command {
 				$optionValue = (is_array($optionValue)) ? implode(", ",$optionValue) : $optionValue;
 				$optionValue = (!$optionValue) ? "false" : $optionValue;
 				$spacer      = Console::getSpacer($lengthLong,strlen($optionName));
-				Console::writeInfo($optionName.":".$spacer."<ok>".$optionValue."</ok>");
+				Console::writeLine("<info>".$optionName.":</info>".$spacer.$optionValue);
 			}
 			
 		} else if (Console::findCommandOption("get")) {
