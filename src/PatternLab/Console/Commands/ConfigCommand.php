@@ -67,6 +67,26 @@ class ConfigCommand extends Command {
 			
 		} else if (Console::findCommandOption("set")) {
 			
+			// find the value that was passed
+			$updateOption = Console::findCommandOptionValue("set");
+			$updateOptionBits = explode("=",$updateOption);
+			if (count($updateOptionBits) == 1) {
+				Console::writeError("the --set option should look like <info>optionName=\"optionValue\"</info>. nothing was updated...");
+			} 
+			
+			// set the name and value that were passed
+			$updateName   = $updateOptionBits[0];
+			$updateValue  = (($updateOptionBits[1][0] == "\"") || ($updateOptionBits[1][0] == "'")) ? substr($updateOptionBits[1],1,strlen($updateOptionBits[1])-1) : $updateOptionBits[1];
+			
+			// make sure the option being updated already exists
+			$currentValue = Config::getOption($updateName);
+			
+			if (!$currentValue) {
+				Console::writeError("the search config option you provided, <info>".$updateName."</info>, does not exists in the config...");
+			} else {
+				Config::updateConfigOption($updateName,$updateValue);
+			}
+			
 		} else {
 			
 		}
