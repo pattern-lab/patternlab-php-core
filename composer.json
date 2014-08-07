@@ -36,6 +36,7 @@
 		"seld/jsonlint": "1.1.2",
 		"symfony/event-dispatcher": "v2.5.0",
 		"symfony/filesystem": "v2.5.0",
+		"symfony/finder": "v2.5.3",
 		"kevinlebrun/colors.php": "0.*",
 		"pattern-lab/unified-asset-installer": "dev-dev"
 	}
