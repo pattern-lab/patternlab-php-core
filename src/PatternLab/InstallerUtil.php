@@ -358,6 +358,8 @@ class InstallerUtil {
 				// write out the listener list
 				file_put_contents($pathList,json_encode($listenerList));
 				
+				break;
+				
 			}
 			
 		}
@@ -406,6 +408,8 @@ class InstallerUtil {
 				
 				// write out the pattern engine list
 				file_put_contents($pathList,json_encode($patternEngineList));
+				
+				break;
 				
 			}
 			
