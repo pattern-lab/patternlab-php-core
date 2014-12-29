@@ -104,6 +104,7 @@ class PatternData {
 		$dispatcherInstance->dispatch("patternData.rulesLoaded",$event);
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
+		// seems a little silly to use symfony finder here. not really giving me any power
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("patternSourceDir")), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		

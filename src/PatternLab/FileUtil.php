@@ -154,6 +154,7 @@ class FileUtil {
 		// make sure patterns exists before trying to clean it
 		if (is_dir($patternPublicDir)) {
 			
+			// symfony finder doesn't support child first and I don't want to do array crap
 			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($patternPublicDir), \RecursiveIteratorIterator::CHILD_FIRST);
 			
 			// make sure dots are skipped
@@ -203,6 +204,7 @@ class FileUtil {
 		// for the remaining dirs in public delete them and their files
 		foreach ($publicDirs as $dir) {
 			
+			// symfony finder doesn't support child first and I don't want to do array crap
 			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::CHILD_FIRST);
 			
 			// make sure dots are skipped
