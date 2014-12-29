@@ -16,6 +16,7 @@ use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Dispatcher;
 use \PatternLab\Timer;
+use \Symfony\Component\Finder\Finder;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
@@ -56,24 +57,23 @@ class Data {
 			Console::writeWarning("<path>_data/</path> doesn't exist so you won't have dynamic data...");
 			mkdir($sourceDir."/_data/");
 		}
-		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_data/");
-		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		// find the markdown-based annotations
+		$finder = new Finder();
+		$finder->files()->in($sourceDir."/_data/");
+		$finder->sortByName();
 		
-		foreach ($objects as $name => $object) {
+		foreach ($finder as $name => $file) {
 			
-			$ext           = $object->getExtension();
+			$ext           = $file->getExtension();
 			$data          = array();
-			$fileName      = $object->getFilename();
+			$fileName      = $file->getFilename();
 			$hidden        = ($fileName[0] == "_");
-			$isFile        = $object->isFile();
 			$isListItems   = strpos("listitems",$fileName);
-			$pathName      = $object->getPathname();
+			$pathName      = $file->getPathname();
 			$pathNameClean = str_replace($sourceDir."/","",$pathName);
 			
-			if ($isFile && !$hidden && (($ext == "json") || ($ext == "yaml"))) {
+			if (!$hidden && (($ext == "json") || ($ext == "yaml"))) {
 				
 				if ($isListItems === false) {
 					

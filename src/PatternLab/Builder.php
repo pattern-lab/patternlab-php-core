@@ -25,6 +25,7 @@ use \PatternLab\PatternEngine;
 use \PatternLab\Render;
 use \PatternLab\Template;
 use \PatternLab\Timer;
+use \Symfony\Component\Finder\Finder;
 
 class Builder {
 	
@@ -53,24 +54,18 @@ class Builder {
 		$mqs = array();
 		
 		// iterate over all of the other files in the source directory
-		$directoryIterator = new \RecursiveDirectoryIterator(Config::getOption("sourceDir"));
-		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+		$finder = new Finder();
+		$finder->files()->name("*.css")->in(Config::getOption("sourceDir"));
+		$finder->sortByName();
 		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach ($objects as $name => $object) {
+		foreach ($finder as $file) {
 			
-			if ($object->isFile() && ($object->getExtension() == "css")) {
-				
-				$data = file_get_contents($object->getPathname());
-				preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
-				foreach ($matches[3] as $match) {
-					if (!in_array($match,$mqs)) {
-						$mqs[] = $match;
-					}
+			$data = file_get_contents($file->getPathname());
+			preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
+			foreach ($matches[3] as $match) {
+				if (!in_array($match,$mqs)) {
+					$mqs[] = $match;
 				}
-				
 			}
 			
 		}

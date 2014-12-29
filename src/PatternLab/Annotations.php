@@ -17,6 +17,7 @@ use \PatternLab\Console;
 use \PatternLab\Dispatcher;
 use \PatternLab\Parsers\Documentation;
 use \PatternLab\Timer;
+use \Symfony\Component\Finder\Finder;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
@@ -47,39 +48,34 @@ class Annotations {
 			Console::writeWarning("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...");
 			mkdir($sourceDir."/_annotations");
 		}
-		$directoryIterator = new \RecursiveDirectoryIterator($sourceDir."/_annotations");
-		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		// find the markdown-based annotations
+		$finder = new Finder();
+		$finder->files()->name("*.md")->in($sourceDir."/_annotations");
+		$finder->sortByName();
 		
-		foreach ($objects as $name => $object) {
+		foreach ($finder as $name => $file) {
+				
+			$data    = array();
+			$data[0] = array();
 			
-			// if it's an .md file parse and generate the proper info
-			if ($object->isFile() && ($object->getExtension() == "md")) {
+			$text = file_get_contents($file->getPathname());
+			
+			$matches = (strpos($text,PHP_EOL."~*~".PHP_EOL) !== false) ? explode(PHP_EOL."~*~".PHP_EOL,$text) : array($text);
+			
+			foreach ($matches as $match) {
 				
-				$data    = array();
-				$data[0] = array();
+				list($yaml,$markdown) = Documentation::parse($match);
 				
-				$text = file_get_contents($object->getPathname());
-				
-				$matches = (strpos($text,PHP_EOL."~*~".PHP_EOL) !== false) ? explode(PHP_EOL."~*~".PHP_EOL,$text) : array($text);
-				
-				foreach ($matches as $match) {
-					
-					list($yaml,$markdown) = Documentation::parse($match);
-					
-					if (isset($yaml["el"]) || isset($yaml["selector"])) {
-						$data[0]["el"]  = (isset($yaml["el"])) ? $yaml["el"] : $yaml["selector"];
-					} else {
-						$data[0]["el"]  = "#someimpossibleselector";
-					}
-					$data[0]["title"]   = isset($yaml["title"]) ? $yaml["title"] : "";
-					$data[0]["comment"] = $markdown;
-					
-					self::$store["comments"] = array_merge(self::$store["comments"],$data);
-					
+				if (isset($yaml["el"]) || isset($yaml["selector"])) {
+					$data[0]["el"]  = (isset($yaml["el"])) ? $yaml["el"] : $yaml["selector"];
+				} else {
+					$data[0]["el"]  = "#someimpossibleselector";
 				}
+				$data[0]["title"]   = isset($yaml["title"]) ? $yaml["title"] : "";
+				$data[0]["comment"] = $markdown;
+				
+				self::$store["comments"] = array_merge(self::$store["comments"],$data);
 				
 			}
 			
