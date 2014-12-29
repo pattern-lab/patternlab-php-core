@@ -17,8 +17,34 @@ use \PatternLab\Console;
 use \PatternLab\Timer;
 use \Symfony\Component\Filesystem\Filesystem;
 use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use \Symfony\Component\Finder\Finder;
 
 class InstallerUtil {
+	
+	protected static $fs;
+	
+	/**
+	 * Move the component files from the package to their location in the patternlab-components dir
+	 * @param  {String/Array}   the items to create a fileList for
+	 *
+	 * @return {Array}          list of files destination and source
+	 */
+	protected static function buildFileList($initialList) {
+		
+		$fileList = array();
+		
+		// see if it's an array. loop over the multiple items if it is
+		if (is_array($initialList)) {
+			foreach ($initialList as $listItem) {
+				$fileList[$listItem] = $listItem;
+			}
+		} else {
+			$fileList[$listItem] = $listItem;
+		}
+		
+		return $fileList;
+		
+	}
 	
 	/**
 	* Common init sequence
@@ -32,6 +58,144 @@ class InstallerUtil {
 		$baseDir = __DIR__."/../../../../../";
 		Config::init($baseDir,false);
 		
+		// load the file system function
+		self::$fs = new Filesystem();
+	}
+	
+	/**
+	 * Parse the component types to figure out what needs to be moved and added to the component JSON files
+	 * @param  {String}    file path to move
+	 * @param  {String}    file path to move to
+	 * @param  {String}    the name of the package
+	 * @param  {String}    the base directory for the source of the files
+	 * @param  {String}    the base directory for the destination of the files (publicDir or sourceDir)
+	 * @param  {Array}     the list of files to be moved
+	 */
+	protected static function moveFiles($source,$destination,$packageName,$sourceBase,$destinationBase) {
+		
+		// make sure the destination base exists
+		if (!is_dir($destinationBase)) {
+			mkdir($destinationBase);
+		}
+		
+		// clean any * or / on the end of $destination
+		$destination = ($destination[strlen($destination)-1] == "*") ? substr($destination,0,-1) : $destination;
+		$destination = ($destination[strlen($destination)-1] == "/") ? substr($destination,0,-1) : $destination;
+		
+		// decide how to move the files. the rules:
+		// dest ~ src        -> action
+		// *    ~ *          -> mirror to path/
+		// path ~ *          -> mirror to path/
+		// path ~ foo/*      -> mirror to path/foo
+		// path ~ foo/s.html -> copy tp path/foo/s.html
+		
+		if (($source == "*") && ($destination == "*")) {
+			if (!self::pathExists($packageName,$destinationBase."/")) {
+				self::$fs->mirror($sourceBase,$destinationBase."/");
+			}
+		} else if ($source == "*") {
+			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
+				self::$fs->mirror($sourceBase,$destinationBase."/".$destination);
+			}
+		} else if ($source[strlen($source)-1] == "*") {
+			$source = rtrim($source,"/*");
+			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
+				self::$fs->mirror($sourceBase.$source,$destinationBase."/".$destination);
+			}
+		} else {
+			$pathInfo       = explode("/",$destination);
+			$file           = array_pop($pathInfo);
+			$destinationDir = implode("/",$pathInfo);
+			if (!self::$fs->exists($destinationBase."/".$destinationDir)) {
+				self::$fs->mkdir($destinationBase."/".$destinationDir);
+			}
+			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
+				self::$fs->copy($sourceBase.$source,$destinationBase."/".$destination,true);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Parse the component types to figure out what needs to be moved and added to the component JSON files
+	 * @param  {String}    the name of the package
+	 * @param  {String}    the base directory for the source of the files
+	 * @param  {String}    the base directory for the destination of the files (publicDir or sourceDir)
+	 * @param  {Array}     the list of files to be moved
+	 */
+	protected static function parseComponentTypes($packageName,$sourceBase,$destinationBase,$componentTypes) {
+		
+		/*
+		NEED TO KNOW TYPES BEFORE MOVING, they just get mirrored
+		"dist": {
+			"componentDir": { // patternlab-components/package/name/
+				"css": "css/*", // string or array
+				"javascript": { // string, object, or array
+					"files": // string or array
+					"onready": // string
+				}
+				"images": // string or array
+				"templates": // string or array
+			}
+		*/
+		
+		/*
+		patternlab-components/templates.json (read in via PHP and written out as data.json), loaded via AJAX
+			for PHP: { "templates": [...] }
+			for JS:  var templates = [ { "pattern-lab/plugin-kss": [ "dist/templates/foo.mustache "] } ];
+		patternlab-components/javascript.json (read in via PHP and written out as data.json), $script uses the data.json to load the list of files
+			for PHP: { "javascript": [...] };
+			for JS:  var javascript = [ { "pattern-lab/plugin-kss": { "dependencies": [ "path.js" ], "onready": "code" } } ];
+		patternlab-components/css.json (read in via PHP and written out as data.json), simple loader uses data.json to the load the list of files
+			for PHP: { "css": [...] };
+			for JS:  var css = [ { "pattern-lab/plugin-kss": [ "path1.css", "path2.css" ] } ];
+		*/
+		
+		$destinationBase = $destinationBase."/".$packageName;
+		
+		// check if css option is set
+		if (isset($componentTypes["css"])) {
+			
+			$fileList = self::buildFileList($componentTypes["css"]);
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::updateComponentJSON("css",$componentTypes["css"]);
+			
+		}
+		
+		// check if the javascript option is set
+		if (isset($componentList["javascript"])) {
+			
+			// check to see if this has options
+			if (is_array($componentList["javascript"]) && (isset($componentTypes["javascript"]["files"]))) {
+				$fileList       = self::buildFileList($componentList["javascript"]["files"]);
+				$javascriptList = $componentList["javascript"]["files"];
+			} else {
+				$fileList       = self::buildFileList($componentList["javascript"]);
+				$javascriptList = $componentList["javascript"];
+			}
+			
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::updateComponentJSON("javascript",$javascriptList);
+			
+		}
+		
+		// check if the images option is set
+		if (isset($componentTypes["images"])) {
+			
+			$fileList = self::buildFileList($componentTypes["images"]);
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			
+		}
+		
+		// check if the templates option is set
+		if (isset($componentList["templates"])) {
+			
+			$fileList = self::buildFileList($componentTypes["templates"]);
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::updateComponentJSON("templates",$componentTypes["templates"]);
+			
+		}
+		
 	}
 	
 	/**
@@ -43,46 +207,21 @@ class InstallerUtil {
 	 */
 	protected static function parseFileList($packageName,$sourceBase,$destinationBase,$fileList) {
 		
-		$fs = new Filesystem();
-		
 		foreach ($fileList as $fileItem) {
 			
 			// retrieve the source & destination
-			$source      = self::removeDots(key($fileItem));
-			$destination = self::removeDots($fileItem[$source]);
-			
-			// make sure the destination base exists
-			if (!is_dir($destinationBase)) {
-				mkdir($destinationBase);
-			}
+			$destination = self::removeDots(key($fileItem));
+			$source      = self::removeDots($fileItem[$destination]);
 			
 			// depending on the source handle things differently. mirror if it ends in /*
-			if (($source == "*") && ($destination == "*")) {
-				if (!self::pathExists($packageName,$destinationBase."/")) {
-					$fs->mirror($sourceBase,$destinationBase."/");
-				}
-			} else if (($source == "*") && ($destination[strlen($source)-1] == "*")) {
-				$destination = rtrim($destination,"/*");
-				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase,$destinationBase."/".$destination);
-				}
-			} else if ($source[strlen($source)-1] == "*") {
-				$source      = rtrim($source,"/*");
-				$destination = rtrim($destination,"/*");
-				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->mirror($sourceBase.$source,$destinationBase."/".$destination);
+			if (is_array($source)) {
+				foreach ($source as $key => $value) {
+					self::moveFiles($value,$key,$packageName,$sourceBase,$destinationBase);
 				}
 			} else {
-				$pathInfo       = explode("/",$destination);
-				$file           = array_pop($pathInfo);
-				$destinationDir = implode("/",$pathInfo);
-				if (!$fs->exists($destinationBase."/".$destinationDir)) {
-					$fs->mkdir($destinationBase."/".$destinationDir);
-				}
-				if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-					$fs->copy($sourceBase.$source,$destinationBase."/".$destination,true);
-				}
+				self::moveFiles($source,$destination,$packageName,$sourceBase,$destinationBase);
 			}
+			
 			
 		}
 		
@@ -97,9 +236,7 @@ class InstallerUtil {
 	 */
 	protected static function pathExists($packageName,$path) {
 		
-		$fs = new Filesystem();
-		
-		if ($fs->exists($path)) {
+		if (self::$fs->exists($path)) {
 			
 			// set if the prompt should fire
 			$prompt = true;
@@ -154,6 +291,10 @@ class InstallerUtil {
 	 */
 	public static function postPackageInstall($event) {
 		
+		// run the console and config inits
+		self::init();
+		
+		// run the tasks based on what's in the extra dir
 		self::runTasks($event,"install");
 		
 	}
@@ -163,6 +304,9 @@ class InstallerUtil {
 	 * @param  {Object}     a script event object from composer
 	 */
 	public static function postPackageUpdate($event) {
+		
+		// run the console and config inits
+		self::init();
 		
 		self::runTasks($event,"update");
 		
@@ -240,9 +384,6 @@ class InstallerUtil {
 	 */
 	protected static function runTasks($event,$type) {
 		
-		// run the console and config inits
-		self::init();
-		
 		// get package info
 		$package   = ($type == "install") ? $event->getOperation()->getPackage() : $event->getOperation()->getTargetPackage();
 		$extra     = $package->getExtra();
@@ -282,7 +423,12 @@ class InstallerUtil {
 				
 				// move assets to the data directory
 				if (isset($extra["dist"]["dataDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("dataDir"),$extra["dist"]["scriptsDir"]);
+					self::parseFileList($name,$pathDist,Config::getOption("dataDir"),$extra["dist"]["dataDir"]);
+				}
+				
+				// move assets to the components directory
+				if (isset($extra["dist"]["componentDir"])) {
+					self::parseComponentTypes($name,$pathDist,Config::getOption("componentDir")."/".$name,$extra["dist"]["componentDir"]);
 				}
 				
 				// see if we need to modify the config
@@ -332,33 +478,27 @@ class InstallerUtil {
 		// load listener list
 		$listenerList = json_decode(file_get_contents($pathList),true);
 		
-		// grab the list of files in the package
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathPackage), \RecursiveIteratorIterator::CHILD_FIRST);
+		// set-up a finder to find the listener
+		$finder = new Finder();
+		$finder->files()->name('PatternLabListener.php')->in($pathPackage);
 		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		// go through the package items
-		foreach($objects as $name => $object) {
+		// iterate over the returned objects
+		foreach ($finder as $file) {
 			
-			if ($object->getFilename() == "PatternLabListener.php") {
-				
-				// create the name
-				$dirs         = explode("/",$object->getPath());
-				$listenerName = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				
-				// check to see what we should do with the listener info
-				if (!$remove && !in_array($listenerName,$listenerList["listeners"])) {
-					$listenerList["listeners"][] = $listenerName;
-				} else if ($remove && in_array($listenerName,$listenerList["listeners"])) {
-					$key = array_search($listenerName, $listenerList["listeners"]);
-					unset($listenerList["listeners"][$key]);
-				}
-				
-				// write out the listener list
-				file_put_contents($pathList,json_encode($listenerList));
-				
+			// create the name
+			$dirs         = explode("/",$file->getPath());
+			$listenerName = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$file->getFilename());
+			
+			// check to see what we should do with the listener info
+			if (!$remove && !in_array($listenerName,$listenerList["listeners"])) {
+				$listenerList["listeners"][] = $listenerName;
+			} else if ($remove && in_array($listenerName,$listenerList["listeners"])) {
+				$key = array_search($listenerName, $listenerList["listeners"]);
+				unset($listenerList["listeners"][$key]);
 			}
+			
+			// write out the listener list
+			file_put_contents($pathList,json_encode($listenerList));
 			
 		}
 		
@@ -381,33 +521,27 @@ class InstallerUtil {
 		// load pattern engine list
 		$patternEngineList = json_decode(file_get_contents($pathList),true);
 		
-		// grab the list of files in the package
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathPackage), \RecursiveIteratorIterator::CHILD_FIRST);
+		// set-up a finder to find the pattern engine
+		$finder = new Finder();
+		$finder->files()->name("PatternEngineRule.php")->in($pathPackage);
 		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		// go through the package items
-		foreach ($objects as $name => $object) {
+		// iterate over the returned objects
+		foreach ($finder as $file) {
 			
-			if ($object->getFilename() == "PatternEngineRule.php") {
-				
-				// create the name
-				$dirs              = explode("/",$object->getPath());
-				$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$object->getFilename());
-				
-				// check what we should do with the pattern engine info
-				if (!$remove && !in_array($patternEngineName, $patternEngineList["patternengines"])) {
-					$patternEngineList["patternengines"][] = $patternEngineName;
-				} else if ($remove && in_array($patternEngineName, $patternEngineList["patternengines"])) {
-					$key = array_search($patternEngineName, $patternEngineList["patternengines"]);
-					unset($patternEngineList["patternengines"][$key]);
-				}
-				
-				// write out the pattern engine list
-				file_put_contents($pathList,json_encode($patternEngineList));
-				
+			/// create the name
+			$dirs              = explode("/",$file->getPath());
+			$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$file->getFilename());
+			
+			// check what we should do with the pattern engine info
+			if (!$remove && !in_array($patternEngineName, $patternEngineList["patternengines"])) {
+				$patternEngineList["patternengines"][] = $patternEngineName;
+			} else if ($remove && in_array($patternEngineName, $patternEngineList["patternengines"])) {
+				$key = array_search($patternEngineName, $patternEngineList["patternengines"]);
+				unset($patternEngineList["patternengines"][$key]);
 			}
+			
+			// write out the pattern engine list
+			file_put_contents($pathList,json_encode($patternEngineList));
 			
 		}
 		

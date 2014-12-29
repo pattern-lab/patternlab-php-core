@@ -441,7 +441,7 @@ class Console {
 	public static function writeError($line,$doubleSpace = false,$doubleBreak = false) {
 		$lineFinal = self::addTags($line,"error");
 		self::writeLine($lineFinal,$doubleSpace,$doubleBreak);
-		exit;
+		exit(1);
 	}
 	
 	/**
