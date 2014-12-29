@@ -160,7 +160,7 @@ class FileUtil {
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			// for each file figure out what to do with it
-			foreach($objects as $name => $object) {
+			foreach ($objects as $name => $object) {
 				
 				if ($object->isDir()) {
 					// if this is a directory remove it
