@@ -238,6 +238,9 @@ class InstallerUtil {
 		
 		if (self::$fs->exists($path)) {
 			
+			// set-up a human readable prompt
+			$humanReadablePath = str_replace(Config::getOption("baseDir"), "./", $path);
+			
 			// set if the prompt should fire
 			$prompt = true;
 			
@@ -263,15 +266,15 @@ class InstallerUtil {
 			if ($prompt) {
 				
 				// prompt for input using the supplied query
-				$prompt  = "the path <path>".$path."</path> already exists. overwrite it with the contents of <path>".$packageName."</path>?";
+				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. overwrite it with the contents from the <path>".$packageName."</path> package?";
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
 				
 				if ($input == "y") {
-					Console::writeTag("ok","contents of <path>".$path."</path> being overwritten...", false, false);
+					Console::writeTag("ok","contents of <path>".$humanReadablePath."</path> being overwritten...", false, true);
 					return false;
 				} else {
-					Console::writeWarning("contents of <path>".$path."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...", false, false);
+					Console::writeWarning("contents of <path>".$humanReadablePath."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...", false, true);
 					return true;
 				}
 				
