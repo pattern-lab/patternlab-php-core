@@ -37,6 +37,7 @@ class PatternData {
 	protected static $patternTypeDash     = "";
 	protected static $rules               = array();
 	protected static $dirSep              = DIRECTORY_SEPARATOR;
+	protected static $frontMeta           = array("-","_");
 	
 	/**
 	* Return if a specific option is set
@@ -189,6 +190,13 @@ class PatternData {
 	*/
 	public static function getDirSep() {
 		return self::$dirSep;
+	}
+	
+	/**
+	* Return the front meta bits (hidden and noviewall)
+	*/
+	public static function getFrontMeta() {
+		return self::$frontMeta;
 	}
 	
 	/**
