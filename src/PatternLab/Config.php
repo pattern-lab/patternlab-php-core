@@ -363,7 +363,7 @@ class Config {
 		$options[$optionName] = $optionValue;
 		
 		// dump the YAML
-		$configOutput = Yaml::dump($array, 3);
+		$configOutput = Yaml::dump($options, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
