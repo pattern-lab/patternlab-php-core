@@ -18,7 +18,6 @@ use \PatternLab\PatternData\Event as PatternDataEvent;
 use \PatternLab\PatternData\Exporters\DataLinkExporter;
 use \PatternLab\PatternData\Exporters\DataMergeExporter;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
-use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
 use \PatternLab\PatternData\Exporters\PatternPathSrcExporter;
 use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternData\Helpers\LineageHelper;
