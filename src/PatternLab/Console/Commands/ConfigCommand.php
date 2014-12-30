@@ -36,7 +36,7 @@ class ConfigCommand extends Command {
 		if (Console::findCommandOption("list")) {
 			
 			// get all of the options
-			$options = Config::get();
+			$options = Config::getOptions();
 			
 			// sort 'em alphabetically
 			ksort($options);

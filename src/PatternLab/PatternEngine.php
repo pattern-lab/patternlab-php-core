@@ -45,7 +45,7 @@ class PatternEngine {
 		}
 		
 		if (!$found) {
-			Console::writeError("the supplied pattern extension didn't match a pattern loader rule...");
+			Console::writeError("the supplied pattern extension didn't match a pattern loader rule. check your config...");
 		}
 		
 	}

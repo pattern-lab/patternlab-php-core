@@ -15,22 +15,22 @@ namespace PatternLab;
 use \PatternLab\Console;
 use \PatternLab\FileUtil;
 use \PatternLab\Timer;
+use \Symfony\Component\Yaml\Yaml;
+use \Symfony\Component\Yaml\Exception\ParseException;
 
 class Config {
 	
 	protected static $options            = array();
-	protected static $userConfig         = "config.ini";
+	protected static $userConfig         = "config.yml";
 	protected static $userConfigDir      = "";
 	protected static $userConfigDirClean = "config";
 	protected static $userConfigDirDash  = "_config";
 	protected static $userConfigPath     = "";
-	protected static $plConfigPath       = "../../config/config.ini.default";
-	protected static $cleanValues        = array("ie","id","patternStates","styleGuideExcludes","ishControlsHide");
+	protected static $plConfigPath       = "../../config/config.yml.default";
 	protected static $dirAdded           = false;
 	
 	/**
 	* Clean a given dir from the config file
-	* NO IDEA WHAT THIS IS USED FOR
 	* @param  {String}       directory to be cleaned
 	*
 	* @return {String}       cleaned directory
@@ -43,15 +43,6 @@ class Config {
 		
 		return $dir;
 		
-	}
-	
-	/**
-	* Get the options set in the config
-	* 
-	* @return {Array}        the options from the config
-	*/
-	public static function get() {
-		return self::$options;
 	}
 	
 	/**
@@ -75,6 +66,15 @@ class Config {
 	}
 	
 	/**
+	* Get the options set in the config
+	* 
+	* @return {Array}        the options from the config
+	*/
+	public static function getOptions() {
+		return self::$options;
+	}
+	
+	/**
 	* Adds the config options to a var to be accessed from the rest of the system
 	* If it's an old config or no config exists this will update and generate it.
 	* @param  {Boolean}       whether we should print out the status of the config being loaded
@@ -88,14 +88,21 @@ class Config {
 		
 		// normalize the baseDir
 		$baseDir = FileUtil::normalizePath($baseDir);
-		self::$options["baseDir"] = $baseDir;
+		
+		// double-check the default config file exists
+		if (!is_dir($baseDir)) {
+			Console::writeError("make sure ".$baseDir." exists...");
+		}
+		
+		// set the baseDir option
+		self::$options["baseDir"] = ($baseDir[strlen($baseDir)-1] == DIRECTORY_SEPARATOR) ? $baseDir : $baseDir.DIRECTORY_SEPARATOR;
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
 			
 			// set-up the paths
-			self::$userConfigDirClean  = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirClean;
-			self::$userConfigDirDash   = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirDash;
+			self::$userConfigDirClean  = self::$options["baseDir"].self::$userConfigDirClean;
+			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
 			self::$plConfigPath        = __DIR__.DIRECTORY_SEPARATOR.self::$plConfigPath;
@@ -114,13 +121,18 @@ class Config {
 		
 		// double-check the default config file exists
 		if (!file_exists(self::$plConfigPath)) {
-			Console::writeError("make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically...");
+			Console::writeError("make sure <path>".self::$plConfigPath."</path> exists before trying to have Pattern Lab build the config.yml file automagically...");
 		}
 		
 		// set the default config using the pattern lab config
-		if (!self::$options = @parse_ini_file(self::$plConfigPath)) {
-			Console::writeError("Config parse error in <path>".self::$plConfigPath."</path>..."); 
+		try {
+			$data = Yaml::parse(file_get_contents(self::$plConfigPath));
+		} catch (ParseException $e) {
+			Console::writeError("Config parse error in <path>".self::$plConfigPath."</path>: ".$e->getMessage());
 		}
+		
+		// load the options from the default file
+		self::loadOptions($data);
 		
 		// make sure these are copied
 		$defaultOptions = self::$options;
@@ -133,9 +145,12 @@ class Config {
 		if (!file_exists(self::$userConfigPath)) {
 			$migrate = true;
 		} else {
-			if (!self::$options = @parse_ini_file(self::$userConfigPath)) {
-				Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>..."); 
+			try {
+				$data = Yaml::parse(file_get_contents(self::$userConfigPath));
+			} catch (ParseException $e) {
+				Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 			}
+			self::loadOptions($data);
 		}
 		
 		// compare version numbers
@@ -163,30 +178,21 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		$baseFull                          = $baseDir.DIRECTORY_SEPARATOR;
-		self::$options["baseDir"]          = $baseDir;
-		self::$options["coreDir"]          = (is_dir($baseFull."_core")) ? $baseFull."_core" : $baseFull."core";
-		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? $baseFull.self::cleanDir(self::$options["exportDir"])   : $baseFull."exports";
-		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? $baseFull.self::cleanDir(self::$options["packagesDir"]) : $baseFull."packages";
-		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? $baseFull.self::cleanDir(self::$options["publicDir"])   : $baseFull."public";
-		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? $baseFull.self::cleanDir(self::$options["scriptsDir"])  : $baseFull."scripts";
-		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? $baseFull.self::cleanDir(self::$options["sourceDir"])   : $baseFull."source";
+		self::$options["coreDir"]          = (is_dir(self::$options["baseDir"]."_core")) ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
+		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
+		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? self::$options["baseDir"].self::cleanDir(self::$options["packagesDir"]) : self::$options["baseDir"]."packages";
+		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
+		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
+		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
 		self::$options["componentDir"]     = self::$options["publicDir"]."/patternlab-components";
 		self::$options["dataDir"]          = self::$options["sourceDir"]."/_data";
 		self::$options["patternExportDir"] = self::$options["exportDir"]."/patterns";
 		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
 		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
 		
-		// populate some standard variables out of the config
-		foreach (self::$options as $key => $value) {
-			
-			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (in_array($key,self::$cleanValues)) {
-				$values = explode(",",$value);
-				array_walk($values,'PatternLab\Util::trim');
-				self::$options[$key] = $values;
-			}
-			
+		// make sure styleguideExcludes is set to an array even if it's empty
+		if (is_string(self::$options["styleGuideExcludes"])) {
+			self::$options["styleGuideExcludes"] = array();
 		}
 		
 		// set the cacheBuster
@@ -201,6 +207,39 @@ class Config {
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");
+		
+	}
+	
+	/**
+	* Check to see if the given array is an associative array
+	* @param  {Array}        the array to be checked
+	* 
+	* @return {Boolean}      whether it's an associative array
+	*/
+	protected static function isAssoc($array) {
+		return (bool) count(array_filter(array_keys($array), 'is_string'));
+	}
+	
+	/**
+	* Load the options into self::$options
+	* @param  {Array}        the data to be added
+	* @param  {String}       any addition that may need to be added to the option key
+	*/
+	public static function loadOptions($data,$parentKey = "") {
+		
+		foreach ($data as $key => $value) {
+			
+			$key = $parentKey.trim($key);
+			
+			if (is_array($value) && self::isAssoc($value)) {
+				self::loadOptions($value,$key.".");
+			} else if (is_array($value) && !self::isAssoc($value)) {
+				self::$options[$key] = $value;
+			} else {
+				self::$options[$key] = trim($value);
+			}
+			
+		}
 		
 	}
 	
@@ -314,13 +353,16 @@ class Config {
 	*/
 	protected static function writeUpdateConfigOption($optionName,$optionValue) {
 		
-		$configOutput = "";
-		$options      = parse_ini_file(self::$userConfigPath);
+		// parse the YAML options
+		try {
+			$options = Yaml::parse(file_get_contents(self::$userConfigPath));
+		} catch (ParseException $e) {
+			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
+		}
 		$options[$optionName] = $optionValue;
 		
-		foreach ($options as $key => $value) {
-			$configOutput .= $key." = \"".$value."\"\n";
-		}
+		// dump the YAML
+		$configOutput = Yaml::dump($options, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
@@ -343,11 +385,8 @@ class Config {
 			}
 		}
 		
-		// create the output data
-		$configOutput = "";
-		foreach ($defaultOptions as $key => $value) {
-			$configOutput .= $key." = \"".$value."\"\n";
-		}
+		// dump the YAML
+		$configOutput = Yaml::dump($defaultOptions, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
