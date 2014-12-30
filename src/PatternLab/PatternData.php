@@ -185,7 +185,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the overall store of PatternData
+	* Return the directory separator
 	*/
 	public static function getDirSep() {
 		return self::$dirSep;
