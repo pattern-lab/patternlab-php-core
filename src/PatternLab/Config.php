@@ -121,7 +121,7 @@ class Config {
 		
 		// double-check the default config file exists
 		if (!file_exists(self::$plConfigPath)) {
-			Console::writeError("make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically...");
+			Console::writeError("make sure <path>".self::$plConfigPath."</path> exists before trying to have Pattern Lab build the config.ini file automagically...");
 		}
 		
 		// set the default config using the pattern lab config
