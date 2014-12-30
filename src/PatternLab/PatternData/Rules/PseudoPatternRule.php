@@ -42,9 +42,14 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		$patternType        = PatternData::getPatternType();
 		$patternTypeDash    = PatternData::getPatternTypeDash();
 		$dirSep             = PatternData::getDirSep();
+		$frontMeta          = PatternData::getFrontMeta();
+		
+		// should this pattern get rendered?
+		$hidden             = ($name[0] == "_");
+		$noviewall          = ($name[0] == "-");
 		
 		// set-up the names
-		$patternFull        = $name;                                                           // 00-colors.mustache
+		$patternFull        = in_array($name[0],$frontMeta) ? substr($name,1) : $name;         // 00-colors~foo.mustache
 		$patternState       = "";
 		
 		// check for pattern state
@@ -69,15 +74,18 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		$patternPartial      = $patternTypeDash."-".$patternDash;                               // pages-homepage-emergency
 		$patternPath         = str_replace(".".$ext,"",str_replace("~","-",$pathName));         // 00-atoms/01-global/00-colors
 		$patternPathDash     = str_replace($dirSep,"-",$patternPath);                           // 00-atoms-01-global-00-colors (file path)
-		$patternPathOrigBits = explode("~",$pathName);                                          
-		$patternPathOrig     = $patternPathOrigBits[0];                                         // 04-pages/00-homepage
-		$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);                       // 04-pages-00-homepage
 		
-		// should this pattern get rendered?
-		$hidden             = ($patternFull[0] == "_");
+		// check the original pattern path. if it doesn't exist make a guess
+		$patternPathOrig     = PatternData::getPatternOption($patternBaseOrig,"pathName");      // 04-pages/00-homepage
+		$patternPathOrigDash = PatternData::getPatternOption($patternBaseOrig,"pathDash");      // 04-pages-00-homepage
+		if (!$patternPathOrig) {
+			$patternPathOrigBits = explode("~",$pathName);
+			$patternPathOrig     = $patternPathOrigBits[0];                                     // 04-pages/00-homepage
+			$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);                   // 04-pages-00-homepage
+		}
 		
 		// create a key for the data store
-		$patternStoreKey    = $patternPartial;
+		$patternStoreKey     = $patternPartial;
 		
 		// collect the data
 		$patternStoreData   = array("category"     => "pattern",
@@ -90,6 +98,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 									"breadcrumb"   => $patternType,
 									"state"        => $patternState,
 									"hidden"       => $hidden,
+									"noviewall"    => $noviewall,
 									"depth"        => $depth,
 									"ext"          => $ext,
 									"path"         => $path,
@@ -156,7 +165,8 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 			
 		}
 		
-		$patternStoreData["data"] = array_replace_recursive($patternDataBase, $patternData);
+		// make sure the pattern data is an array before merging the data
+		$patternStoreData["data"] = is_array($patternData) ? array_replace_recursive($patternDataBase, $patternData) : $patternDataBase;
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
 		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;

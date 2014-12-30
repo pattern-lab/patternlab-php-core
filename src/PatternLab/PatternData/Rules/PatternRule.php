@@ -41,10 +41,15 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		$patternTypeClean    = PatternData::getPatternTypeClean();
 		$patternTypeDash     = PatternData::getPatternTypeDash();
 		$dirSep              = PatternData::getDirSep();
+		$frontMeta           = PatternData::getFrontMeta();
+		
+		// should this pattern get rendered?
+		$hidden           = ($name[0] == "_");
+		$noviewall        = ($name[0] == "-");
 		
 		// set-up the names
-		$patternFull      = $name;                                                     // 00-colors.mustache
-		$pattern          = str_replace(".".$this->extProp,"",$patternFull);           // 00-colors
+		$patternFull      = in_array($name[0],$frontMeta) ? substr($name,1) : $name;  // 00-colors.mustache
+		$pattern          = str_replace(".".$this->extProp,"",$patternFull);          // 00-colors
 		$patternState     = "";
 		
 		// check for pattern state
@@ -55,14 +60,11 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		// finish setting up vars
-		$patternDash      = $this->getPatternName(str_replace("_","",$pattern),false); // colors
+		$patternDash      = $this->getPatternName($pattern,false);                     // colors
 		$patternClean     = str_replace("-"," ",$patternDash);                         // colors (dashes replaced with spaces)
 		$patternPartial   = $patternTypeDash."-".$patternDash;                         // atoms-colors
 		$patternPath      = str_replace(".".$this->extProp,"",$pathName);              // 00-atoms/01-global/00-colors
 		$patternPathDash  = str_replace($dirSep,"-",$patternPath);                     // 00-atoms-01-global-00-colors (file path)
-		
-		// should this pattern get rendered?
-		$hidden           = ($patternFull[0] == "_");
 		
 		// create a key for the data store
 		$patternStoreKey  = $patternPartial;
@@ -78,6 +80,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "breadcrumb"       => $patternTypeClean,
 								  "state"            => $patternState,
 								  "hidden"           => $hidden,
+								  "noviewall"        => $noviewall,
 								  "depth"            => $depth,
 								  "ext"              => $ext,
 								  "path"             => $path,
