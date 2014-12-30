@@ -157,7 +157,7 @@ class InstallerUtil {
 		if (isset($componentTypes["css"])) {
 			
 			$fileList = self::buildFileList($componentTypes["css"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
 			self::updateComponentJSON("css",$componentTypes["css"]);
 			
 		}
@@ -174,7 +174,7 @@ class InstallerUtil {
 				$javascriptList = $componentList["javascript"];
 			}
 			
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
 			self::updateComponentJSON("javascript",$javascriptList);
 			
 		}
@@ -183,7 +183,7 @@ class InstallerUtil {
 		if (isset($componentTypes["images"])) {
 			
 			$fileList = self::buildFileList($componentTypes["images"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
 			
 		}
 		
@@ -191,7 +191,7 @@ class InstallerUtil {
 		if (isset($componentList["templates"])) {
 			
 			$fileList = self::buildFileList($componentTypes["templates"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList)
+			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
 			self::updateComponentJSON("templates",$componentTypes["templates"]);
 			
 		}
