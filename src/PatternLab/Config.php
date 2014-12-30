@@ -30,6 +30,7 @@ class Config {
 	
 	/**
 	* Clean a given dir from the config file
+	* NO IDEA WHAT THIS IS USED FOR
 	* @param  {String}       directory to be cleaned
 	*
 	* @return {String}       cleaned directory
