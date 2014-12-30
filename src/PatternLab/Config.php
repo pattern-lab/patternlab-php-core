@@ -386,11 +386,8 @@ class Config {
 			}
 		}
 		
-		// create the output data
-		$configOutput = "";
-		foreach ($defaultOptions as $key => $value) {
-			$configOutput .= $key." = \"".$value."\"\n";
-		}
+		// dump the YAML
+		$configOutput = Yaml::dump($defaultOptions, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
