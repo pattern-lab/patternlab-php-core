@@ -88,14 +88,21 @@ class Config {
 		
 		// normalize the baseDir
 		$baseDir = FileUtil::normalizePath($baseDir);
-		self::$options["baseDir"] = $baseDir;
+		
+		// double-check the default config file exists
+		if (!is_dir($baseDir)) {
+			Console::writeError("make sure ".$baseDir." exists...");
+		}
+		
+		// set the baseDir option
+		self::$options["baseDir"] = ($baseDir[strlen($baseDir)-1] == DIRECTORY_SEPARATOR) ? $baseDir : $baseDir.DIRECTORY_SEPARATOR;
 		
 		// can't add __DIR__ above so adding here
 		if (!self::$dirAdded) {
 			
 			// set-up the paths
-			self::$userConfigDirClean  = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirClean;
-			self::$userConfigDirDash   = $baseDir.DIRECTORY_SEPARATOR.self::$userConfigDirDash;
+			self::$userConfigDirClean  = self::$options["baseDir"].self::$userConfigDirClean;
+			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
 			self::$plConfigPath        = __DIR__.DIRECTORY_SEPARATOR.self::$plConfigPath;
@@ -163,14 +170,12 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		$baseFull                          = $baseDir.DIRECTORY_SEPARATOR;
-		self::$options["baseDir"]          = $baseDir;
-		self::$options["coreDir"]          = (is_dir($baseFull."_core")) ? $baseFull."_core" : $baseFull."core";
-		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? $baseFull.self::cleanDir(self::$options["exportDir"])   : $baseFull."exports";
-		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? $baseFull.self::cleanDir(self::$options["packagesDir"]) : $baseFull."packages";
-		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? $baseFull.self::cleanDir(self::$options["publicDir"])   : $baseFull."public";
-		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? $baseFull.self::cleanDir(self::$options["scriptsDir"])  : $baseFull."scripts";
-		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? $baseFull.self::cleanDir(self::$options["sourceDir"])   : $baseFull."source";
+		self::$options["coreDir"]          = (is_dir($baseFull."_core")) ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
+		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
+		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? self::$options["baseDir"].self::cleanDir(self::$options["packagesDir"]) : self::$options["baseDir"]."packages";
+		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
+		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
+		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
 		self::$options["componentDir"]     = self::$options["publicDir"]."/patternlab-components";
 		self::$options["dataDir"]          = self::$options["sourceDir"]."/_data";
 		self::$options["patternExportDir"] = self::$options["exportDir"]."/patterns";
