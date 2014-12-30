@@ -99,7 +99,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 				$storeTake2 = PatternData::get();
 				foreach ($storeTake2 as $haystackKey => $haystackData) {
 					
-					if (($haystackData["category"] == "pattern") && (isset($haystackData["lineages"]))) {
+					if (($haystackData["category"] == "pattern") && (isset($haystackData["lineages"])) && (!empty($haystackData["lineages"]))) {
 						
 						foreach ($haystackData["lineages"] as $haystackLineage) {
 							

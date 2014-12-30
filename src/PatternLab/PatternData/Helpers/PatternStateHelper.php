@@ -91,7 +91,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 			
 			if ($patternStoreData["category"] == "pattern") {
 				
-				if (isset($patternStoreData["lineages"])) {
+				if (isset($patternStoreData["lineages"]) && !empty($patternStoreData["lineages"])) {
 					
 					foreach ($patternStoreData["lineages"] as $patternLineageKey => $patternLineageInfo) {
 						
@@ -105,7 +105,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 					
 				}
 				
-				if (isset($patternStoreData["lineagesR"])) {
+				if (isset($patternStoreData["lineagesR"]) && !empty($patternStoreData["lineagesR"])) {
 					
 					foreach ($patternStoreData["lineagesR"] as $patternLineageKey => $patternLineageInfo) {
 						
