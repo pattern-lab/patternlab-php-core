@@ -88,4 +88,3 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 	}
 	
 }
-

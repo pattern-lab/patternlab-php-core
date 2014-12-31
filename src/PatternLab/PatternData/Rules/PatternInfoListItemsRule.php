@@ -67,4 +67,3 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 	}
 	
 }
-

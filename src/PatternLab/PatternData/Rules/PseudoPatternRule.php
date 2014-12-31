@@ -175,4 +175,3 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 	}
 	
 }
-
