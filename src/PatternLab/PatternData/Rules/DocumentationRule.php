@@ -39,14 +39,13 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$patternTypeDash    = PatternData::getPatternTypeDash();
 		$dirSep             = PatternData::getDirSep();
 		
-		// set-up the names
-		$docFull    = $name;                                                 // 00-colors.md
-		$doc        = str_replace(".".$this->extProp,"",$docFull);           // 00-colors
+		// make sure the pattern isn't hidden
+		$hidden  = ($name[0] == "_");
+		
+		// set-up the names, $name == 00-colors.md
+		$doc        = str_replace(".".$this->extProp,"",$name);              // 00-colors
 		$docDash    = $this->getPatternName(str_replace("_","",$doc),false); // colors
 		$docPartial = $patternTypeDash."-".$docDash;
-		
-		// make sure the pattern isn't hidden
-		$hidden  = ($docFull[0] == "_");
 		
 		// if the pattern isn't hidden do stuff
 		if (!$hidden) {

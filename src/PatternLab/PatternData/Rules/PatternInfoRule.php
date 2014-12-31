@@ -39,14 +39,13 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 		// load default vars
 		$patternTypeDash = PatternData::getPatternTypeDash();
 		
-		// set-up the names
-		$patternFull     = $name;                                 // foo.json
-		$pattern         = str_replace(".".$ext,"",$patternFull); // foo
+		// should this pattern get rendered?
+		$hidden          = ($name[0] == "_");
+		
+		// set-up the names, $name == foo.json
+		$pattern         = str_replace(".".$ext,"",$name);        // foo
 		$patternDash     = $this->getPatternName($pattern,false); // foo
 		$patternPartial  = $patternTypeDash."-".$patternDash;     // atoms-foo
-		
-		// should this pattern get rendered?
-		$hidden          = ($patternFull[0] == "_");
 		
 		if (!$hidden) {
 			
