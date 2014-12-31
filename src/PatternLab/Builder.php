@@ -212,9 +212,9 @@ class Builder {
 				
 				// modify the pattern mark-up
 				$markup        = $patternStoreData["code"];
-				$markupEncoded = htmlentities($markup);
+				$markupEncoded = htmlentities($markup,ENT_COMPAT,"UTF-8");
 				$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
-				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension));
+				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension),ENT_COMPAT,"UTF-8");
 				
 				// if the pattern directory doesn't exist create it
 				if (!is_dir($patternPublicDir."/".$path)) {
