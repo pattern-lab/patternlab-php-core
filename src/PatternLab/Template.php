@@ -57,11 +57,16 @@ class Template {
 		self::$patternHead       = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
 		self::$patternFoot       = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
 		
-		// add the generic loaders
+		// add the filesystemLoader
+		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
+		$filesystemLoaderClass   = $patternEngineBasePath."\Loaders\FilesystemLoader";
+		
 		$options                 = array();
 		$options["templatePath"] = $pluginDir."/".$styleguideKit."/views";
 		$options["partialsPath"] = $pluginDir."/".$styleguideKit."/views/partials";
-		self::$filesystemLoader  = PatternEngine::getInstance()->getFileSystemLoader($options);
+		
+		self::$filesystemLoader  = new $filesystemLoaderClass($options);
+		
 		$stringLoaderClass       = $patternEngineBasePath."\Loaders\StringLoader";
 		self::$stringLoader      = new $stringLoaderClass();
 		
