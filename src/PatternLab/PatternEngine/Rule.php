@@ -28,6 +28,9 @@ class Rule {
 	public function test() {
 		
 		return ($this->engineProp == Config::getOption("patternExtension"));
+	public function test($patternExtension) {
+		
+		return ($this->engineProp === $patternExtension);
 		
 	}
 	
