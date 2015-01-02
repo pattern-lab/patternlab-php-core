@@ -70,6 +70,9 @@ class Template {
 		$stringLoaderClass       = $patternEngineBasePath."\Loaders\StringLoader";
 		self::$stringLoader      = new $stringLoaderClass();
 		
+		// i can't remember why i chose to implement the pattern loader directly in classes
+		// i figure i had a good reason which is why it's not showing up here
+		
 	}
 	
 	/*
@@ -110,26 +113,6 @@ class Template {
 	/*
 	 * Get the html loader
 	 */
-	
-	/*
-	 * Get the pattern loader
-	 */
-	public static function getPatternLoader() {
-		
-		if (empty(self::$patternLoader)) {
-			Console::writeTag("error","pattern loader needs to be set before you can get it...");
-			Console::writeError("try this first: <info>Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));</info>");
-		}
-		
-		return self::$patternLoader;
-		
-	}
-	
-	/*
-	 * Get the pattern loader
-	 */
-	public static function setPatternLoader($instance) {
-		self::$patternLoader = $instance;
 	public static function getStringLoader() {
 		return self::$stringLoader;
 	}
