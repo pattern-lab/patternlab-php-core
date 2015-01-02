@@ -22,7 +22,6 @@ use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
 use \PatternLab\PatternData\Exporters\PatternPathDestsExporter;
 use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternEngine;
-use \PatternLab\Render;
 use \PatternLab\Template;
 use \PatternLab\Timer;
 use \Symfony\Component\Finder\Finder;

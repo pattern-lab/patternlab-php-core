@@ -16,7 +16,6 @@ use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\PatternData;
 use \PatternLab\PatternEngine;
-use \PatternLab\Render;
 use \PatternLab\Template;
 use \PatternLab\Timer;
 
