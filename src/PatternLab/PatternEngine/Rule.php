@@ -18,6 +18,7 @@ use \PatternLab\Timer;
 class Rule {
 	
 	protected $engineProp;
+	protected $basePath;
 	
 	public function __construct() {
 		
@@ -25,9 +26,12 @@ class Rule {
 		
 	}
 	
-	public function test() {
+	public function getBasePath() {
 		
-		return ($this->engineProp == Config::getOption("patternExtension"));
+		return $this->basePath;
+		
+	}
+	
 	public function test($patternExtension) {
 		
 		return ($this->engineProp === $patternExtension);
