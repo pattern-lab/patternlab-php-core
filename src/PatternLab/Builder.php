@@ -275,10 +275,13 @@ class Builder {
 		// add the pattern lab specific mark-up
 		$partials["patternLabHead"] = Render::Header(Template::getHTMLHead(),array("cacheBuster" => $partials["cacheBuster"]));
 		$partials["patternLabFoot"] = Render::Footer(Template::getHTMLFoot(),array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+		$stringLoader               = Template::getStringLoader();
 		
-		$header                     = Render::Header(Template::getPatternHead(),$partials);
 		$code                       = Template::getFilesystemLoader()->render("viewall",$partials);
-		$footer                     = Render::Footer(Template::getPatternFoot(),$partials);
+		$partials["patternLabHead"] = $stringLoader->render(array("string" => Template::getHTMLHead(), "data" => array("cacheBuster" => $partials["cacheBuster"])));
+		$partials["patternLabFoot"] = $stringLoader->render(array("string" => Template::getHTMLFoot(), "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
+		$header                     = $stringLoader->render(array("string" => Template::getPatternHead(), "data" => $partials));
+		$footer                     = $stringLoader->render(array("string" => Template::getPatternFoot(), "data" => $partials));
 		
 		$styleGuidePage             = $header.$code.$footer;
 		
@@ -307,6 +310,7 @@ class Builder {
 		$patternHead      = Template::getPatternHead();
 		$patternFoot      = Template::getPatternFoot();
 		$filesystemLoader = Template::getFilesystemLoader();
+		$stringLoader     = Template::getStringLoader();
 		
 		// make sure the pattern dir exists
 		if (!is_dir($patternPublicDir)) {
@@ -330,13 +334,13 @@ class Builder {
 					$patternData["patternPartial"] = "viewall-".$patternStoreData["typeDash"]."-".$patternStoreData["nameDash"];
 					
 					// add the pattern lab specific mark-up
-					$partials["patternLabHead"] = Render::Header($htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
-					$partials["patternLabFoot"] = Render::Footer($htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+					$partials["patternLabHead"] = $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $partials["cacheBuster"])));
+					$partials["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
-					$header      = Render::Header($patternHead,$partials);
 					$code        = $filesystemLoader->render("viewall",$partials);
-					$footer      = Render::Footer($patternFoot,$partials);
+					$header      = $stringLoader->render(array("string" => $patternHead, "data" => $partials));
+					$footer      = $stringLoader->render(array("string" => $patternFoot, "data" => $partials));
 					$viewAllPage = $header.$code.$footer;
 					
 					// if the pattern directory doesn't exist create it
@@ -363,13 +367,13 @@ class Builder {
 					$patternData["patternPartial"] = "viewall-".$patternStoreData["nameDash"]."-all";
 					
 					// add the pattern lab specific mark-up
-					$partials["patternLabHead"] = Render::Header($htmlHead,array("cacheBuster" => $partials["cacheBuster"]));
-					$partials["patternLabFoot"] = Render::Footer($htmlFoot,array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+					$partials["patternLabHead"] = $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $partials["cacheBuster"])));
+					$partials["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
-					$header      = Render::Header($patternHead,$partials);
 					$code        = $filesystemLoader->render("viewall",$partials);
-					$footer      = Render::Footer($patternFoot,$partials);
+					$header      = $stringLoader->render(array("string" => $patternHead, "data" => $partials));
+					$footer      = $stringLoader->render(array("string" => $patternFoot, "data" => $partials));
 					$viewAllPage = $header.$code.$footer;
 					
 					// if the pattern directory doesn't exist create it

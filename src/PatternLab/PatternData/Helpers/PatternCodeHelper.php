@@ -41,6 +41,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$htmlFoot                = Template::getHTMLFoot();
 		$patternHead             = Template::getPatternHead();
 		$patternFoot             = Template::getPatternFoot();
+		$stringLoader            = Template::getStringLoader();
 		
 		// load the pattern loader
 		Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));
@@ -71,15 +72,15 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				// add the pattern lab specific mark-up
 				// set a default var
 				$exportClean = (isset($options["exportClean"])) ? $options["exportClean"] : false;
-				$data["patternLabHead"]           = (!$this->exportFiles) ? Render::Header($htmlHead,array("cacheBuster" => $data["cacheBuster"])) : "";
-				$data["patternLabFoot"]           = (!$this->exportFiles) ? Render::Footer($htmlFoot,array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData))) : "";
+				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
+				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)))) : "";
 				
 				// figure out the source path for the pattern to render
 				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
 				
-				$header  = (!$this->exportClean) ? Render::Header($patternHead,$data) : "";
-				$code    = Render::Pattern($srcPath,$data);
-				$footer  = (!$this->exportClean) ? Render::Footer($patternFoot,$data) : "";
+				$header  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternHead, "data" => $data)) : "";
+				$code    = $patternLoader->render(array("pattern" => $srcPath, "data" => $data));
+				$footer  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternFoot, "data" => $data)) : "";
 				
 				PatternData::setPatternOption($patternStoreKey,"header",$header);
 				PatternData::setPatternOption($patternStoreKey,"code",$code);
