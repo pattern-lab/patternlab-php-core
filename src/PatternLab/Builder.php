@@ -273,14 +273,13 @@ class Builder {
 		$patternData = array();
 		
 		// add the pattern lab specific mark-up
-		$partials["patternLabHead"] = Render::Header(Template::getHTMLHead(),array("cacheBuster" => $partials["cacheBuster"]));
-		$partials["patternLabFoot"] = Render::Footer(Template::getHTMLFoot(),array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData)));
+		$filesystemLoader           = Template::getFilesystemLoader();
 		$stringLoader               = Template::getStringLoader();
 		
-		$code                       = Template::getFilesystemLoader()->render("viewall",$partials);
 		$partials["patternLabHead"] = $stringLoader->render(array("string" => Template::getHTMLHead(), "data" => array("cacheBuster" => $partials["cacheBuster"])));
 		$partials["patternLabFoot"] = $stringLoader->render(array("string" => Template::getHTMLFoot(), "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 		$header                     = $stringLoader->render(array("string" => Template::getPatternHead(), "data" => $partials));
+		$code                       = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
 		$footer                     = $stringLoader->render(array("string" => Template::getPatternFoot(), "data" => $partials));
 		
 		$styleGuidePage             = $header.$code.$footer;
@@ -338,8 +337,8 @@ class Builder {
 					$partials["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
-					$code        = $filesystemLoader->render("viewall",$partials);
 					$header      = $stringLoader->render(array("string" => $patternHead, "data" => $partials));
+					$code        = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
 					$footer      = $stringLoader->render(array("string" => $patternFoot, "data" => $partials));
 					$viewAllPage = $header.$code.$footer;
 					
@@ -371,8 +370,8 @@ class Builder {
 					$partials["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
-					$code        = $filesystemLoader->render("viewall",$partials);
 					$header      = $stringLoader->render(array("string" => $patternHead, "data" => $partials));
+					$code        = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
 					$footer      = $stringLoader->render(array("string" => $patternFoot, "data" => $partials));
 					$viewAllPage = $header.$code.$footer;
 					
