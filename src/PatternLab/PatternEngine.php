@@ -76,6 +76,8 @@ class PatternEngine {
 				
 			}
 			
+		} else {
+			Console::writeError("The pattern engines list isn't available in <path>".$packagesDir."</path>...");
 		}
 		
 	}
