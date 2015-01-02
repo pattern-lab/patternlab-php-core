@@ -73,7 +73,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				
 				// add the pattern lab specific mark-up
 				// set a default var
-				$exportClean = (isset($options["exportClean"])) ? $options["exportClean"] : false;
+				$exportClean                      = (isset($options["exportClean"])) ? $options["exportClean"] : false;
 				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)))) : "";
 				
