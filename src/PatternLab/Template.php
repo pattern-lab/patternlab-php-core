@@ -23,8 +23,8 @@ class Template {
 	protected static $patternHead;
 	protected static $patternFoot;
 	protected static $filesystemLoader;
-	protected static $htmlLoader;
 	protected static $patternLoader;
+	protected static $stringLoader;
 	
 	/**
 	* Set-up default vars
@@ -62,7 +62,8 @@ class Template {
 		$options["templatePath"] = $pluginDir."/".$styleguideKit."/views";
 		$options["partialsPath"] = $pluginDir."/".$styleguideKit."/views/partials";
 		self::$filesystemLoader  = PatternEngine::getInstance()->getFileSystemLoader($options);
-		self::$htmlLoader        = PatternEngine::getInstance()->getVanillaLoader();
+		$stringLoaderClass       = $patternEngineBasePath."\Loaders\StringLoader";
+		self::$stringLoader      = new $stringLoaderClass();
 		
 	}
 	
@@ -104,9 +105,6 @@ class Template {
 	/*
 	 * Get the html loader
 	 */
-	public static function getHTMLLoader() {
-		return self::$htmlLoader;
-	}
 	
 	/*
 	 * Get the pattern loader
@@ -127,6 +125,8 @@ class Template {
 	 */
 	public static function setPatternLoader($instance) {
 		self::$patternLoader = $instance;
+	public static function getStringLoader() {
+		return self::$stringLoader;
 	}
 	
 }
