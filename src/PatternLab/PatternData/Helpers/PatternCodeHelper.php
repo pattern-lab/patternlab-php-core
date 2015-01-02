@@ -44,7 +44,9 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$stringLoader            = Template::getStringLoader();
 		
 		// load the pattern loader
-		Template::setPatternLoader(PatternEngine::getInstance()->getPatternLoader($options));
+		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
+		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
+		$patternLoader           = new $patternLoaderClass($options);
 		
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
