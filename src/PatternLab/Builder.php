@@ -278,6 +278,7 @@ class Builder {
 		
 		$partials["patternLabHead"] = $stringLoader->render(array("string" => Template::getHTMLHead(), "data" => array("cacheBuster" => $partials["cacheBuster"])));
 		$partials["patternLabFoot"] = $stringLoader->render(array("string" => Template::getHTMLFoot(), "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
+		
 		$header                     = $stringLoader->render(array("string" => Template::getPatternHead(), "data" => $partials));
 		$code                       = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
 		$footer                     = $stringLoader->render(array("string" => Template::getPatternFoot(), "data" => $partials));
