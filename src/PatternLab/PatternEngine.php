@@ -34,10 +34,11 @@ class PatternEngine {
 	public static function init() {
 		
 		$found = false;
+		$patternExtension = Config::getOption("patternExtension");
 		self::loadRules();
 		
 		foreach (self::$rules as $rule) {
-			if ($rule->test()) {
+			if ($rule->test($patternExtension)) {
 				self::$instance = $rule;
 				$found = true;
 				break;
