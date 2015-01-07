@@ -129,13 +129,13 @@ class InstallerUtil {
 		NEED TO KNOW TYPES BEFORE MOVING, they just get mirrored
 		"dist": {
 			"componentDir": { // patternlab-components/package/name/
-				"css": "css/*", // string or array
+				"css": "css/*", // string, object, or array
 				"javascript": { // string, object, or array
 					"files": // string or array
 					"onready": // string
 				}
-				"images": // string or array
-				"templates": // string or array
+				"images": // string, object or array
+				"templates": // string, object or array
 			}
 		*/
 		
