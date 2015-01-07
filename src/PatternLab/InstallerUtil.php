@@ -156,7 +156,7 @@ class InstallerUtil {
 		/*
 		patternlab-components/templates.json (read in via PHP and written out as data.json), loaded via AJAX
 			for PHP: { "templates": [...] }
-			for JS:  var templates = [ { "pattern-lab/plugin-kss": [ "dist/templates/foo.mustache "] } ];
+			for JS:  var templates = [ { "pattern-lab/plugin-kss": [ "dist/templates/foo.mustache"] } ];
 		patternlab-components/javascript.json (read in via PHP and written out as data.json), $script uses the data.json to load the list of files
 			for PHP: { "javascript": [...] };
 			for JS:  var javascript = [ { "pattern-lab/plugin-kss": { "dependencies": [ "path.js" ], "onready": "code" } } ];
