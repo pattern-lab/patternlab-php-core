@@ -140,6 +140,20 @@ class InstallerUtil {
 		*/
 		
 		/*
+		iterate over a source or source dirs and copy files into the componentdir. 
+		use file extensions to add them to the appropriate arrays below. so...
+			"patternlab": {
+				"dist": {
+					"componentDir": {
+						{ "*": "*" }
+					}
+				}
+				"onready": ""
+			}
+			
+		}
+		
+		/*
 		patternlab-components/templates.json (read in via PHP and written out as data.json), loaded via AJAX
 			for PHP: { "templates": [...] }
 			for JS:  var templates = [ { "pattern-lab/plugin-kss": [ "dist/templates/foo.mustache "] } ];
