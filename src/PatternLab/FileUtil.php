@@ -182,7 +182,7 @@ class FileUtil {
 		$sourceDirs = glob($sourceDir."/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
-		$ignoreDirs = array("styleguide");
+		$ignoreDirs = array("styleguide","patternlab-components");
 		foreach ($ignoreDirs as $ignoreDir) {
 			$key = array_search($publicDir."/".$ignoreDir,$publicDirs);
 			if ($key !== false){
