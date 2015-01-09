@@ -83,11 +83,11 @@ class InstallerUtil {
 		$destination = ($destination[strlen($destination)-1] == "/") ? substr($destination,0,-1) : $destination;
 		
 		// decide how to move the files. the rules:
-		// dest ~ src        -> action
-		// *    ~ *          -> mirror to path/
-		// path ~ *          -> mirror to path/
-		// path ~ foo/*      -> mirror to path/foo
-		// path ~ foo/s.html -> copy tp path/foo/s.html
+		// src        ~ dest        -> action
+		// *          ~ *           -> mirror all in {srcroot}/ to {destroot}/
+		// *          ~ path/*      -> mirror all in {srcroot}/ to {destroot}/path/
+		// foo/*      ~ path/*      -> mirror all in {srcroot}/foo/ to {destroot}/path/
+		// foo/s.html ~ path/k.html -> mirror {srcroot}/foo/s.html to {destroot}/path/k.html
 		
 		if (($source == "*") && ($destination == "*")) {
 			if (!self::pathExists($packageName,$destinationBase."/")) {
