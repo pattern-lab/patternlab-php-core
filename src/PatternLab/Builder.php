@@ -162,6 +162,31 @@ class Builder {
 		$viewAllPaths = $vapExporter->run($navItems);
 		$output      .= "var viewAllPaths = ".json_encode($viewAllPaths).";";
 		
+		// gather plugin package information
+		$packagesInfo = array();
+		$componentDir = Config::getOption("componentDir");
+		$componentPackagesDir = $componentDir."/packages";
+		$finder = new Finder();
+		$finder->files()->name("*.json")->in($componentPackagesDir);
+		$finder->sortByName();
+		foreach ($finder as $file) {
+			$filename = $file->getFilename();
+			if ($filename[0] != "_") {
+				$javascriptPaths = array();
+				$packageInfo = json_decode(file_get_contents($file->getPathname()),true);
+				foreach ($packageInfo["templates"] as $templateKey => $templatePath) {
+					$templatePathFull = $componentDir."/".$packageInfo["name"]."/".$templatePath;
+					$packageInfo["templates"][$templateKey] = (file_exists($templatePathFull)) ? file_get_contents($templatePathFull) : "";
+				}
+				foreach ($packageInfo["javascripts"] as $key => $javascriptPath) {
+					$javascriptPaths[] = "patternlab-components/".$packageInfo["name"]."/".$javascriptPath;
+				}
+				$packageInfo["javascripts"] = $javascriptPaths;
+				$packagesInfo[] = $packageInfo;
+			}
+		}
+		$output .= "var plugins = ".json_encode($packagesInfo).";";
+		
 		// write out the data
 		file_put_contents($dataDir."/patternlab-data.js",$output);
 		
