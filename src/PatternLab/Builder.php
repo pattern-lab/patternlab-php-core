@@ -167,6 +167,9 @@ class Builder {
 		// gather plugin package information
 		$packagesInfo = array();
 		$componentDir = Config::getOption("componentDir");
+		if (!is_dir($componentDir)) {
+			mkdir($componentDir);
+		}
 		$componentPackagesDir = $componentDir."/packages";
 		if (!is_dir($componentDir."/packages")) {
 			mkdir($componentDir."/packages");
