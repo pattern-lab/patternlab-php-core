@@ -166,6 +166,9 @@ class Builder {
 		$packagesInfo = array();
 		$componentDir = Config::getOption("componentDir");
 		$componentPackagesDir = $componentDir."/packages";
+		if (!is_dir($componentDir."/packages")) {
+			mkdir($componentDir."/packages");
+		}
 		$finder = new Finder();
 		$finder->files()->name("*.json")->in($componentPackagesDir);
 		$finder->sortByName();
