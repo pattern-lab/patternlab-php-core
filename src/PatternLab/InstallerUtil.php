@@ -79,7 +79,7 @@ class InstallerUtil {
 		}
 		
 		// clean any * or / on the end of $destination
-		$destination = ($destination[strlen($destination)-1] == "*") ? substr($destination,0,-1) : $destination;
+		$destination = (($destination != "*") && ($destination[strlen($destination)-1] == "*")) ? substr($destination,0,-1) : $destination;
 		$destination = ($destination[strlen($destination)-1] == "/") ? substr($destination,0,-1) : $destination;
 		
 		// decide how to move the files. the rules:
@@ -117,31 +117,20 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Parse the component types to figure out what needs to be moved and added to the component JSON files
+	 * Parse the component types to figure out what needs to be added to the component JSON files
 	 * @param  {String}    the name of the package
 	 * @param  {String}    the base directory for the source of the files
 	 * @param  {String}    the base directory for the destination of the files (publicDir or sourceDir)
-	 * @param  {Array}     the list of files to be moved
+	 * @param  {Array}     the list of files to be parsed for component types
+	 * @param  {String}    template extension for templates
+	 * @param  {String}    the javascript to run on ready
+	 * @param  {String}    the javascript to run as a callback
 	 */
-	protected static function parseComponentTypes($packageName,$sourceBase,$destinationBase,$componentTypes) {
-		
-		/*
-		NEED TO KNOW TYPES BEFORE MOVING, they just get mirrored
-		"dist": {
-			"componentDir": { // patternlab-components/package/name/
-				"css": "css/*", // string, object, or array
-				"javascript": { // string, object, or array
-					"files": // string or array
-					"onready": // string
-				}
-				"images": // string, object or array
-				"templates": // string, object or array
-			}
-		*/
+	protected static function parseComponentList($packageName,$sourceBase,$destinationBase,$componentFileList,$templateExtension,$onready,$callback) {
 		
 		/*
 		iterate over a source or source dirs and copy files into the componentdir. 
-		use file extensions to add them to the appropriate arrays below. so...
+		use file extensions to add them to the appropriate type arrays below. so...
 			"patternlab": {
 				"dist": {
 					"componentDir": {
@@ -149,66 +138,111 @@ class InstallerUtil {
 					}
 				}
 				"onready": ""
+				"callback": ""
+				"templateExtension": ""
+			}
+		}
+		
+		*/
+		
+		// decide how to type list files. the rules:
+		// src        ~ dest        -> action
+		// *          ~ *           -> iterate over all files in {srcroot}/ and create a type listing
+		// foo/*      ~ path/*      -> iterate over all files in {srcroot}/foo/ and create a type listing
+		// foo/s.html ~ path/k.html -> create a type listing for {srcroot}/foo/s.html
+		
+		// set-up component types store
+		$componentTypes = array("stylesheets" => array(), "javascripts" => array(), "templates" => array());
+		
+		// iterate over the file list
+		foreach ($componentFileList as $componentItem) {
+			
+			// retrieve the source & destination
+			$source      = self::removeDots(key($componentItem));
+			$destination = self::removeDots($componentItem[$source]);
+			
+			if (($source == "*") || ($source[strlen($source)-1] == "*")) {
+				
+				// build the source & destination
+				$source      = (strlen($source) > 2)      ? rtrim($source,"/*") : "";
+				$destination = (strlen($destination) > 2) ? rtrim($destination,"/*") : "";
+				
+				// get files
+				$finder = new Finder();
+				$finder->files()->in($sourceBase.$source);
+				
+				// iterate over the returned objects
+				foreach ($finder as $file) {
+					
+					$ext = $file->getExtension();
+					
+					if ($ext == "css") {
+						$componentTypes["stylesheets"][] = str_replace($sourceBase.$source,$destination,$file->getPathname());
+					} else if ($ext == "js") {
+						$componentTypes["javascripts"][] = str_replace($sourceBase.$source,$destination,$file->getPathname());
+					} else if ($ext == $templateExtension) {
+						$componentTypes["templates"][]   = str_replace($sourceBase.$source,$destination,$file->getPathname());
+					}
+				
+				}
+				
+			} else {
+				
+				$bits = explode(".",$source);
+				
+				if (count($bits) > 0) {
+					
+					$ext = $bits[count($bits)-1];
+					
+					if ($ext == "css") {
+						$componentTypes["stylesheets"][] = $destination;
+					} else if ($ext == "js") {
+						$componentTypes["javascripts"][] = $destination;
+					} else if ($ext == $templateExtension) {
+						$componentTypes["templates"][]   = $destination;
+					}
+					
+				}
+				
 			}
 			
 		}
 		
 		/*
-		patternlab-components/templates.json (read in via PHP and written out as data.json), loaded via AJAX
-			for PHP: { "templates": [...] }
-			for JS:  var templates = [ { "pattern-lab/plugin-kss": [ "dist/templates/foo.mustache"] } ];
-		patternlab-components/javascript.json (read in via PHP and written out as data.json), $script uses the data.json to load the list of files
-			for PHP: { "javascript": [...] };
-			for JS:  var javascript = [ { "pattern-lab/plugin-kss": { "dependencies": [ "path.js" ], "onready": "code" } } ];
-		patternlab-components/css.json (read in via PHP and written out as data.json), simple loader uses data.json to the load the list of files
-			for PHP: { "css": [...] };
-			for JS:  var css = [ { "pattern-lab/plugin-kss": [ "path1.css", "path2.css" ] } ];
+		FOR USE AS A PACKAGE TO BE LOADED LATER
+		{
+			"name": "pattern-lab-plugin-kss",
+			"templates": { "filename": "filepath" }, // replace slash w/ dash in filename. replace extension
+			"stylesheets": [ ],
+			"javascripts": [ ],
+			"onready": "",
+			"callback": ""
+		}
 		*/
+		$packageInfo                = array();
+		$packageInfo["name"]        = $packageName;
+		$packageInfo["templates"]   = array();
+		foreach ($componentTypes["templates"] as $templatePath) {
+			$templateKey = preg_replace("/\W/","-",str_replace(".".$templateExtension,"",$templatePath));
+			$packageInfo["templates"][$templateKey] = $templatePath;
+		}
+		$packageInfo["stylesheets"] = $componentTypes["stylesheets"];
+		$packageInfo["javascripts"] = $componentTypes["javascripts"];
+		$packageInfo["onready"]     = $onready;
+		$packageInfo["callback"]    = $callback;
+		$packageInfoPath            = Config::getOption("componentDir")."/packages/".str_replace("/","-",$packageName).".json";
 		
-		$destinationBase = $destinationBase."/".$packageName;
-		
-		// check if css option is set
-		if (isset($componentTypes["css"])) {
-			
-			$fileList = self::buildFileList($componentTypes["css"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
-			self::updateComponentJSON("css",$componentTypes["css"]);
-			
+		// double-check the dirs are created
+		if (!is_dir(Config::getOption("componentDir"))) {
+			mkdir(Config::getOption("componentDir"));
 		}
 		
-		// check if the javascript option is set
-		if (isset($componentList["javascript"])) {
-			
-			// check to see if this has options
-			if (is_array($componentList["javascript"]) && (isset($componentTypes["javascript"]["files"]))) {
-				$fileList       = self::buildFileList($componentList["javascript"]["files"]);
-				$javascriptList = $componentList["javascript"]["files"];
-			} else {
-				$fileList       = self::buildFileList($componentList["javascript"]);
-				$javascriptList = $componentList["javascript"];
-			}
-			
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
-			self::updateComponentJSON("javascript",$javascriptList);
-			
+		if (!is_dir(Config::getOption("componentDir")."/packages/")) {
+			mkdir(Config::getOption("componentDir")."/packages/");
 		}
 		
-		// check if the images option is set
-		if (isset($componentTypes["images"])) {
-			
-			$fileList = self::buildFileList($componentTypes["images"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
-			
-		}
-		
-		// check if the templates option is set
-		if (isset($componentList["templates"])) {
-			
-			$fileList = self::buildFileList($componentTypes["templates"]);
-			self::parseFileList($packageName,$sourceBase,$destinationBase,$fileList);
-			self::updateComponentJSON("templates",$componentTypes["templates"]);
-			
-		}
+		// write out the package info
+		file_put_contents($packageInfoPath,json_encode($packageInfo));
 		
 	}
 	
@@ -224,18 +258,11 @@ class InstallerUtil {
 		foreach ($fileList as $fileItem) {
 			
 			// retrieve the source & destination
-			$destination = self::removeDots(key($fileItem));
-			$source      = self::removeDots($fileItem[$destination]);
+			$source      = self::removeDots(key($fileItem));
+			$destination = self::removeDots($fileItem[$source]);
 			
 			// depending on the source handle things differently. mirror if it ends in /*
-			if (is_array($source)) {
-				foreach ($source as $key => $value) {
-					self::moveFiles($value,$key,$packageName,$sourceBase,$destinationBase);
-				}
-			} else {
-				self::moveFiles($source,$destination,$packageName,$sourceBase,$destinationBase);
-			}
-			
+			self::moveFiles($source,$destination,$packageName,$sourceBase,$destinationBase);
 			
 		}
 		
@@ -376,6 +403,8 @@ class InstallerUtil {
 			self::scanForPatternEngineRule($pathBase,true);
 		}
 		
+		// go over .json in patternlab-components/, remove references to packagename
+		
 	}
 	
 	/**
@@ -445,7 +474,12 @@ class InstallerUtil {
 				
 				// move assets to the components directory
 				if (isset($extra["dist"]["componentDir"])) {
-					self::parseComponentTypes($name,$pathDist,Config::getOption("componentDir")."/".$name,$extra["dist"]["componentDir"]);
+					$templateExtension = isset($extra["templateExtension"]) ? $extra["templateExtension"] : "mustache";
+					$onready           = isset($extra["onready"]) ? $extra["onready"] : "";
+					$callback          = isset($extra["callback"]) ? $extra["callback"] : "";
+					$componentDir      = Config::getOption("componentDir");
+					self::parseComponentList($name,$pathDist,$componentDir."/".$name,$extra["dist"]["componentDir"],$templateExtension,$onready,$callback);
+					self::parseFileList($name,$pathDist,$componentDir."/".$name,$extra["dist"]["componentDir"]);
 				}
 				
 				// see if we need to modify the config
