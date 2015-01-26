@@ -69,7 +69,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$patternData["patternState"]      = $patternStoreData["state"];
 				
 				// extra copy for the code view
-				$patternData["patternDescAdditions"] = isset($patternStoreData["codeViewDescAdditions"]) ? $patternStoreData["codeViewDescAdditions"] : array();
+				$patternData["extraOutput"]       = isset($patternStoreData["extraOutput"]) ? $patternStoreData["extraOutput"] : array();
 				
 				// add the pattern lab specific mark-up
 				// set a default var

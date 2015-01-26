@@ -90,7 +90,8 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "isFile"           => $this->isFileProp,
 								  "partialViewDescAdditions"    => array(),
 								  "partialViewExampleAdditions" => array(),
-								  "codeViewDescAdditions"       => array());
+								  "extraHolder"      => array(),
+								  "extraOutput"      => array());
 		
 		// add any subtype info if necessary
 		if ($depth == 2) {
