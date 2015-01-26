@@ -135,12 +135,14 @@ class Builder {
 		$output     .= "var config = ".json_encode($config).";";
 		
 		// load the ish Controls
-		$ishControlsHide = Config::getOption("ishControlsHide");
+		$ishControls     = array();
 		$controlsToHide  = array();
-		foreach ($ishControlsHide as $controlToHide) {
-			$controlsToHide[$controlToHide] = "true";
+		$ishControlsHide = Config::getOption("ishControlsHide");
+		if ($ishControlsHide) {
+			foreach ($ishControlsHide as $controlToHide) {
+				$controlsToHide[$controlToHide] = "true";
+			}
 		}
-		$ishControls                    = array();
 		$ishControls["ishControlsHide"] = $controlsToHide;
 		$ishControls["mqs"]             = $this->gatherMQs();
 		$output      .= "var ishControls = ".json_encode($ishControls).";";
