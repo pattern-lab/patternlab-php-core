@@ -75,7 +75,7 @@ class InstallerUtil {
 		
 		// make sure the destination base exists
 		if (!is_dir($destinationBase)) {
-			mkdir($destinationBase);
+			self::$fs->mkdir($destinationBase);
 		}
 		
 		// clean any * or / on the end of $destination
