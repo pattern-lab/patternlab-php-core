@@ -291,7 +291,7 @@ class Config {
 	*/
 	public static function updateConfigOption($optionName,$optionValue) {
 		
-		if (strpos($optionValue,"<prompt>") !== false) {
+		if (is_string($optionValue) && strpos($optionValue,"<prompt>") !== false) {
 			
 			// prompt for input using the supplied query
 			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
@@ -309,7 +309,8 @@ class Config {
 		} else if (self::$options["overrideConfig"] == "q") {
 			
 			// prompt for input
-			$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$optionValue."</desc>?";
+			$optionValueOutput = is_array($optionValue) ? implode(", ",$optionValue) : $optionValue;
+			$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$optionValueOutput."</desc>?";
 			$options = "Y/n";
 			$input   = Console::promptInput($prompt,$options);
 			
