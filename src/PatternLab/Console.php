@@ -55,7 +55,7 @@ class Console {
 		$colorTheme["info"]     = "cyan";
 		$colorTheme["warning"]  = "yellow";
 		$colorTheme["error"]    = "red";
-		$colorTheme["bold"]     = "bold";
+		$colorTheme["strong"]   = "bold";
 		self::$color->setTheme($colorTheme);
 		
 	}
