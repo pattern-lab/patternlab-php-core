@@ -295,6 +295,11 @@ class Console {
 			self::writeLine("  --".$attributes["commandLong"].$spacer."  <desc>".$attributes["commandDesc"]."</desc>",true);
 		}
 		
+		// write out how to get more help
+		self::writeLine("");
+		self::writeLine("<h2>Get options for a specific command:</h2>",true,true);
+		self::writeLine("  php ".self::$self." --help --command",true);
+		
 		self::writeLine("");
 		
 	}
