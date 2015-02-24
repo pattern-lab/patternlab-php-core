@@ -70,6 +70,10 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		
 		// dispatch event
 		Dispatcher::getInstance()->dispatch("patternCodeHelper.rawPatternLoaded");
+		
+		// re-load the pattern data since we modified it
+		$store = PatternData::get();
+		
 		// load the pattern loader
 		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
 		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
