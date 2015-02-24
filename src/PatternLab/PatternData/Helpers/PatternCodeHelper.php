@@ -14,6 +14,7 @@ namespace PatternLab\PatternData\Helpers;
 
 use \PatternLab\Config;
 use \PatternLab\Data;
+use \PatternLab\Dispatcher;
 use \PatternLab\PatternData;
 use \PatternLab\PatternEngine;
 use \PatternLab\Template;
@@ -43,6 +44,8 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$patternFoot             = Template::getPatternFoot();
 		$stringLoader            = Template::getStringLoader();
 		
+		// dispatch event
+		Dispatcher::getInstance()->dispatch("patternCodeHelper.rawPatternLoaded");
 		// load the pattern loader
 		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
 		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
