@@ -79,7 +79,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
 		$patternLoader           = new $patternLoaderClass($options);
 		
-		$store = PatternData::get();
+		// iterate to process each pattern
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
@@ -108,16 +108,17 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)))) : "";
 				
-				// figure out the source path for the pattern to render
-				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
-				
-				$header  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternHead, "data" => $data)) : "";
-				$code    = $patternLoader->render(array("pattern" => $srcPath, "data" => $data));
-				$footer  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternFoot, "data" => $data)) : "";
-				
-				PatternData::setPatternOption($patternStoreKey,"header",$header);
-				PatternData::setPatternOption($patternStoreKey,"code",$code);
-				PatternData::setPatternOption($patternStoreKey,"footer",$footer);
+				if (isset($patternStoreData["patternRaw"])) {
+					
+					$header  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternHead, "data" => $data)) : "";
+					$code    = $patternLoader->render(array("pattern" => $patternStoreData["patternRaw"], "data" => $data));
+					$footer  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternFoot, "data" => $data)) : "";
+					
+					PatternData::setPatternOption($patternStoreKey,"header",$header);
+					PatternData::setPatternOption($patternStoreKey,"code",$code);
+					PatternData::setPatternOption($patternStoreKey,"footer",$footer);
+					
+				}
 				
 			}
 			
