@@ -13,6 +13,7 @@
 namespace PatternLab\PatternData\Helpers;
 
 use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
 use \PatternLab\PatternData;
@@ -38,11 +39,34 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		$options                 = array();
 		$options["patternPaths"] = $this->patternPaths;
 		$patternExtension        = Config::getOption("patternExtension");
+		$patternSourceDir        = Config::getOption("patternSourceDir");
 		$htmlHead                = Template::getHTMLHead();
 		$htmlFoot                = Template::getHTMLFoot();
 		$patternHead             = Template::getPatternHead();
 		$patternFoot             = Template::getPatternFoot();
 		$stringLoader            = Template::getStringLoader();
+		
+		// load the pattern data
+		$store = PatternData::get();
+		
+		// iterate to get raw data loaded into the PatternData Store
+		foreach ($store as $patternStoreKey => $patternStoreData) {
+			
+			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
+				
+				// figure out the source path for the pattern to render
+				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
+				
+				// load the raw data so it can be modified/rendered
+				if (file_exists($patternSourceDir."/".$srcPath.".".$patternExtension)) {
+					PatternData::setPatternOption($patternStoreKey,"patternRaw",file_get_contents($patternSourceDir."/".$srcPath.".".$patternExtension));
+				} else {
+					Console::writeWarning($patternStoreData["partial"]." wasn't found for loading. i have no idea why... ");
+				}
+				
+			}
+			
+		}
 		
 		// dispatch event
 		Dispatcher::getInstance()->dispatch("patternCodeHelper.rawPatternLoaded");
