@@ -26,6 +26,13 @@ class Data {
 	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
 	
 	/**
+	* Clear all of the data in the $store
+	*/
+	public static function clear() {
+		self::$store = array();
+	}
+	
+	/**
 	* Gather data from any JSON and YAML files in source/_data
 	*
 	* Reserved attributes:

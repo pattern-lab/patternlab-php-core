@@ -65,6 +65,13 @@ class PatternData {
 	}
 	
 	/**
+	* Clear all of the data in the $store
+	*/
+	public static function clear() {
+		self::$store = array();
+	}
+	
+	/**
 	* Check to see if the given pattern type has a pattern subtype associated with it
 	* @param  {String}        the name of the pattern
 	*

@@ -26,6 +26,13 @@ class Annotations {
 	protected static $store = array();
 	
 	/**
+	* Clear all of the data in the $store
+	*/
+	public static function clear() {
+		self::$store = array();
+	}
+	
+	/**
 	* Gather data from annotations.js and *.md files found in source/_annotations
 	*
 	* @return {Array}        populates Annotations::$store
