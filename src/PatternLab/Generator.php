@@ -52,6 +52,8 @@ class Generator extends Builder {
 		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
 		$exportFiles   = (isset($options["exportFiles"]))   ? $options["exportFiles"] : false;
 		$exportClean   = (isset($options["exportClean"]))   ? $options["exportClean"] : false;
+		$watchMessage  = (isset($options["watchMessage"]))  ? $options["watchMessage"] : false;
+		$watchVerbose  = (isset($options["watchVerbose"]))  ? $options["watchVerbose"] : false;
 		
 		if ($noCacheBuster) {
 			Config::updateOption("cacheBuster",0);
@@ -95,9 +97,12 @@ class Generator extends Builder {
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		Util::updateChangeTime();
 		
-		Console::writeLine("your site has been generated...");
-		
-		Timer::stop();
+		if ($watchVerbose && $watchMessage) {
+			Console::writeLine($watchMessage);
+		} else {
+			Console::writeLine("your site has been generated...");
+			Timer::stop();
+		}
 		
 	}
 	
