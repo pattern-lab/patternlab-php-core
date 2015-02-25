@@ -195,7 +195,7 @@ class Watcher extends Builder {
 					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$ignoreExts)) && (!in_array($object->getFilename(),$ignoreDirs))) {
 						
 						// catch directories that have the ignored dir in their path
-						$ignoreDir = $this->ignoreDir($fileName);
+						$ignoreDir = FileUtil::ignoreDir($fileName);
 						
 						// check to see if it's a new directory
 						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($publicDir."/".$fileName)) {
