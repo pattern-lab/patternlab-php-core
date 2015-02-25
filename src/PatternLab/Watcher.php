@@ -98,7 +98,7 @@ class Watcher extends Builder {
 			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($patternObjects as $name => $object) {
-					
+				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
 				$fileName      = str_replace($sourceDir."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
