@@ -159,23 +159,37 @@ class Watcher extends Builder {
 				
 			}
 			
-			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/_annotations/"), \RecursiveIteratorIterator::SELF_FIRST);
-			
-			// make sure dots are skipped
-			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-			
-			foreach($objects as $name => $object) {
+			// iterate over annotations, data, meta and any other _ dirs
+			$watchDirs = glob($sourceDir."/_*",GLOB_ONLYDIR);
+			foreach ($watchDirs as $watchDir) {
 				
-				$fileName = str_replace($sourceDir."/_annotations".DIRECTORY_SEPARATOR,"",$name);
-				$mt = $object->getMTime();
-				
-				if (!isset($o->$fileName)) {
-					$o->$fileName = $mt;
-					$this->updateSite($fileName,"added");
-				} else if ($o->$fileName != $mt) {
-					$o->$fileName = $mt;
-					$this->updateSite($fileName,"changed");
+				if (str_replace($sourceDir."/","",$watchDir) != "_patterns") {
+					
+					// iterate over the data files and regenerate the entire site if they've changed
+					$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($watchDir), \RecursiveIteratorIterator::SELF_FIRST);
+					
+					// make sure dots are skipped
+					$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+					
+					foreach($objects as $name => $object) {
+						
+						$fileName = str_replace($sourceDir."/","",$name);
+						$mt = $object->getMTime();
+						
+						if (!isset($o->$fileName)) {
+							$o->$fileName = $mt;
+							if ($c) {
+								$this->updateSite($fileName,"added");
+							}
+						} else if ($o->$fileName != $mt) {
+							$o->$fileName = $mt;
+							if ($c) {
+								$this->updateSite($fileName,"changed");
+							}
+						}
+						
+					}
+					
 				}
 				
 			}
