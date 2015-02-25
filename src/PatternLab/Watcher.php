@@ -51,16 +51,16 @@ class Watcher extends Builder {
 		}
 		
 		// set default attributes
-		$reload        = (isset($options["autoReload"])) ? $options["autoReload"] : false;
 		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
 		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
 		
 		// automatically start the auto-refresh tool
-		if ($reload) {
+		// DEPRECATED
+		/*if ($reload) {
 			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
 			Console::writeLine("starting page auto-reload...");
-		}
+		}*/
 		
 		if ($noCacheBuster) {
 			Config::updateOption("cacheBuster",0);
@@ -239,10 +239,13 @@ class Watcher extends Builder {
 			if (gc_enabled()) gc_collect_cycles();
 			
 			// output anything the reload server might send our way
+			// DEPRECATED
+			/*
 			if ($reload) {
 				$output = fgets($fp, 100);
 				if ($output != "\n") print $output;
 			}
+			*/
 			
 			// pause for .05 seconds to give the CPU a rest
 			usleep(50000);
@@ -250,7 +253,8 @@ class Watcher extends Builder {
 		}
 		
 		// close the auto-reload process, this shouldn't do anything
-		fclose($fp);
+		// DEPRECATED
+		// fclose($fp);
 		
 	}
 	
