@@ -75,8 +75,8 @@ class Watcher extends Builder {
 		Console::writeLine("watching your site for changes...");
 		
 		// default vars
-		$publicDir = Config::getOption("publicDir");
-		$sourceDir = Config::getOption("sourceDir");
+		$publicDir  = Config::getOption("publicDir");
+		$sourceDir  = Config::getOption("sourceDir");
 		$ignoreExts = Config::getOption("ie");
 		$ignoreDirs = Config::getOption("id");
 		
