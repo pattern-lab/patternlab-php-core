@@ -288,15 +288,16 @@ class Watcher extends Builder {
 	*/
 	private function updateSite($fileName,$message,$verbose = true) {
 		
+		$watchMessage = "";
 		if ($verbose) {
 			if ($message == "added") {
-				Console::writeLine($fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...");
+				$watchMessage = "<warning>".$fileName." was added to Pattern Lab. reload the website to see this change in the navigation...</warning>";
 			} elseif ($message == "removed") {
-				Console::writeLine($fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...");
+				$watchMessage = "<warning>".$fileName." was removed from Pattern Lab. reload the website to see this change reflected in the navigation...</warning>";
 			} elseif ($message == "hidden") {
-				Console::writeLine($fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...");
+				$watchMessage = "<warning>".$fileName." was hidden from Pattern Lab. reload the website to see this change reflected in the navigation...</warning>";
 			} else {
-				Console::writeLine($fileName." changed...");
+				$watchMessage = "<info>".$fileName." changed...</info>";
 			}
 		}
 		
