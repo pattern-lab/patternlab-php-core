@@ -77,6 +77,8 @@ class Watcher extends Builder {
 		// default vars
 		$publicDir = Config::getOption("publicDir");
 		$sourceDir = Config::getOption("sourceDir");
+		$ignoreExts = Config::getOption("ie");
+		$ignoreDirs = Config::getOption("id");
 		
 		// run forever
 		while (true) {
@@ -190,7 +192,7 @@ class Watcher extends Builder {
 					
 					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
 					$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
-					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$ignoreExts)) && (!in_array($object->getFilename(),$ignoreDirs))) {
 						
 						// catch directories that have the ignored dir in their path
 						$ignoreDir = $this->ignoreDir($fileName);
