@@ -36,6 +36,8 @@ class Watcher extends Builder {
 		// construct the parent
 		parent::__construct($config);
 		
+		$this->options = array();
+		
 	}
 	
 	/**
@@ -53,6 +55,9 @@ class Watcher extends Builder {
 		// set default attributes
 		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
 		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
+		
+		// make sure a copy of the given options are saved for using when running generate
+		$this->options = $options;
 		
 		// automatically start the auto-refresh tool
 		// DEPRECATED
@@ -306,6 +311,12 @@ class Watcher extends Builder {
 				Console::writeLine($fileName." changed...");
 			}
 		}
+		
+		$options = $this->options;
+		
+		$options["watchVerbose"] = $verbose;
+		$options["watchMessage"] = $watchMessage;
+		$options["moveStatic"]   = false;
 	}
 	
 }
