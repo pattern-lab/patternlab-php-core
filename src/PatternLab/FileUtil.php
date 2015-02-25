@@ -33,9 +33,9 @@ class FileUtil {
 		$sourceDir = Config::getOption("sourceDir");
 		$publicDir = Config::getOption("publicDir");
 		
-		if (file_exists($sourceDir."/".$s)) {
-			copy($sourceDir."/".$s,$publicDir."/".$p);
-		}
+		$fs = new Filesystem();
+		$fs->copy($sourceDir.DIRECTORY_SEPARATOR.$s,$publicDir.DIRECTORY_SEPARATOR.$p);
+		
 	}
 
 	/**

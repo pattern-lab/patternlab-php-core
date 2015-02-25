@@ -36,6 +36,8 @@ class Watcher extends Builder {
 		// construct the parent
 		parent::__construct($config);
 		
+		$this->options = array();
+		
 	}
 	
 	/**
@@ -51,16 +53,19 @@ class Watcher extends Builder {
 		}
 		
 		// set default attributes
-		$reload        = (isset($options["autoReload"])) ? $options["autoReload"] : false;
 		$moveStatic    = (isset($options["moveStatic"])) ? $options["moveStatic"] : true;
 		$noCacheBuster = (isset($options["noCacheBuster"])) ? $options["noCacheBuster"] : false;
 		
+		// make sure a copy of the given options are saved for using when running generate
+		$this->options = $options;
+		
 		// automatically start the auto-refresh tool
-		if ($reload) {
+		// DEPRECATED
+		/*if ($reload) {
 			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
 			Console::writeLine("starting page auto-reload...");
-		}
+		}*/
 		
 		if ($noCacheBuster) {
 			Config::updateOption("cacheBuster",0);
@@ -75,8 +80,10 @@ class Watcher extends Builder {
 		Console::writeLine("watching your site for changes...");
 		
 		// default vars
-		$publicDir = Config::getOption("publicDir");
-		$sourceDir = Config::getOption("sourceDir");
+		$publicDir  = Config::getOption("publicDir");
+		$sourceDir  = Config::getOption("sourceDir");
+		$ignoreExts = Config::getOption("ie");
+		$ignoreDirs = Config::getOption("id");
 		
 		// run forever
 		while (true) {
@@ -91,7 +98,7 @@ class Watcher extends Builder {
 			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($patternObjects as $name => $object) {
-					
+				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
 				$fileName      = str_replace($sourceDir."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
@@ -157,23 +164,37 @@ class Watcher extends Builder {
 				
 			}
 			
-			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/_annotations/"), \RecursiveIteratorIterator::SELF_FIRST);
-			
-			// make sure dots are skipped
-			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-			
-			foreach($objects as $name => $object) {
+			// iterate over annotations, data, meta and any other _ dirs
+			$watchDirs = glob($sourceDir."/_*",GLOB_ONLYDIR);
+			foreach ($watchDirs as $watchDir) {
 				
-				$fileName = str_replace($sourceDir."/_annotations".DIRECTORY_SEPARATOR,"",$name);
-				$mt = $object->getMTime();
-				
-				if (!isset($o->$fileName)) {
-					$o->$fileName = $mt;
-					$this->updateSite($fileName,"added");
-				} else if ($o->$fileName != $mt) {
-					$o->$fileName = $mt;
-					$this->updateSite($fileName,"changed");
+				if (str_replace($sourceDir."/","",$watchDir) != "_patterns") {
+					
+					// iterate over the data files and regenerate the entire site if they've changed
+					$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($watchDir), \RecursiveIteratorIterator::SELF_FIRST);
+					
+					// make sure dots are skipped
+					$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+					
+					foreach($objects as $name => $object) {
+						
+						$fileName = str_replace($sourceDir."/","",$name);
+						$mt = $object->getMTime();
+						
+						if (!isset($o->$fileName)) {
+							$o->$fileName = $mt;
+							if ($c) {
+								$this->updateSite($fileName,"added");
+							}
+						} else if ($o->$fileName != $mt) {
+							$o->$fileName = $mt;
+							if ($c) {
+								$this->updateSite($fileName,"changed");
+							}
+						}
+						
+					}
+					
 				}
 				
 			}
@@ -190,10 +211,10 @@ class Watcher extends Builder {
 					
 					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
 					$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
-					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$ignoreExts)) && (!in_array($object->getFilename(),$ignoreDirs))) {
 						
 						// catch directories that have the ignored dir in their path
-						$ignoreDir = $this->ignoreDir($fileName);
+						$ignoreDir = FileUtil::ignoreDir($fileName);
 						
 						// check to see if it's a new directory
 						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($publicDir."/".$fileName)) {
@@ -239,10 +260,13 @@ class Watcher extends Builder {
 			if (gc_enabled()) gc_collect_cycles();
 			
 			// output anything the reload server might send our way
+			// DEPRECATED
+			/*
 			if ($reload) {
 				$output = fgets($fp, 100);
 				if ($output != "\n") print $output;
 			}
+			*/
 			
 			// pause for .05 seconds to give the CPU a rest
 			usleep(50000);
@@ -250,7 +274,8 @@ class Watcher extends Builder {
 		}
 		
 		// close the auto-reload process, this shouldn't do anything
-		fclose($fp);
+		// DEPRECATED
+		// fclose($fp);
 		
 	}
 	
@@ -263,29 +288,33 @@ class Watcher extends Builder {
 	*/
 	private function updateSite($fileName,$message,$verbose = true) {
 		
-		Data::gather();
-		PatternData::gather();
-		Annotations::gather();
-		
-		$this->generateIndex();
-		$this->generateStyleguide();
-		$this->generateViewAllPages();
-		$this->generatePatterns();
-		$this->generateAnnotations();
-		
-		Util::updateChangeTime();
-		
+		$watchMessage = "";
 		if ($verbose) {
 			if ($message == "added") {
-				Console::writeLine($fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...");
+				$watchMessage = "<warning>".$fileName." was added to Pattern Lab. reload the website to see this change in the navigation...</warning>";
 			} elseif ($message == "removed") {
-				Console::writeLine($fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...");
+				$watchMessage = "<warning>".$fileName." was removed from Pattern Lab. reload the website to see this change reflected in the navigation...</warning>";
 			} elseif ($message == "hidden") {
-				Console::writeLine($fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...");
+				$watchMessage = "<warning>".$fileName." was hidden from Pattern Lab. reload the website to see this change reflected in the navigation...</warning>";
 			} else {
-				Console::writeLine($fileName." changed...");
+				$watchMessage = "<info>".$fileName." changed...</info>";
 			}
 		}
+		
+		$options = $this->options;
+		
+		$options["watchVerbose"] = $verbose;
+		$options["watchMessage"] = $watchMessage;
+		$options["moveStatic"]   = false;
+		
+		// clear the various data stores for re-population
+		Data::clear();
+		PatternData::clear();
+		Annotations::clear();
+		
+		$g = new Generator();
+		$g->generate($options);
+		
 	}
 	
 }
