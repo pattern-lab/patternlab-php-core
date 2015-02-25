@@ -288,18 +288,6 @@ class Watcher extends Builder {
 	*/
 	private function updateSite($fileName,$message,$verbose = true) {
 		
-		Data::gather();
-		PatternData::gather();
-		Annotations::gather();
-		
-		$this->generateIndex();
-		$this->generateStyleguide();
-		$this->generateViewAllPages();
-		$this->generatePatterns();
-		$this->generateAnnotations();
-		
-		Util::updateChangeTime();
-		
 		if ($verbose) {
 			if ($message == "added") {
 				Console::writeLine($fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...");
@@ -317,6 +305,15 @@ class Watcher extends Builder {
 		$options["watchVerbose"] = $verbose;
 		$options["watchMessage"] = $watchMessage;
 		$options["moveStatic"]   = false;
+		
+		// clear the various data stores for re-population
+		Data::clear();
+		PatternData::clear();
+		Annotations::clear();
+		
+		$g = new Generator();
+		$g->generate($options);
+		
 	}
 	
 }
