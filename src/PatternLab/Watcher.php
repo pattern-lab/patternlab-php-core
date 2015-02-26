@@ -25,6 +25,8 @@ use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
 use \PatternLab\Util;
 use \PatternLab\Timer;
+use \Symfony\Component\Filesystem\Filesystem;
+use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class Watcher extends Builder {
 	
@@ -314,6 +316,88 @@ class Watcher extends Builder {
 		
 		$g = new Generator();
 		$g->generate($options);
+		
+	}
+	
+	public function watchStarterKit() {
+			
+		// double-checks options was properly set
+		$starterKit = Config::getOption("starterKit");
+		if (!$starterKit) {
+			Console::writeError("need to have a StarterKit set in the config...");
+		}
+		
+		// set-up the full starterkit path
+		$starterKitPath = Config::getOption("packagesDir").DIRECTORY_SEPARATOR.$starterKit.DIRECTORY_SEPARATOR."dist";
+		
+		// default vars
+		$sourceDir   = Config::getOption("sourceDir");
+		$packagesDir = Config::getOption("packagesDir");
+		
+		$fs = new Filesystem();
+		
+		$c  = false;           // track that one loop through the pattern file listing has completed
+		$o  = new \stdClass(); // create an object to hold the properties
+		$cp = new \stdClass(); // create an object to hold a clone of $o
+		
+		$o->patterns = new \stdClass();
+		
+		Console::writeLine("watching your starterkit for changes...");
+		
+		// run forever
+		while (true) {
+			
+			// clone the patterns so they can be checked in case something gets deleted
+			$cp = clone $o->patterns;
+			
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($starterKitPath), \RecursiveIteratorIterator::SELF_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+			
+			foreach ($objects as $name => $object) {
+				
+				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+				$fileName = str_replace($starterKitPath.DIRECTORY_SEPARATOR,"",$name);
+				
+				// check to see if it's a new directory
+				if ($object->isDir() && !isset($o->$fileName) && !is_dir($starterKitPath."/".$fileName)) {
+					mkdir($sourceDir."/".$fileName);
+					$o->$fileName = "dir created"; // placeholder
+					Console::writeLine($fileName."/ directory was created...");
+				}
+				
+				// check to see if it's a new file or a file that has changed
+				if (file_exists($name)) {
+					
+					$mt = $object->getMTime();
+					if ($object->isFile() && !isset($o->$fileName) && !file_exists($sourceDir.DIRECTORY_SEPARATOR.$fileName)) {
+						$o->$fileName = $mt;
+						$fs->copy($starterKitPath.DIRECTORY_SEPARATOR.$fileName,$sourceDir.DIRECTORY_SEPARATOR.$fileName);
+						Console::writeInfo($fileName." added...");
+					} else if ($object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
+						$o->$fileName = $mt;
+						$fs->copy($starterKitPath.DIRECTORY_SEPARATOR.$fileName,$sourceDir.DIRECTORY_SEPARATOR.$fileName);
+						Console::writeInfo($fileName." changed...");
+					} else if (!isset($o->fileName)) {
+						$o->$fileName = $mt;
+					}
+					
+				} else {
+					unset($o->$fileName);
+				}
+				
+			}
+			
+			$c = true;
+			
+			// taking out the garbage. basically killing mustache after each run.
+			if (gc_enabled()) gc_collect_cycles();
+			
+			// pause for .05 seconds to give the CPU a rest
+			usleep(50000);
+			
+		}
 		
 	}
 	
