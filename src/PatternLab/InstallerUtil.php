@@ -503,9 +503,13 @@ class InstallerUtil {
 			// see if the package has a listener
 			self::scanForListener($pathBase);
 			
-			// see if the package is a pattern engine
+			// address other specific needs based on type
 			if ($type == "patternlab-patternengine") {
 				self::scanForPatternEngineRule($pathBase);
+			} else if ($type == "patternlab-starterkit") {
+				Config::updateConfigOption("starterKit",$name);
+			} else if ($type == "patternlab-styleguidekit") {
+				Config::updateConfigOption("styleguideKit",$name);
 			}
 			
 		}
