@@ -38,11 +38,12 @@ class WatchCommand extends Command {
 		$options                  = array();
 		$options["moveStatic"]    = (Console::findCommandOption("p|patternsonly")) ? false : true;
 		$options["noCacheBuster"] = Console::findCommandOption("n|nocache");
-		$options["autoReload"]    = Console::findCommandOption("r|autoreload");
 		
 		// load the generator
 		$g = new Generator();
 		$g->generate($options);
+		// DEPRECATED
+		// $options["autoReload"]    = Console::findCommandOption("r|autoreload");
 		
 		// load the watcher
 		$w = new Watcher();
