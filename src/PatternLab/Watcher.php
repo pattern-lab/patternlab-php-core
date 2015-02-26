@@ -324,7 +324,7 @@ class Watcher extends Builder {
 		// double-checks options was properly set
 		$starterKit = Config::getOption("starterKit");
 		if (!$starterKit) {
-			Console::writeError("need to have a StarterKit set in the config...");
+			Console::writeError("need to have a starterkit set in the config...");
 		}
 		
 		// set-up the full starterkit path
