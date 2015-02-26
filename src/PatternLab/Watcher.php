@@ -329,6 +329,9 @@ class Watcher extends Builder {
 		
 		// set-up the full starterkit path
 		$starterKitPath = Config::getOption("packagesDir").DIRECTORY_SEPARATOR.$starterKit.DIRECTORY_SEPARATOR."dist";
+		if (!is_dir($starterKitPath)) {
+			Console::writeError("the starterkit doesn't seem to exist...");
+		}
 		
 		// default vars
 		$sourceDir   = Config::getOption("sourceDir");
