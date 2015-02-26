@@ -28,6 +28,7 @@ class WatchCommand extends Command {
 		Console::setCommand($this->command,"Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in <path>source/</path> and regenerates Pattern Lab when there are any.","w");
 		Console::setCommandOption($this->command,"patternsonly","Watches only the patterns. Does NOT clean <path>public/</path>.","To watch and generate only the patterns:","p");
 		Console::setCommandOption($this->command,"nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:","n");
+		Console::setCommandOption($this->command,"starterkit","Watch for changes to the StarterKit and copy to <path>source/</path>. The <info>--starterkit</info> flag should only be used if one is actively developing a StarterKit.","To watch for changes to the StarterKit:","s");
 		//Console::setCommandOption($this->command,"autoreload","Turn on the auto-reload service.","To turn on auto-reload:","r");
 		
 	}
@@ -39,15 +40,28 @@ class WatchCommand extends Command {
 		$options["moveStatic"]    = (Console::findCommandOption("p|patternsonly")) ? false : true;
 		$options["noCacheBuster"] = Console::findCommandOption("n|nocache");
 		
-		// load the generator
-		$g = new Generator();
-		$g->generate($options);
 		// DEPRECATED
 		// $options["autoReload"]    = Console::findCommandOption("r|autoreload");
 		
-		// load the watcher
-		$w = new Watcher();
-		$w->watch($options);
+		// see if the starterKit flag was passed so you know what dir to watch
+		if (Console::findCommandOption("s|starterkit")) {
+			
+			// load the starterkit watcher
+			$w = new Watcher();
+			$w->watchStarterKit();
+			
+		} else {
+			
+			// load the generator
+			$g = new Generator();
+			$g->generate($options);
+			
+			// load the watcher
+			$w = new Watcher();
+			$w->watch($options);
+			
+		}
+		
 		
 	}
 	
