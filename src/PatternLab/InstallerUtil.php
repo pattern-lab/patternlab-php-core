@@ -366,15 +366,15 @@ class InstallerUtil {
 			if ($prompt) {
 				
 				// prompt for input using the supplied query
-				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. merge and possibly overwrite it the with contents from the <path>".$packageName."</path> package?";
-				$options = "Y/n";
+				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. merge or replace with the contents of <path>".$packageName."</path> package?";
+				$options = "M/r";
 				$input   = Console::promptInput($prompt,$options);
 				
-				if ($input == "y") {
-					Console::writeTag("ok","contents of <path>".$humanReadablePath."</path> are being replaced and may be overwritten...", false, true);
+				if ($input == "m") {
+					Console::writeTag("ok","contents of <path>".$humanReadablePath."</path> have been merged with the package's content...", false, true);
 					return false;
 				} else {
-					Console::writeWarning("contents of <path>".$humanReadablePath."</path> weren't overwritten. some parts of the <path>".$packageName."</path> package may be missing...", false, true);
+					Console::writeWarning("contents of <path>".$humanReadablePath."</path> have been replaced by the package's content...", false, true);
 					return true;
 				}
 				
