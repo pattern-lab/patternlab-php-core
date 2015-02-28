@@ -26,15 +26,15 @@ class StarterKitCommand extends Command {
 		
 		Console::setCommand($this->command,"Initialize or fetch a specific StarterKit","The StarterKit command downloads StarterKits.","k");
 		Console::setCommandOption($this->command,"init","Initialize with a blank StarterKit based on the active PatternEngine.","To initialize your project with a base StarterKit:","i");
-		Console::setCommandOption($this->command,"fetch:","Fetch a specific StarterKit from GitHub.","To fetch a StarterKit from GitHub:","f:","<starterkit-name>");
+		Console::setCommandOption($this->command,"install:","Fetch a specific StarterKit from GitHub.","To fetch a StarterKit from GitHub:","j:","<starterkit-name>");
 		
 	}
 	
 	public function run() {
 		
 		// find the value given to the command
-		$init       = Console::findCommandValue("i|init");
-		$starterkit = Console::findCommandValue("f|fetch");
+		$init       = Console::findCommandOption("i|init");
+		$starterkit = Console::findCommandOptionValue("f|install");
 		
 		if ($init) {
 			$patternEngine = Config::getOption("patternExtension");
