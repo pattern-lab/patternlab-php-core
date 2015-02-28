@@ -59,7 +59,7 @@ class Fetch {
 		$sourceDir        = Config::getOption("sourceDir");
 		$tempDir          = sys_get_temp_dir();
 		$tempDirSK        = $tempDir.DIRECTORY_SEPARATOR."pl-sk-archive";
-		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist"
+		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist";
 		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
 		
 		$fs = new Filesystem();
