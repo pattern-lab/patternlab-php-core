@@ -339,7 +339,12 @@ class Config {
 		}
 		
 		if (array_key_exists($optionName,self::$options)) {
-			self::$options[$optionName] = $optionValue;
+			if (is_array(self::$options[$optionName])) {
+				$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
+				self::$options[$optionName] = array_merge(self::$options[$optionName], $optionValue);
+			} else {
+				self::$options[$optionName] = $optionValue;
+			}
 			return true;
 		}
 		
@@ -360,7 +365,13 @@ class Config {
 		} catch (ParseException $e) {
 			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 		}
-		$options[$optionName] = $optionValue;
+		
+		if (is_array($options[$optionName])) {
+			$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
+			$options[$optionName] = array_merge($options[$optionName], $optionValue);
+		} else {
+			$options[$optionName] = $optionValue;
+		}
 		
 		// dump the YAML
 		$configOutput = Yaml::dump($options, 3);
