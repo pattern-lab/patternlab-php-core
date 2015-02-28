@@ -184,7 +184,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the overall store of PatternData
+	* Get the overall store of PatternData
 	*/
 	public static function get() {
 		
@@ -193,21 +193,21 @@ class PatternData {
 	}
 	
 	/**
-	* Return the directory separator
+	* Get the directory separator
 	*/
 	public static function getDirSep() {
 		return self::$dirSep;
 	}
 	
 	/**
-	* Return the front meta bits (hidden and noviewall)
+	* GEt the front meta bits (hidden and noviewall)
 	*/
 	public static function getFrontMeta() {
 		return self::$frontMeta;
 	}
 	
 	/**
-	* Return a specific item from the store
+	* Get a specific item from the store
 	* @param  {String}     the option to check
 	*/
 	public static function getOption($optionName) {
@@ -221,7 +221,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return a specific item from a pattern in the store data
+	* Get a specific item from a pattern in the store data
 	* @param  {String}        the name of the pattern
 	* @param  {String}        the name of the option to get
 	*
@@ -238,7 +238,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type
+	* Get the pattern sub type
 	*/
 	public static function getPatternSubtype() {
 		
@@ -251,7 +251,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type clean
+	* Get the pattern sub type clean
 	*/
 	public static function getPatternSubtypeClean() {
 		
@@ -264,7 +264,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type dash
+	* Get the pattern sub type dash
 	*/
 	public static function getPatternSubtypeDash() {
 		
@@ -277,7 +277,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type set
+	* Get the pattern sub type set
 	*/
 	public static function getPatternSubtypeSet() {
 		
@@ -290,7 +290,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type
+	* Get the pattern type
 	*/
 	public static function getPatternType() {
 		
@@ -303,7 +303,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type clean
+	* Get the pattern type clean
 	*/
 	public static function getPatternTypeClean() {
 		
@@ -316,7 +316,7 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type dash
+	* Get the pattern type dash
 	*/
 	public static function getPatternTypeDash() {
 		
@@ -431,7 +431,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type
+	* Set the pattern subtype
+	* @param  {String}       the option value
 	*/
 	public static function setPatternSubtype($optionValue) {
 		
@@ -440,7 +441,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type clean
+	* Set the pattern subtype clean
+	* @param  {String}       the option value
 	*/
 	public static function setPatternSubtypeClean($optionValue) {
 		
@@ -449,7 +451,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type dash
+	* Set the pattern subtype dash
+	* @param  {String}       the option value
 	*/
 	public static function setPatternSubtypeDash($optionValue) {
 		
@@ -458,7 +461,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern sub type set
+	* Set the pattern subtype set
+	* @param  {String}       the option value
 	*/
 	public static function setPatternSubtypeSet($optionValue) {
 		
@@ -467,7 +471,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type
+	* Set the pattern type
+	* @param  {String}       the option value
 	*/
 	public static function setPatternType($optionValue) {
 		
@@ -476,7 +481,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type clean
+	* Set the pattern type clean
+	* @param  {String}       the option value
 	*/
 	public static function setPatternTypeClean($optionValue) {
 		
@@ -485,7 +491,8 @@ class PatternData {
 	}
 	
 	/**
-	* Return the pattern type dash
+	* Set the pattern type dash
+	* @param  {String}       the option value
 	*/
 	public static function setPatternTypeDash($optionValue) {
 		
