@@ -90,11 +90,9 @@ class Fetch {
 		}
 		
 		// extract, if the zip is supposed to be unpacked do that (e.g. stripdir)
-		$zippy      = Zippy::load();
+		$zippy = Zippy::load();
 		$zippy->addStrategy(new UnpackFileStrategy());
-		$zipAdapter = $zippy->getAdapterFor('tar.gz');
-		$archiveZip = $zipAdapter->open($tempFile);
-		$archiveZip = $archiveZip->extract($tempDirSK);
+		$zippy->getAdapterFor('tar.gz')->open($tempFile)->extract($tempDirSK);
 		
 		// thrown an error if temp/dist/ doesn't exist
 		if (!is_dir($tempDirDist)) {
