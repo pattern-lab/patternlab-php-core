@@ -523,4 +523,14 @@ class PatternData {
 		
 	}
 	
+	/**
+	* Set a rule
+	* @param  {String}       the name of the rule
+	* @param  {Object}       the rule properties, guess this is a class too
+	*/
+	public static function setRule($ruleName, $rule) {
+		
+		self::$rules[$ruleName] = $rule;
+		
+	}
 }
