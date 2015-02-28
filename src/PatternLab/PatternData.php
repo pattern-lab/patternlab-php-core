@@ -534,4 +534,25 @@ class PatternData {
 		self::$rules[$ruleName] = $rule;
 		
 	}
+	
+	/**
+	* Update a property for a given rule
+	* @param  {String}       the name of the rule to update
+	* @param  {String}       the name of the property
+	* @param  {String}       the value of the property
+	* @param  {String}       the action that should be taken with the new value
+	*
+	* @return {Boolean}      whether the update was successful
+	*/
+	public function updateRuleProp($ruleName, $propName, $propValue, $action = "or") {
+		
+		if ($rule != self::getRule($ruleName)) {
+			return false;
+		}
+		
+		$rule->updateProp($propName, $propValue, $action);
+		self::setRule($ruleName, $rule);
+		
+	}
+	
 }
