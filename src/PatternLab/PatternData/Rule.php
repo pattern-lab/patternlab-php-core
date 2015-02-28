@@ -122,4 +122,19 @@ class Rule {
 		return false;
 		
 	}
+	
+	/**
+	* Set a value for a property on the current PatternData rule
+	* @param  {String}       the name of the property
+	* @param  {String}       the value of the property
+	*
+	* @return {Boolean}      whether the set was successful
+	*/
+	public function setProp($propName, $propValue) {
+		
+		$this->$propName = $this->$propValue;
+		return true;
+		
+	}
+	
 }
