@@ -82,8 +82,7 @@ class Fetch {
 		$tempFile = tempnam($tempDir, "pl-sk-archive.tar.gz");
 		file_put_contents($tempFile, $package);
 		
-		Console::writeInfo("installing the starterkit...");
-		
+		Console::writeInfo("finished downloading the starterkit...");
 		
 		// make sure the temp dir exists before copying into it
 		if (!is_dir($tempDirSK)) { 
