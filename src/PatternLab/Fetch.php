@@ -12,8 +12,14 @@
 
 namespace PatternLab;
 
+use \Alchemy\Zippy\Zippy;
+use \PatternLab\Config;
 use \PatternLab\Console;
+use \PatternLab\InstallerUtil;
 use \PatternLab\Timer;
+use \PatternLab\Zippy\UnpackFileStrategy;
+use \Symfony\Component\Filesystem\Filesystem;
+use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class Fetch {
 	
@@ -23,15 +29,143 @@ class Fetch {
 	 *
 	 * @return {String}    the modified file contents
 	 */
-	public function fetch($package = "") {
+	public function fetchPackage($package = "") {
 		
 		if (empty($package)) {
 			Console::writeError("please provide a path for the package before trying to fetch it...");
 		}
-		
+
 		// run composer
 		$composerPath = Config::getOption("coreDir").DIRECTORY_SEPARATOR."bin/composer.phar";
 		passthru("php ".$composerPath." require ".$package);
+				
+	}
+		
+	/**
+	 * Fetch a package from GitHub
+	 * @param  {String}    the command option to provide the rule for
+	 * @param  {String}    the path to the package to be downloaded
+	 *
+	 * @return {String}    the modified file contents
+	 */
+	public function fetchStarterKit($starterkit = "") {
+
+		// double-checks options was properly set
+		if (empty($starterkit)) {
+			Console::writeError("please provide a path for the starterkit before trying to fetch it...");
+		}
+
+		// set default attributes
+		$sourceDir        = Config::getOption("sourceDir");
+		$tempDir          = sys_get_temp_dir();
+		$tempDirSK        = $tempDir.DIRECTORY_SEPARATOR."pl-sk-archive";
+		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist"
+		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
+		
+		$fs = new Filesystem();
+		
+		// figure out the options for the GH path
+		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
+		
+		//get the path to the GH repo and validate it
+		$tarballUrl = "https://github.com/".$org."/".$repo."/archive/".$tag.".tar.gz";
+		
+		Console::writeInfo("downloading the starterkit...");
+		
+		// try to download the given package
+		if (!$package = @file_get_contents($tarballUrl)) {
+			$error = error_get_last();
+			Console::writeError("the starterkit wasn't downloaded because:\n\n  ".$error["message"]);
+		}
+		
+		// write the package to the temp directory
+		$tempFile = tempnam($tempDir, "pl-sk-archive.tar.gz");
+		file_put_contents($tempFile, $package);
+		
+		Console::writeInfo("installing the starterkit...");
+		
+		// see if the source directory is empty
+		$emptyDir = true;
+		if (is_dir($sourceDir)) {
+			$objects  = new \DirectoryIterator($sourceDir);
+			foreach ($objects as $object) {
+				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+					$emptyDir = false;
+				}
+			}
+		}
+		
+		// if source directory isn't empty ask if it's ok to nuke what's there
+		if (!$emptyDir) {
+			
+			$prompt  = "a starterkit is already installed. merge or replace?";
+			$options = "M/r";
+			$input   = Console::promptInput($prompt,$options);
+			
+			if ($answer == "r") {
+				Console::writeWarning("deleting the old files before installing the new starterkit...");
+				$fs->remove($checkDir);
+			}
+			
+		}
+		
+		// make sure the temp dir exists before copying into it
+		if (!is_dir($tempDirSK)) { 
+			mkdir($tempDirSK); 
+		}
+		
+		// extract, if the zip is supposed to be unpacked do that (e.g. stripdir)
+		$zippy      = Zippy::load();
+		$zippy->addStrategy(new UnpackFileStrategy());
+		$zipAdapter = $zippy->getAdapterFor('tar.gz');
+		$archiveZip = $zipAdapter->open($tempFile);
+		$archiveZip = $archiveZip->extract($tempDirSK);
+		
+		// thrown an error if temp/dist/ doesn't exist
+		if (!is_dir($tempDirDist)) {
+			Console::writeError("the starterkit needs to contain a dist/ directory before it can be installed...");
+		}
+		
+		// check for composer.json. if it exists use it for determining things. otherwise just mirror dist/ to source/
+		if (file_exists($tempComposerFile)) {
+			$tempComposerJSON = json_decode(file_get_contents($tempComposerFile), true);
+			InstallerUtil::parseComposerExtraList($tempComposerJSON, $starterkit, $tempDirDist)
+		} else {
+			$fs->mirror($tempDirDist, $sourceDir);
+		}
+		
+		// remove the temp files
+		Console::writeInfo("cleaning up the temp files...");
+		$fs->remove($tempFile);
+		$fs->remove($tempDir);
+		
+		Console::writeInfo("the starterkit installation is complete...");
+		
+	}
+	
+	/**
+	 * Break up the package path
+	 * @param  {String}    path of the GitHub repo
+	 *
+	 * @return {Array}     the parts of the package path
+	 */
+	protected function getPackageInfo($package) {
+		
+		$org  = "";
+		$repo = "";
+		$tag  = "master";
+		
+		if (strpos($package, "#") !== false) {
+			list($package,$tag) = explode("#",$package);
+		}
+		
+		if (strpos($package, "/") !== false) {
+			list($org,$repo) = explode("/",$package);
+		} else {
+			Console::writeError("please provide a real path to a package...");
+		}
+		
+		return array($org,$repo,$tag);
 		
 	}
 	
