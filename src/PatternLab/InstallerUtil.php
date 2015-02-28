@@ -117,6 +117,65 @@ class InstallerUtil {
 	}
 	
 	/**
+	 * Parse the extra section from composer.json
+	 * @param  {Object}     the JSON for the composer extra section
+	 */
+	public static function parseComposerExtraList($composerExtra) {
+		
+		// move assets to the base directory
+		if (isset($composerExtra["dist"]["baseDir"])) {
+			self::parseFileList($name,$pathDist,Config::getOption("baseDir"),$composerExtra["dist"]["baseDir"]);
+		}
+		
+		// move assets to the public directory
+		if (isset($composerExtra["dist"]["publicDir"])) {
+			self::parseFileList($name,$pathDist,Config::getOption("publicDir"),$composerExtra["dist"]["publicDir"]);
+		}
+		
+		// move assets to the source directory
+		if (isset($composerExtra["dist"]["sourceDir"])) {
+			self::parseFileList($name,$pathDist,Config::getOption("sourceDir"),$composerExtra["dist"]["sourceDir"]);
+		}
+		
+		// move assets to the scripts directory
+		if (isset($composerExtra["dist"]["scriptsDir"])) {
+			self::parseFileList($name,$pathDist,Config::getOption("scriptsDir"),$composerExtra["dist"]["scriptsDir"]);
+		}
+		
+		// move assets to the data directory
+		if (isset($composerExtra["dist"]["dataDir"])) {
+			self::parseFileList($name,$pathDist,Config::getOption("dataDir"),$composerExtra["dist"]["dataDir"]);
+		}
+		
+		// move assets to the components directory
+		if (isset($composerExtra["dist"]["componentDir"])) {
+			$templateExtension = isset($composerExtra["templateExtension"]) ? $composerExtra["templateExtension"] : "mustache";
+			$onready           = isset($composerExtra["onready"]) ? $composerExtra["onready"] : "";
+			$callback          = isset($composerExtra["callback"]) ? $composerExtra["callback"] : "";
+			$componentDir      = Config::getOption("componentDir");
+			self::parseComponentList($name,$pathDist,$componentDir."/".$name,$composerExtra["dist"]["componentDir"],$templateExtension,$onready,$callback);
+			self::parseFileList($name,$pathDist,$componentDir."/".$name,$composerExtra["dist"]["componentDir"]);
+		}
+		
+		// see if we need to modify the config
+		if (isset($composerExtra["config"])) {
+			
+			foreach ($composerExtra["config"] as $optionInfo) {
+				
+				// get config info
+				$option = key($optionInfo);
+				$value  = $optionInfo[$option];
+				
+				// update the config option
+				Config::updateConfigOption($option,$value);
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
 	 * Parse the component types to figure out what needs to be added to the component JSON files
 	 * @param  {String}    the name of the package
 	 * @param  {String}    the base directory for the source of the files
@@ -441,62 +500,10 @@ class InstallerUtil {
 		// make sure we're only evaluating pattern lab packages
 		if (strpos($type,"patternlab-") !== false) {
 			
-			// make sure that it has the name-spaced section of data to be parsed
+			// make sure that it has the name-spaced section of data to be parsed. if it exists parse it
 			if (isset($extra["patternlab"])) {
 				
-				// rebase $extra
-				$extra = $extra["patternlab"];
-				
-				// move assets to the base directory
-				if (isset($extra["dist"]["baseDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("baseDir"),$extra["dist"]["baseDir"]);
-				}
-				
-				// move assets to the public directory
-				if (isset($extra["dist"]["publicDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("publicDir"),$extra["dist"]["publicDir"]);
-				}
-				
-				// move assets to the source directory
-				if (isset($extra["dist"]["sourceDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("sourceDir"),$extra["dist"]["sourceDir"]);
-				}
-				
-				// move assets to the scripts directory
-				if (isset($extra["dist"]["scriptsDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("scriptsDir"),$extra["dist"]["scriptsDir"]);
-				}
-				
-				// move assets to the data directory
-				if (isset($extra["dist"]["dataDir"])) {
-					self::parseFileList($name,$pathDist,Config::getOption("dataDir"),$extra["dist"]["dataDir"]);
-				}
-				
-				// move assets to the components directory
-				if (isset($extra["dist"]["componentDir"])) {
-					$templateExtension = isset($extra["templateExtension"]) ? $extra["templateExtension"] : "mustache";
-					$onready           = isset($extra["onready"]) ? $extra["onready"] : "";
-					$callback          = isset($extra["callback"]) ? $extra["callback"] : "";
-					$componentDir      = Config::getOption("componentDir");
-					self::parseComponentList($name,$pathDist,$componentDir."/".$name,$extra["dist"]["componentDir"],$templateExtension,$onready,$callback);
-					self::parseFileList($name,$pathDist,$componentDir."/".$name,$extra["dist"]["componentDir"]);
-				}
-				
-				// see if we need to modify the config
-				if (isset($extra["config"])) {
-					
-					foreach ($extra["config"] as $optionInfo) {
-						
-						// get config info
-						$option = key($optionInfo);
-						$value  = $optionInfo[$option];
-						
-						// update the config option
-						Config::updateConfigOption($option,$value);
-						
-					}
-					
-				}
+				self::parseComposerExtraList($extra["patternlab"]);
 				
 			}
 			
