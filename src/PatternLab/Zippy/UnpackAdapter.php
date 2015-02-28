@@ -13,16 +13,16 @@
 
 namespace PatternLab\Zippy;
 
-use \Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
+use \Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter;
 
-class UnpackAdapter extends TarGNUTarAdapter {
+class UnpackAdapter extends TarGzBSDTarAdapter {
 	
 	protected function getExtractOptions() {
-		return array('--overwrite-dir', '--overwrite', '--strip-components=1');
+		return array('--strip-components=1');
 	}
 	
 	protected function getExtractMembersOptions() {
-		return array('--overwrite-dir', '--overwrite', '--strip-components=1');
+		return array('--strip-components=1');
 	}
 	
 }
