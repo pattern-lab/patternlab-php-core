@@ -341,6 +341,17 @@ class PatternData {
 		return false;
 		
 	}
+	
+	/**
+	* Get all rules
+	*/
+	public static function getRules() {
+		
+		return self::$rules;
+		
+	}
+	
+	/**
 	* Load all of the rules related to Pattern Data
 	*/
 	public static function loadRules($options) {
