@@ -22,17 +22,19 @@ class FetchCommand extends Command {
 		
 		parent::__construct();
 		
-		$this->command = "fetch:";
+		$this->command = "fetch";
 		
-		Console::setCommand($this->command,"Fetch a package","The fetch command loads a package and its dependencies from Packagist.","f:");
-		Console::setCommandSample($this->command,"To fetch a package from Packagist:","<package-name>");
+		Console::setCommand($this->command,"Fetch a package or StarterKit","The fetch command downloads packages and StarterKits.","f");
+		Console::setCommandOption($this->command,"package:","Fetch a package from Packagist.","To fetch a package from Packagist:","p:","<package-name>");
+		Console::setCommandOption($this->command,"starterkit:","Fetch a StarterKit from GitHub.","To fetch a StarterKit from GitHub:","s:","<starterkit-name>");
 		
 	}
 	
 	public function run() {
 		
 		// find the value given to the command
-		$package = Console::findCommandValue("f|fetch");
+		$package    = Console::findCommandValue("p|package");
+		$starterkit = Console::findCommandValue("s|starterkit");
 		
 		if ($package) {
 			
@@ -50,15 +52,19 @@ class FetchCommand extends Command {
 			
 			// run composer via fetch
 			$f = new Fetch();
-			$f->fetch($package);
+			$f->fetchPackage($package);
+			
+		} else if ($starterkit) {
+			
+			// download the starterkit
+			$f = new Fetch();
+			$f->fetchStarterKit($starterkit);
 			
 		} else {
 			
 			Console::writeHelpCommand($this->command);
 			
 		}
-		
-		
 		
 	}
 	
