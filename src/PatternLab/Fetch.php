@@ -103,8 +103,16 @@ class Fetch {
 		
 		// check for composer.json. if it exists use it for determining things. otherwise just mirror dist/ to source/
 		if (file_exists($tempComposerFile)) {
+			
 			$tempComposerJSON = json_decode(file_get_contents($tempComposerFile), true);
-			InstallerUtil::parseComposerExtraList($tempComposerJSON, $starterkit, $tempDirDist)
+			if (isset($tempComposerJSON["extra"]) && isset($tempComposerJSON["extra"]["patternlab"])) {
+				Console::writeInfo("installing the starterkit...");
+				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist);
+				Console::writeInfo("installed the starterkit...");
+			} else {
+				Console::writeError("the starterkit's composer.json file didn't have a valid format. missing patternlab directives...");
+			}
+			
 		} else {
 			
 			// see if the source directory is empty
