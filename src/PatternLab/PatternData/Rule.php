@@ -107,4 +107,62 @@ class Rule {
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
+	/**
+	* Get the value for a property on the current PatternData rule
+	* @param  {String}       the name of the property
+	*
+	* @return {Boolean}      whether the set was successful
+	*/
+	public function getProp($propName) {
+		
+		if (isset($this->$propName)) {
+			return $this->$propName;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	* Set a value for a property on the current PatternData rule
+	* @param  {String}       the name of the property
+	* @param  {String}       the value of the property
+	*
+	* @return {Boolean}      whether the set was successful
+	*/
+	public function setProp($propName, $propValue) {
+		
+		$this->$propName = $this->$propValue;
+		return true;
+		
+	}
+	
+	/**
+	* Update a property on a given rule
+	* @param  {String}       the name of the property
+	* @param  {String}       the value of the property
+	* @param  {String}       the action that should be taken with the new value
+	*
+	* @return {Boolean}      whether the update was successful
+	*/
+	public function updateProp($propName, $propValue, $action = "or") {
+		
+		if (!isset($this->$propName) || !is_scalar($propValue)) {
+			return false;
+		}
+		
+		if ($action == "or") {
+			
+			$propValue = $this->$propName."||".$propValue;
+			
+		} else if ($action == "and") {
+			
+			$propValue = $this->$propName."&&".$propValue;
+			
+		}
+		
+		return $this->setProp($this->$propName,$propValue);
+		
+	}
+	
 }
