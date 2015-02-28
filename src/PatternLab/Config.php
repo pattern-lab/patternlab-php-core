@@ -308,17 +308,24 @@ class Config {
 			
 		} else if (self::$options["overrideConfig"] == "q") {
 			
-			// prompt for input
-			$optionValueOutput = is_array($optionValue) ? implode(", ",$optionValue) : $optionValue;
-			$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$optionValueOutput."</desc>?";
-			$options = "Y/n";
-			$input   = Console::promptInput($prompt,$options);
+			// standardize the values for comparison
+			$currentOptionValue = is_array(self::$options[$optionName]) ? implode(", ",self::$options[$optionName]) : self::$options[$optionName];
+			$newOptionValue     = is_array($optionValue) ? implode(", ",$optionValue) : $optionValue;
 			
-			if ($input == "y") {
-				self::writeUpdateConfigOption($optionName,$optionValue);
-				Console::writeInfo("config option ".$optionName." updated...", false, true);
-			} else {
-				Console::writeWarning("config option <desc>".$optionName."</desc> not  updated...", false, true);
+			if ($currentOptionValue != $newOptionValue) {
+				
+				// prompt for input
+				$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$newOptionValue."</desc>?";
+				$options = "Y/n";
+				$input   = Console::promptInput($prompt,$options);
+			
+				if ($input == "y") {
+					self::writeUpdateConfigOption($optionName,$optionValue);
+					Console::writeInfo("config option ".$optionName." updated...", false, true);
+				} else {
+					Console::writeWarning("config option <desc>".$optionName."</desc> not  updated...", false, true);
+				}
+				
 			}
 			
 		}
