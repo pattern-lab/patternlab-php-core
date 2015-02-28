@@ -88,28 +88,28 @@ class InstallerUtil {
 		// foo/s.html ~ path/k.html -> mirror {srcroot}/foo/s.html to {destroot}/path/k.html
 		
 		if (($source == "*") && ($destination == "*")) {
-			if (!self::pathExists($packageName,$destinationBase."/")) {
-				self::$fs->mirror($sourceBase,$destinationBase."/");
-			}
+			$result  = self::pathExists($packageName, $destinationBase."/");
+			$options = ($result) ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
+			$fs->mirror($sourceBase, $destinationBase."/", null, $options);
 		} else if ($source == "*") {
-			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-				self::$fs->mirror($sourceBase,$destinationBase."/".$destination);
-			}
+			$result  = self::pathExists($packageName, $destinationBase."/".$destination);
+			$options = ($result) ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
+			$fs->mirror($sourceBase, $destinationBase."/".$destination, null, $options);
 		} else if ($source[strlen($source)-1] == "*") {
-			$source = rtrim($source,"/*");
-			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-				self::$fs->mirror($sourceBase.$source,$destinationBase."/".$destination);
-			}
+			$source  = rtrim($source,"/*");
+			$result  = self::pathExists($packageName, $destinationBase."/".$destination);
+			$options = ($result) ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
+			$fs->mirror($sourceBase.$source, $destinationBase."/".$destination, null, $options);
 		} else {
 			$pathInfo       = explode("/",$destination);
 			$file           = array_pop($pathInfo);
 			$destinationDir = implode("/",$pathInfo);
-			if (!self::$fs->exists($destinationBase."/".$destinationDir)) {
-				self::$fs->mkdir($destinationBase."/".$destinationDir);
+			if (!$fs->exists($destinationBase."/".$destinationDir)) {
+				$fs->mkdir($destinationBase."/".$destinationDir);
 			}
-			if (!self::pathExists($packageName,$destinationBase."/".$destination)) {
-				self::$fs->copy($sourceBase.$source,$destinationBase."/".$destination,true);
-			}
+			$result   = self::pathExists($packageName, $destinationBase."/".$destination);
+			$override = ($result) ? true : false;
+			$fs->copy($sourceBase.$source, $destinationBase."/".$destination, $override);
 		}
 		
 	}
