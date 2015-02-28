@@ -84,30 +84,6 @@ class Fetch {
 		
 		Console::writeInfo("installing the starterkit...");
 		
-		// see if the source directory is empty
-		$emptyDir = true;
-		if (is_dir($sourceDir)) {
-			$objects  = new \DirectoryIterator($sourceDir);
-			foreach ($objects as $object) {
-				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
-					$emptyDir = false;
-				}
-			}
-		}
-		
-		// if source directory isn't empty ask if it's ok to nuke what's there
-		if (!$emptyDir) {
-			
-			$prompt  = "a starterkit is already installed. merge or replace?";
-			$options = "M/r";
-			$input   = Console::promptInput($prompt,$options);
-			
-			if ($answer == "r") {
-				Console::writeWarning("deleting the old files before installing the new starterkit...");
-				$fs->remove($checkDir);
-			}
-			
-		}
 		
 		// make sure the temp dir exists before copying into it
 		if (!is_dir($tempDirSK)) { 
@@ -132,6 +108,28 @@ class Fetch {
 			InstallerUtil::parseComposerExtraList($tempComposerJSON, $starterkit, $tempDirDist)
 		} else {
 			$fs->mirror($tempDirDist, $sourceDir);
+			
+			// see if the source directory is empty
+			$emptyDir = true;
+			if (is_dir($sourceDir)) {
+				$objects  = new \DirectoryIterator($sourceDir);
+				foreach ($objects as $object) {
+					if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+						$emptyDir = false;
+					}
+				}
+			}
+			
+			// if source directory isn't empty ask if it's ok to nuke what's there
+			if (!$emptyDir) {
+				
+				$prompt  = "a starterkit is already installed. merge or replace?";
+				$options = "M/r";
+				$input   = Console::promptInput($prompt,$options);
+				$options = ($input == "r") ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
+				
+			}
+			
 		}
 		
 		// remove the temp files
