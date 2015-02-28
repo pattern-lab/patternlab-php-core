@@ -329,6 +329,18 @@ class PatternData {
 	}
 	
 	/**
+	* Get a particular rule
+	* @param  {String}        the name of the pattern
+	*/
+	public static function getRule($ruleName) {
+		
+		if (isset(self::$rules[$ruleName])) {
+			return self::$rules[$ruleName];
+		}
+		
+		return false;
+		
+	}
 	* Load all of the rules related to Pattern Data
 	*/
 	public static function loadRules($options) {
