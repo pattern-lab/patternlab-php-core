@@ -120,7 +120,7 @@ class InstallerUtil {
 	 * Parse the extra section from composer.json
 	 * @param  {Object}     the JSON for the composer extra section
 	 */
-	public static function parseComposerExtraList($composerExtra) {
+	public static function parseComposerExtraList($composerExtra, $name, $pathDist) {
 		
 		// move assets to the base directory
 		if (isset($composerExtra["dist"]["baseDir"])) {
@@ -502,9 +502,7 @@ class InstallerUtil {
 			
 			// make sure that it has the name-spaced section of data to be parsed. if it exists parse it
 			if (isset($extra["patternlab"])) {
-				
-				self::parseComposerExtraList($extra["patternlab"]);
-				
+				self::parseComposerExtraList($extra["patternlab"], $name, $pathDist);
 			}
 			
 			// see if the package has a listener
