@@ -106,7 +106,6 @@ class Fetch {
 			$tempComposerJSON = json_decode(file_get_contents($tempComposerFile), true);
 			InstallerUtil::parseComposerExtraList($tempComposerJSON, $starterkit, $tempDirDist)
 		} else {
-			$fs->mirror($tempDirDist, $sourceDir);
 			
 			// see if the source directory is empty
 			$emptyDir = true;
@@ -128,6 +127,10 @@ class Fetch {
 				$options = ($input == "r") ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
 				
 			}
+			
+			Console::writeInfo("installing the starterkit files...");
+			$fs->mirror($tempDirDist, $sourceDir, null, $options);
+			Console::writeInfo("starterkit files have been installed...");
 			
 		}
 		
