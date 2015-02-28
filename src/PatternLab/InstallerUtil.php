@@ -21,8 +21,6 @@ use \Symfony\Component\Finder\Finder;
 
 class InstallerUtil {
 	
-	protected static $fs;
-	
 	/**
 	 * Move the component files from the package to their location in the patternlab-components dir
 	 * @param  {String/Array}   the items to create a fileList for
@@ -58,8 +56,6 @@ class InstallerUtil {
 		$baseDir = __DIR__."/../../../../../";
 		Config::init($baseDir,false);
 		
-		// load the file system function
-		self::$fs = new Filesystem();
 	}
 	
 	/**
@@ -73,9 +69,11 @@ class InstallerUtil {
 	 */
 	protected static function moveFiles($source,$destination,$packageName,$sourceBase,$destinationBase) {
 		
+		$fs = new Filesystem();
+		
 		// make sure the destination base exists
 		if (!is_dir($destinationBase)) {
-			self::$fs->mkdir($destinationBase);
+			$fs->mkdir($destinationBase);
 		}
 		
 		// clean any * or / on the end of $destination
@@ -336,7 +334,9 @@ class InstallerUtil {
 	 */
 	protected static function pathExists($packageName,$path) {
 		
-		if (self::$fs->exists($path)) {
+		$fs = new Filesystem;
+		
+		if ($fs->exists($path)) {
 			
 			// set-up a human readable prompt
 			$humanReadablePath = str_replace(Config::getOption("baseDir"), "./", $path);
