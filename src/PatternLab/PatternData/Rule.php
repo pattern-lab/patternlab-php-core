@@ -107,4 +107,19 @@ class Rule {
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
+	/**
+	* Get the value for a property on the current PatternData rule
+	* @param  {String}       the name of the property
+	*
+	* @return {Boolean}      whether the set was successful
+	*/
+	public function getProp($propName) {
+		
+		if (isset($this->$propName)) {
+			return $this->$propName;
+		}
+		
+		return false;
+		
+	}
 }
