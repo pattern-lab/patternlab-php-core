@@ -429,6 +429,16 @@ class Console {
 	}
 	
 	/**
+	* Make a path human readable by dropping the base dir
+	* @param  {String}        the path to clean
+	*
+	* @return {String}        cleaned up path
+	*/
+	public static function getHumanReadablePath($path) {
+		return str_replace(Config::getOption("baseDir"), "./", $path);
+	}
+	
+	/**
 	* Modify a line to include the given tag by default
 	* @param  {String}        the content to be written out
 	*/
