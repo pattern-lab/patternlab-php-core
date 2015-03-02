@@ -37,7 +37,7 @@
 		"symfony/event-dispatcher": "~2.5",
 		"symfony/filesystem": "~2.5",
 		"symfony/finder": "~2.5",
-		"kevinlebrun/colors.php": "0.*",
+		"kevinlebrun/colors.php": "~0.4",
 		"pattern-lab/unified-asset-installer": "dev-dev",
 		"alchemy/zippy": "~0.2.1"
 	}
