@@ -373,7 +373,7 @@ class Config {
 			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 		}
 		
-		if (is_array($options[$optionName])) {
+		if (isset($options[$optionName]) && is_array($options[$optionName])) {
 			$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
 			$options[$optionName] = array_merge($options[$optionName], $optionValue);
 		} else {
