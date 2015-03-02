@@ -318,7 +318,7 @@ class Config {
 				$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
-			
+				
 				if ($input == "y") {
 					self::writeUpdateConfigOption($optionName,$optionValue);
 					Console::writeInfo("config option ".$optionName." updated...", false, true);
