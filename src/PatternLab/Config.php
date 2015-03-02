@@ -318,7 +318,7 @@ class Config {
 				$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
-			
+				
 				if ($input == "y") {
 					self::writeUpdateConfigOption($optionName,$optionValue);
 					Console::writeInfo("config option ".$optionName." updated...", false, true);
@@ -373,7 +373,7 @@ class Config {
 			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 		}
 		
-		if (is_array($options[$optionName])) {
+		if (isset($options[$optionName]) && is_array($options[$optionName])) {
 			$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
 			$options[$optionName] = array_merge($options[$optionName], $optionValue);
 		} else {
