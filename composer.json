@@ -38,7 +38,7 @@
 		"symfony/filesystem": "~2.5",
 		"symfony/finder": "~2.5",
 		"kevinlebrun/colors.php": "~0.4",
-		"pattern-lab/unified-asset-installer": "dev-dev",
+		"pattern-lab/unified-asset-installer": "~0.5",
 		"alchemy/zippy": "~0.2.1"
 	}
 }
