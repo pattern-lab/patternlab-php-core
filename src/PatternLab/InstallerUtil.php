@@ -435,7 +435,7 @@ class InstallerUtil {
 				$suggestions = $extra["patternlab"]["starterKitSuggestions"];
 				
 				// suggest starterkits
-				Console::writeLine("suggested StarterKits that work with this edition:");
+				Console::writeInfo("suggested starterkits that work with this edition:", false, true);
 				foreach ($suggestions as $i => $suggestion) {
 					
 					// write each suggestion
@@ -445,6 +445,7 @@ class InstallerUtil {
 				}
 				
 				// prompt for input on the suggestions
+				Console::writeLine("");
 				$prompt  = "choose an option or hit return to skip:";
 				$options = "(ex. 1)";
 				$input   = Console::promptInput($prompt,$options);
