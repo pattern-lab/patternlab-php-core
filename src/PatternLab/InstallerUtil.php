@@ -440,6 +440,44 @@ class InstallerUtil {
 	}
 	
 	/**
+	 * Ask questions after the create package is done
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function postCreateProjectCmd($event) {
+		
+		print $event->getOperation()->getPackage()->getName();
+		
+		// run the console and config inits
+		/*self::init();
+		
+		print_r($event)
+		if (Config::getOption("patternExtension")) {
+			
+		}
+		$input = Console::promptInput("Install the base StarterKit for Twig?","(Y/n)");
+		
+		if ($input == "y") {
+			$patternEngine = Config::getOption("patternExtension");
+			$starterkit    = "pattern-lab/starterkit-".$patternEngine."-base";
+		}
+		
+			if ($starterkit) {
+
+				// download the starterkit
+				$f = new Fetch();
+				$f->fetchStarterKit($starterkit);
+			
+		} else if ($input == "n") {
+			
+		} else {
+			Console::writeWarning("i didn't understand that input. so you can just set that up after the install finishes");
+		}
+		*/
+		
+	}
+	
+	
+	/**
 	 * Make sure pattern engines and listeners are removed on uninstall
 	 * @param  {Object}     a script event object from composer
 	 */
