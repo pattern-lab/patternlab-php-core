@@ -421,34 +421,59 @@ class InstallerUtil {
 	 */
 	public static function postCreateProjectCmd($event) {
 		
-		print $event->getComposer()->getPackage()->getName();
+		// see if there is an extra component
+		$extra = $event->getComposer()->getPackage()->getExtra();
 		
-		// run the console and config inits
-		/*self::init();
-		
-		print_r($event)
-		if (Config::getOption("patternExtension")) {
+		if (isset($extra["patternlab"])) {
+			
+			self::init();
+			Console::writeLine("");
+			
+			// see if we have any starterkits to suggest
+			if (isset($extra["patternlab"]["starterKitSuggestions"]) && is_array($extra["patternlab"]["starterKitSuggestions"])) {
+				
+				$suggestions = $extra["patternlab"]["starterKitSuggestions"];
+				
+				// suggest starterkits
+				Console::writeLine("suggested StarterKits that work with this edition:");
+				foreach ($suggestions as $i => $suggestion) {
+					
+					// write each suggestion
+					Console::writeLine($i.": ".$suggestion, true);
+					
+				}
+				
+				// prompt for input on the suggestions
+				$prompt  = "choose an option or hit return to skip:";
+				$options = "(ex. 1)";
+				$input   = Console::promptInput($prompt,$options);
+				
+				if (isset($suggestions[$input])) {
+					
+					Console::writeLine("");
+					$f = new Fetch();
+					$result = $f->fetchStarterKit($suggestions[$input]);
+					
+					if ($result) {
+						
+						Console::writeLine("");
+						$g = new Generator();
+						$g->generate(array("foo" => "bar"));
+						
+						Console::writeLine("");
+						Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
+						
+					}
+					
+				} else {
+					
+					Console::writeWarning("you will need to install a StarterKit before using Pattern Lab...");
+					
+				}
+				
+			}
 			
 		}
-		$input = Console::promptInput("Install the base StarterKit for Twig?","(Y/n)");
-		
-		if ($input == "y") {
-			$patternEngine = Config::getOption("patternExtension");
-			$starterkit    = "pattern-lab/starterkit-".$patternEngine."-base";
-		}
-		
-			if ($starterkit) {
-
-				// download the starterkit
-				$f = new Fetch();
-				$f->fetchStarterKit($starterkit);
-			
-		} else if ($input == "n") {
-			
-		} else {
-			Console::writeWarning("i didn't understand that input. so you can just set that up after the install finishes");
-		}
-		*/
 		
 	}
 	
