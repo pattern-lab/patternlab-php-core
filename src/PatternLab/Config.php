@@ -315,7 +315,7 @@ class Config {
 			if ($currentOptionValue != $newOptionValue) {
 				
 				// prompt for input
-				$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$newOptionValue."</desc>?";
+				$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
 				
