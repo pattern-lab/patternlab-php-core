@@ -416,30 +416,6 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Make sure certain things are set-up before running the installation of dependencies for a project
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function postRootPackageInstall($event) {
-		
-		// run the console and config inits
-		self::init();
-		
-		// default vars
-		$sourceDir   = Config::getOption("sourceDir");
-		$packagesDir = Config::getOption("packagesDir");
-		
-		// check directories
-		if (!is_dir($sourceDir)) {
-			mkdir($sourceDir);
-		}
-		
-		if (!is_dir($packagesDir)) {
-			mkdir($packagesDir);
-		}
-		
-	}
-	
-	/**
 	 * Ask questions after the create package is done
 	 * @param  {Object}     a script event object from composer
 	 */
@@ -476,6 +452,29 @@ class InstallerUtil {
 		
 	}
 	
+	/**
+	 * Make sure certain things are set-up before running the installation of a package
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function preInstallCmd($event) {
+		
+		// run the console and config inits
+		self::init();
+		
+		// default vars
+		$sourceDir   = Config::getOption("sourceDir");
+		$packagesDir = Config::getOption("packagesDir");
+		
+		// check directories
+		if (!is_dir($sourceDir)) {
+			mkdir($sourceDir);
+		}
+		
+		if (!is_dir($packagesDir)) {
+			mkdir($packagesDir);
+		}
+		
+	}
 	
 	/**
 	 * Make sure pattern engines and listeners are removed on uninstall
