@@ -105,7 +105,7 @@ class Config {
 			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
-			self::$plConfigPath        = self::$options["baseDir"].self::$plConfigPath;
+			self::$plConfigPath        = self::$options["baseDir"]."/vendor/pattern-lab/core/".self::$plConfigPath;
 			self::$dirAdded            = true;
 			
 			// just in case the config directory doesn't exist at all
