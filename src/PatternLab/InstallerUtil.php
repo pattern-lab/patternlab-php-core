@@ -421,7 +421,7 @@ class InstallerUtil {
 	 */
 	public static function postCreateProjectCmd($event) {
 		
-		print $event->getOperation()->getPackage()->getName();
+		print $event->getComposer()->getPackage()->getName();
 		
 		// run the console and config inits
 		/*self::init();
