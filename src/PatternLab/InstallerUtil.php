@@ -575,7 +575,7 @@ class InstallerUtil {
 				self::scanForPatternEngineRule($pathBase);
 			} else if ($type == "patternlab-starterkit") {
 				Config::updateConfigOption("starterKit",$name);
-			} else if ($type == "patternlab-styleguidekit") {
+			} else if (($type == "patternlab-styleguidekit") && (strpos($type,"-assets-") === false)) {
 				Config::updateConfigOption("styleguideKit",$name);
 			}
 			
