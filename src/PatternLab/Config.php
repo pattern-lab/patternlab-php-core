@@ -26,7 +26,7 @@ class Config {
 	protected static $userConfigDirClean = "config";
 	protected static $userConfigDirDash  = "_config";
 	protected static $userConfigPath     = "";
-	protected static $plConfigPath       = "../../config/config.yml.default";
+	protected static $plConfigPath       = "config/config.yml.default";
 	protected static $dirAdded           = false;
 	
 	/**
@@ -105,7 +105,7 @@ class Config {
 			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
-			self::$plConfigPath        = __DIR__.DIRECTORY_SEPARATOR.self::$plConfigPath;
+			self::$plConfigPath        = self::$options["baseDir"].self::$plConfigPath;
 			self::$dirAdded            = true;
 			
 			// just in case the config directory doesn't exist at all
