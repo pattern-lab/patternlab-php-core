@@ -416,10 +416,10 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Make sure certain things are set-up before running composer's install
+	 * Make sure certain things are set-up before running the installation of dependencies for a project
 	 * @param  {Object}     a script event object from composer
 	 */
-	public static function preInstallCmd($event) {
+	public static function postRootPackageInstall($event) {
 		
 		// run the console and config inits
 		self::init();
