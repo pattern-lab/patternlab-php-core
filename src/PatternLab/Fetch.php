@@ -147,6 +147,8 @@ class Fetch {
 		
 		Console::writeInfo("the starterkit installation is complete...");
 		
+		return true;
+		
 	}
 	
 	/**
