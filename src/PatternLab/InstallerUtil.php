@@ -439,7 +439,8 @@ class InstallerUtil {
 				foreach ($suggestions as $i => $suggestion) {
 					
 					// write each suggestion
-					Console::writeLine($i.": ".$suggestion, true);
+					$num = $i + 1;
+					Console::writeLine($num.": ".$suggestion, true);
 					
 				}
 				
@@ -447,12 +448,13 @@ class InstallerUtil {
 				$prompt  = "choose an option or hit return to skip:";
 				$options = "(ex. 1)";
 				$input   = Console::promptInput($prompt,$options);
+				$result  = (int)$input - 1;
 				
-				if (isset($suggestions[$input])) {
+				if (isset($suggestions[$result])) {
 					
 					Console::writeLine("");
 					$f = new Fetch();
-					$result = $f->fetchStarterKit($suggestions[$input]);
+					$result = $f->fetchStarterKit($suggestions[$result]);
 					
 					if ($result) {
 						
