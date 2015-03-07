@@ -29,12 +29,21 @@ class ServerCommand extends Command {
 	
 	public function run() {
 		
-		// set-up defaults
-		$publicDir = Config::getOption("publicDir");
-		$coreDir   = Config::getOption("coreDir");
-		
-		Console::writeInfo("server started on localhost:8080. use ctrl+c to exit...");
-		passthru("cd ".$publicDir." && ".$_SERVER["_"]." -S localhost:8080 ".$coreDir."/server/router.php");
+		if (version_compare(phpversion(), '5.4.0', '<')) {
+			
+			Console::writeWarning("you must have PHP 5.4.0 or greater to use this feature. you are using PHP ".phpversion()."...");
+			
+		} else {
+			
+			// set-up defaults
+			$publicDir = Config::getOption("publicDir");
+			$coreDir   = Config::getOption("coreDir");
+			
+			// start-up the server with the router
+			Console::writeInfo("server started on localhost:8080. use ctrl+c to exit...");
+			passthru("cd ".$publicDir." && ".$_SERVER["_"]." -S localhost:8080 ".$coreDir."/server/router.php");
+			
+		}
 		
 	}
 	
