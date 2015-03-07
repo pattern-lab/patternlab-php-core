@@ -23,6 +23,7 @@ use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
 use \PatternLab\PatternData\Helpers\LineageHelper;
 use \PatternLab\PatternData\Helpers\PatternCodeHelper;
 use \PatternLab\PatternData\Helpers\PatternStateHelper;
+use \PatternLab\PatternData\Helpers\RawPatternHelper;
 use \PatternLab\Timer;
 
 class PatternData {
@@ -153,6 +154,17 @@ class PatternData {
 		$dataMergeExporter       = new DataMergeExporter();
 		$dataMergeExporter->run();
 		
+		// dispatch that the raw pattern helper is about to start
+		$event = new PatternDataEvent($options);
+		$dispatcherInstance->dispatch("patternData.rawPatternHelperStart",$event);
+		
+		// add the lineage info to PatternData::$store
+		$rawPatternHelper        = new RawPatternHelper();
+		$rawPatternHelper->run();
+		
+		// dispatch that the raw pattern helper is ended
+		$event = new PatternDataEvent($options);
+		$dispatcherInstance->dispatch("patternData.rawPatternHelperEnd",$event);
 		// add the lineage info to PatternData::$store
 		$lineageHelper           = new LineageHelper();
 		$lineageHelper->run();
