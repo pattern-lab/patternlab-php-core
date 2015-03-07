@@ -158,15 +158,7 @@ class InstallerUtil {
 		// see if we need to modify the config
 		if (isset($composerExtra["config"])) {
 			
-			print_r($composerExtra["config"]);
-			
-			foreach ($composerExtra["config"] as $optionInfo) {
-				
-				// get config info
-				$option = key($optionInfo);
-				$value  = $optionInfo[$option];
-				
-				Console::writeLine($option.": ".$value);
+			foreach ($composerExtra["config"] as $option => $value) {
 				
 				// update the config option
 				Config::updateConfigOption($option,$value);
