@@ -60,6 +60,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 						} else {
 							
 							if (strpos($lineage, '/') === false) {
+								$fileName = $patternStoreData["pathName"].".".$patternExtension;
 								Console::writeWarning("you may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern...");
 							}
 							
