@@ -26,7 +26,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		
 		parent::__construct($options);
 		
-		$this->lineageMatch    = Config::getOption("lineageMatch");
+		$this->lineageMatch    = html_entity_decode(Config::getOption("lineageMatch"),ENT_QUOTES);
 		$this->lineageMatchKey = Config::getOption("lineageMatchKey");
 		
 	}
