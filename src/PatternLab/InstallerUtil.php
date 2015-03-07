@@ -158,6 +158,8 @@ class InstallerUtil {
 		// see if we need to modify the config
 		if (isset($composerExtra["config"])) {
 			
+			print_r($composerExtra["config"]);
+			
 			foreach ($composerExtra["config"] as $optionInfo) {
 				
 				// get config info
