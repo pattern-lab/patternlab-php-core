@@ -62,8 +62,6 @@ class Fetch {
 		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist";
 		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
 		
-		$fs = new Filesystem();
-		
 		// figure out the options for the GH path
 		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
 		
@@ -103,40 +101,19 @@ class Fetch {
 		if (file_exists($tempComposerFile)) {
 			
 			$tempComposerJSON = json_decode(file_get_contents($tempComposerFile), true);
+			
+			// see if it has a patternlab section that might define the files to move
 			if (isset($tempComposerJSON["extra"]) && isset($tempComposerJSON["extra"]["patternlab"])) {
 				Console::writeInfo("installing the starterkit...");
 				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist);
 				Console::writeInfo("installed the starterkit...");
 			} else {
-				Console::writeError("the starterkit's composer.json file didn't have a valid format. missing patternlab directives...");
+				$this->mirrorDist($sourceDir, $tempDirDist);
 			}
 			
 		} else {
 			
-			// see if the source directory is empty
-			$emptyDir = true;
-			if (is_dir($sourceDir)) {
-				$objects  = new \DirectoryIterator($sourceDir);
-				foreach ($objects as $object) {
-					if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
-						$emptyDir = false;
-					}
-				}
-			}
-			
-			// if source directory isn't empty ask if it's ok to nuke what's there
-			if (!$emptyDir) {
-				
-				$prompt  = "a starterkit is already installed. merge or replace?";
-				$options = "M/r";
-				$input   = Console::promptInput($prompt,$options);
-				$options = ($input == "r") ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
-				
-			}
-			
-			Console::writeInfo("installing the starterkit files...");
-			$fs->mirror($tempDirDist, $sourceDir, null, $options);
-			Console::writeInfo("starterkit files have been installed...");
+			$this->mirrorDist($sourceDir, $tempDirDist);
 			
 		}
 		
@@ -146,6 +123,8 @@ class Fetch {
 		$fs->remove($tempDir);
 		
 		Console::writeInfo("the starterkit installation is complete...");
+		
+		return true;
 		
 	}
 	
@@ -172,6 +151,45 @@ class Fetch {
 		}
 		
 		return array($org,$repo,$tag);
+		
+	}
+	
+	/**
+	 * Force mirror the dist/ folder to source/
+	 * @param  {String}    path to the source directory
+	 * @param  {String}    path to the temp dist directory
+	 */
+	protected function mirrorDist($sourceDir, $tempDirDist) {
+		
+		// set default vars
+		$fsOptions = array();
+		$emptyDir = true;
+		
+		// see if the source directory is empty
+		if (is_dir($sourceDir)) {
+			$objects  = new \DirectoryIterator($sourceDir);
+			foreach ($objects as $object) {
+				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+					$emptyDir = false;
+				}
+			}
+		}
+		
+		// if source directory isn't empty ask if it's ok to nuke what's there
+		if (!$emptyDir) {
+			
+			$prompt    = "a starterkit is already installed. merge the new files with it or replace it?";
+			$options   = "M/r";
+			$input     = Console::promptInput($prompt,$options);
+			$fsOptions = ($input == "r") ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
+			
+		}
+		
+		// mirror dist to source
+		Console::writeInfo("installing the starterkit files...");
+		$fs = new Filesystem();
+		$fs->mirror($tempDirDist, $sourceDir, null, $options);
+		Console::writeInfo("starterkit files have been installed...");
 		
 	}
 	

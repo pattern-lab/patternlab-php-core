@@ -19,9 +19,15 @@ use \PatternLab\Timer;
 
 class LineageHelper extends \PatternLab\PatternData\Helper {
 	
+	protected $lineageMatch;
+	protected $lineageMatchKey;
+	
 	public function __construct($options = array()) {
 		
 		parent::__construct($options);
+		
+		$this->lineageMatch    = html_entity_decode(Config::getOption("lineageMatch"),ENT_QUOTES);
+		$this->lineageMatchKey = Config::getOption("lineageMatchKey");
 		
 	}
 	
@@ -39,12 +45,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
 				
 				$patternLineages = array();
-				$fileName        = $patternStoreData["pathName"].".".$patternExtension;
-				$fileNameFull    = $patternSourceDir."/".$fileName;
-				
-				if (file_exists($fileNameFull)) {
-					$foundLineages = $this->findLineages($fileNameFull);
-				}
+				$fileData        = isset($patternStoreData["patternRaw"]) ? $patternStoreData["patternRaw"] : "";
+				$foundLineages   = $this->findLineages($fileData);
 				
 				if (!empty($foundLineages)) {
 					
@@ -58,6 +60,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 						} else {
 							
 							if (strpos($lineage, '/') === false) {
+								$fileName = $patternStoreData["pathName"].".".$patternExtension;
 								Console::writeWarning("you may have a typo in ".$fileName.". {{> ".$lineage." }} is not a valid pattern...");
 							}
 							
@@ -160,14 +163,13 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 	
 	/**
 	* Get the lineage for a given pattern by parsing it and matching mustache partials
-	* @param  {String}       the filename for the pattern to be parsed
+	* @param  {String}       the data from the raw pattern
 	*
 	* @return {Array}        a list of patterns
 	*/
-	protected function findLineages($filename) {
-		$data = file_get_contents($filename);
-		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-_]+)(?:\:[A-Za-z0-9-]+)?(?:(| )\(.*)?([ ]+)?}}/',$data,$matches)) {
-			return array_unique($matches[2]);
+	protected function findLineages($data) {
+		if (preg_match_all("/".$this->lineageMatch."/",$data,$matches)) {
+			return array_unique($matches[$this->lineageMatchKey]);
 		}
 		return array();
 	}

@@ -158,11 +158,7 @@ class InstallerUtil {
 		// see if we need to modify the config
 		if (isset($composerExtra["config"])) {
 			
-			foreach ($composerExtra["config"] as $optionInfo) {
-				
-				// get config info
-				$option = key($optionInfo);
-				$value  = $optionInfo[$option];
+			foreach ($composerExtra["config"] as $option => $value) {
 				
 				// update the config option
 				Config::updateConfigOption($option,$value);
@@ -416,7 +412,72 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Make sure certain things are set-up before running composer's install
+	 * Ask questions after the create package is done
+	 * @param  {Object}     a script event object from composer
+	 */
+	public static function postCreateProjectCmd($event) {
+		
+		// see if there is an extra component
+		$extra = $event->getComposer()->getPackage()->getExtra();
+		
+		if (isset($extra["patternlab"])) {
+			
+			self::init();
+			Console::writeLine("");
+			
+			// see if we have any starterkits to suggest
+			if (isset($extra["patternlab"]["starterKitSuggestions"]) && is_array($extra["patternlab"]["starterKitSuggestions"])) {
+				
+				$suggestions = $extra["patternlab"]["starterKitSuggestions"];
+				
+				// suggest starterkits
+				Console::writeInfo("suggested starterkits that work with this edition:", false, true);
+				foreach ($suggestions as $i => $suggestion) {
+					
+					// write each suggestion
+					$num = $i + 1;
+					Console::writeLine($num.": ".$suggestion, true);
+					
+				}
+				
+				// prompt for input on the suggestions
+				Console::writeLine("");
+				$prompt  = "choose an option or hit return to skip:";
+				$options = "(ex. 1)";
+				$input   = Console::promptInput($prompt,$options);
+				$result  = (int)$input - 1;
+				
+				if (isset($suggestions[$result])) {
+					
+					Console::writeLine("");
+					$f = new Fetch();
+					$result = $f->fetchStarterKit($suggestions[$result]);
+					
+					if ($result) {
+						
+						Console::writeLine("");
+						$g = new Generator();
+						$g->generate(array("foo" => "bar"));
+						
+						Console::writeLine("");
+						Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
+						
+					}
+					
+				} else {
+					
+					Console::writeWarning("you will need to install a StarterKit before using Pattern Lab...");
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Make sure certain things are set-up before running the installation of a package
 	 * @param  {Object}     a script event object from composer
 	 */
 	public static function preInstallCmd($event) {
@@ -513,7 +574,7 @@ class InstallerUtil {
 				self::scanForPatternEngineRule($pathBase);
 			} else if ($type == "patternlab-starterkit") {
 				Config::updateConfigOption("starterKit",$name);
-			} else if ($type == "patternlab-styleguidekit") {
+			} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
 				Config::updateConfigOption("styleguideKit",$name);
 			}
 			

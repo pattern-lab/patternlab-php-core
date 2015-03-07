@@ -222,7 +222,6 @@ class Builder {
 		$patternSourceDir = Config::getOption("patternSourceDir");
 		$patternExtension = Config::getOption("patternExtension");
 		
-		
 		// make sure the export dir exists
 		if ($exportFiles && !is_dir($exportDir)) {
 			mkdir($exportDir);

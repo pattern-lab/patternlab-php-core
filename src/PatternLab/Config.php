@@ -26,7 +26,7 @@ class Config {
 	protected static $userConfigDirClean = "config";
 	protected static $userConfigDirDash  = "_config";
 	protected static $userConfigPath     = "";
-	protected static $plConfigPath       = "../../config/config.yml.default";
+	protected static $plConfigPath       = "config/config.yml.default";
 	protected static $dirAdded           = false;
 	
 	/**
@@ -105,7 +105,7 @@ class Config {
 			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
-			self::$plConfigPath        = __DIR__.DIRECTORY_SEPARATOR.self::$plConfigPath;
+			self::$plConfigPath        = self::$options["baseDir"]."vendor/pattern-lab/core/".self::$plConfigPath;
 			self::$dirAdded            = true;
 			
 			// just in case the config directory doesn't exist at all
@@ -315,7 +315,7 @@ class Config {
 			if ($currentOptionValue != $newOptionValue) {
 				
 				// prompt for input
-				$prompt  = "update the config option <desc>".$optionName."</desc> with the value <desc>".$newOptionValue."</desc>?";
+				$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options);
 				
