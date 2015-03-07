@@ -45,12 +45,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
 				
 				$patternLineages = array();
-				$fileName        = $patternStoreData["pathName"].".".$patternExtension;
-				$fileNameFull    = $patternSourceDir."/".$fileName;
-				
-				if (file_exists($fileNameFull)) {
-					$foundLineages = $this->findLineages($fileNameFull);
-				}
+				$fileData        = isset($patternStoreData["patternRaw"]) ? $patternStoreData["patternRaw"] : "";
+				$foundLineages   = $this->findLineages($fileData);
 				
 				if (!empty($foundLineages)) {
 					
