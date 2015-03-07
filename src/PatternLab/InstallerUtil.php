@@ -166,6 +166,8 @@ class InstallerUtil {
 				$option = key($optionInfo);
 				$value  = $optionInfo[$option];
 				
+				Console::writeLine($option.": ".$value);
+				
 				// update the config option
 				Config::updateConfigOption($option,$value);
 				
