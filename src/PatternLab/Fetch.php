@@ -119,6 +119,7 @@ class Fetch {
 		
 		// remove the temp files
 		Console::writeInfo("cleaning up the temp files...");
+		$fs = new Filesystem();
 		$fs->remove($tempFile);
 		$fs->remove($tempDir);
 		
