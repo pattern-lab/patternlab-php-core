@@ -56,6 +56,8 @@ class InstallerUtil {
 		$baseDir = __DIR__."/../../../../../";
 		Config::init($baseDir,false);
 		
+		Dispatcher::init();
+		
 	}
 	
 	/**
