@@ -49,6 +49,9 @@ class InstallerUtil {
 	*/
 	protected static function init() {
 		
+		// start the timer
+		Timer::start();
+		
 		// initialize the console to print out any issues
 		Console::init();
 		
