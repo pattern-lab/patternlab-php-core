@@ -86,6 +86,7 @@ class Watcher extends Builder {
 		$sourceDir  = Config::getOption("sourceDir");
 		$ignoreExts = Config::getOption("ie");
 		$ignoreDirs = Config::getOption("id");
+		$patternExt = Config::getOption("patternExtension");
 		
 		// run forever
 		while (true) {
@@ -105,7 +106,7 @@ class Watcher extends Builder {
 				$fileName      = str_replace($sourceDir."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
-				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
+				if ($object->isFile() && (($object->getExtension() == $patternExt) || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
 					
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
@@ -121,8 +122,8 @@ class Watcher extends Builder {
 						} else if (!isset($o->patterns->$fileName) && $c) {
 							$o->patterns->$fileName = $mt;
 							$this->updateSite($fileName,"added");
-							if ($object->getExtension() == "mustache") {
-								$patternSrcPath  = str_replace(".mustache","",$fileName);
+							if ($object->getExtension() == $patternExt) {
+								$patternSrcPath  = str_replace(".".$patternExt,"",$fileName);
 								$patternDestPath = str_replace("/","-",$patternSrcPath);
 								$render = ($pattern[0] != "_") ? true : false;
 								$this->patternPaths[$patternParts[0]][$pattern] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "render" => $render);
