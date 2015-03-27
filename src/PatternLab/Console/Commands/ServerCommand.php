@@ -24,8 +24,9 @@ class ServerCommand extends Command {
 		$this->command = "server";
 		
 		Console::setCommand($this->command,"Start the PHP-based server","The server command will start PHP's web server for you.","s");
-		Console::setCommandOption($this->command,"host:","Provide a custom hostname. Default value is <path>localhost</path>.","To use a custom hostname:","","<host>");
-		Console::setCommandOption($this->command,"port:","Provide a custom port. Default value is <path>8080</path>.","To use a custom port:","","<port>");
+		Console::setCommandOption($this->command,"host:","Provide a custom hostname. Default value is <path>localhost</path>.","To use a custom hostname and the default port:","","<host>");
+		Console::setCommandOption($this->command,"port:","Provide a custom port. Default value is <path>8080</path>.","To use a custom port and the default hostname:","","<port>");
+		Console::setCommandSample($this->command,"To provide both a custom hostname and port:","--host <host> --port <port>");
 		
 	}
 	
