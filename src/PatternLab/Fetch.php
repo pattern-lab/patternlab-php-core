@@ -121,7 +121,7 @@ class Fetch {
 		Console::writeInfo("cleaning up the temp files...");
 		$fs = new Filesystem();
 		$fs->remove($tempFile);
-		$fs->remove($tempDir);
+		$fs->remove($tempDirSK);
 		
 		Console::writeInfo("the starterkit installation is complete...");
 		
