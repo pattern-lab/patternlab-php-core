@@ -34,13 +34,13 @@ class Fetch {
 		if (empty($package)) {
 			Console::writeError("please provide a path for the package before trying to fetch it...");
 		}
-
+		
 		// run composer
 		$composerPath = Config::getOption("coreDir").DIRECTORY_SEPARATOR."bin/composer.phar";
 		passthru("php ".$composerPath." require ".$package);
-				
-	}
 		
+	}
+	
 	/**
 	 * Fetch a package from GitHub
 	 * @param  {String}    the command option to provide the rule for
@@ -49,12 +49,12 @@ class Fetch {
 	 * @return {String}    the modified file contents
 	 */
 	public function fetchStarterKit($starterkit = "") {
-
+		
 		// double-checks options was properly set
 		if (empty($starterkit)) {
 			Console::writeError("please provide a path for the starterkit before trying to fetch it...");
 		}
-
+		
 		// set default attributes
 		$sourceDir        = Config::getOption("sourceDir");
 		$tempDir          = sys_get_temp_dir();
