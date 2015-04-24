@@ -165,13 +165,15 @@ class Fetch {
 		// set default vars
 		$fsOptions = array();
 		$emptyDir = true;
+		$validFiles = array("README",".gitkeep",".DS_Store","styleguide");
 		
 		// see if the source directory is empty
 		if (is_dir($sourceDir)) {
 			$objects  = new \DirectoryIterator($sourceDir);
 			foreach ($objects as $object) {
-				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+				if (!$object->isDot() && !in_array($object->getFilename(),$validFiles)) {
 					$emptyDir = false;
+					break;
 				}
 			}
 		}
