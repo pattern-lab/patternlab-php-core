@@ -23,7 +23,7 @@ use \Symfony\Component\Yaml\Yaml;
 class Data {
 	
 	protected static $store        = array();
-	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
+	protected static $reservedKeys = array("cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
 	
 	/**
 	* Clear all of the data in the $store
@@ -76,7 +76,7 @@ class Data {
 			$data          = array();
 			$fileName      = $file->getFilename();
 			$hidden        = ($fileName[0] == "_");
-			$isListItems   = strpos("listitems",$fileName);
+			$isListItems   = strpos($fileName,"listitems");
 			$pathName      = $file->getPathname();
 			$pathNameClean = str_replace($sourceDir."/","",$pathName);
 			
@@ -113,7 +113,7 @@ class Data {
 					
 				} else if ($isListItems !== false) {
 					
-					$data = ($ext == "json") ? self::getListItems("data/listitems.json") : self::getListItems("data/listitems.yaml","yaml");
+					$data = ($ext == "json") ? self::getListItems("_data/".$fileName) : self::getListItems("_data/".$fileName,"yaml");
 					
 					if (!isset(self::$store["listItems"])) {
 						self::$store["listItems"] = array();
@@ -159,7 +159,7 @@ class Data {
 	*
 	* @return {Array}        the final set of list items
 	*/
-	protected static function getListItems($filepath,$ext = "json") {
+	public static function getListItems($filepath,$ext = "json") {
 		
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
