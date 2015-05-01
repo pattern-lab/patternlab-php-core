@@ -115,7 +115,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		if ($depth == 2) {
 			$patternStoreData["subtype"]     = $patternSubtype;
 			$patternStoreData["subtypeDash"] = $patternSubtypeDash;
-			$patternStoreData["breadcrumb"]  = $patternType." &gt; ".$patternSubtype;
+			$patternStoreData["breadcrumb"]  = $patternType." > ".$patternSubtype;
 		}
 		
 		$patternDataBase = array();
