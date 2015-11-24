@@ -478,7 +478,7 @@ class PatternData {
 	
 		if (isset(self::$store[$patternStoreKey]) && isset(self::$store[$patternStoreKey][$optionName]) && isset(self::$store[$patternStoreKey][$optionName][$patternSubStoreKey])) {
 			
-			self::$store[$patternStoreKey][$optionName][$patternLineageKey][$optionSubName] = $optionSubValue;
+			self::$store[$patternStoreKey][$optionName][$patternSubStoreKey][$optionSubName] = $optionSubValue;
 			return true;
 			
 		}
