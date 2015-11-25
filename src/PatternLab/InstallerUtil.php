@@ -655,7 +655,7 @@ class InstallerUtil {
 		foreach ($finder as $file) {
 			
 			/// create the name
-			$dirs              = explode("/",$file->getPath());
+			$dirs              = explode(DIRECTORY_SEPARATOR,$file->getPath());
 			$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$file->getFilename());
 			
 			// check what we should do with the pattern engine info
