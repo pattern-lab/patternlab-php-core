@@ -128,8 +128,8 @@ class PatternData {
 			$isDir    = $object->isDir();
 			$isFile   = $object->isFile();
 			
-			$path     = str_replace($patternSourceDir."/","",$object->getPath());
-			$pathName = str_replace($patternSourceDir."/","",$object->getPathname());
+			$path     = str_replace($patternSourceDir.DIRECTORY_SEPARATOR,"",$object->getPath());
+			$pathName = str_replace($patternSourceDir.DIRECTORY_SEPARATOR,"",$object->getPathname());
 			$name     = $object->getFilename();
 			$depth    = substr_count($pathName,DIRECTORY_SEPARATOR);
 			
