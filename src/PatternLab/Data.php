@@ -285,7 +285,7 @@ class Data {
 		if (isset($d["patternSpecific"]) && array_key_exists($patternPartial,$d["patternSpecific"])) {
 
 			if (!empty($d["patternSpecific"][$patternPartial]["data"])) {
-				$d = array_replace_recursive($d, $d["patternSpecific"][$patternPartial]["data"]);
+				$d = array_merge($d, $d["patternSpecific"][$patternPartial]["data"]);
 			}
 
 			if (!empty($d["patternSpecific"][$patternPartial]["listItems"])) {
@@ -297,7 +297,7 @@ class Data {
 
 				while ($k < $c) {
 					$section = $numbers[$k];
-					$d["listItems"][$section] = array_replace_recursive( $d["listItems"][$section], $d["patternSpecific"][$patternPartial]["listItems"][$section]);
+					$d["listItems"][$section] = array_merge( $d["listItems"][$section], $d["patternSpecific"][$patternPartial]["listItems"][$section]);
 					$k++;
 				}
 
