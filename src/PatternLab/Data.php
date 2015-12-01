@@ -21,17 +21,41 @@ use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
 
 class Data {
-	
+
 	protected static $store        = array();
 	protected static $reservedKeys = array("cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
-	
+
 	/**
 	* Clear all of the data in the $store
 	*/
 	public static function clear() {
 		self::$store = array();
 	}
-	
+
+	/**
+	* Go through data and replace any values that match items from the link.array
+	* @param  {String}       an entry from one of the list-based config entries
+	*
+	* @return {String}       trimmed version of the given $v var
+	*/
+	public static function compareReplaceListVars(&$value) {
+		if (is_string($value)) {
+			$valueCheck = strtolower($value);
+			$valueThin  = str_replace("link.","",$valueCheck);
+			$linkStore  = self::getOption("link");
+			if ((strpos($valueCheck, 'link.') !== false) && array_key_exists($valueThin,$linkStore)) {
+				$value = $linkStore[$valueThin];
+			}
+		}
+	}
+
+	/**
+	* Set-up the array_walk_recursive so that the data can be properly saved in scope
+	*/
+	public static function compareReplaceListVarsInit() {
+		array_walk_recursive(self::$store,'\PatternLab\Data::compareReplaceListVars');
+	}
+
 	/**
 	* Gather data from any JSON and YAML files in source/_data
 	*
@@ -44,13 +68,13 @@ class Data {
 	* @return {Array}        populates Data::$store
 	*/
 	public static function gather($options = array()) {
-		
+
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
-		
+
 		// dispatch that the data gather has started
 		$dispatcherInstance->dispatch("data.gatherStart");
-		
+
 		// default vars
 		$found         = false;
 		$dataJSON      = array();
@@ -58,20 +82,20 @@ class Data {
 		$listItemsJSON = array();
 		$listItemsYAML = array();
 		$sourceDir     = Config::getOption("sourceDir");
-		
+
 		// iterate over all of the other files in the source directory
 		if (!is_dir($sourceDir."/_data/")) {
 			Console::writeWarning("<path>_data/</path> doesn't exist so you won't have dynamic data...");
 			mkdir($sourceDir."/_data/");
 		}
-		
+
 		// find the markdown-based annotations
 		$finder = new Finder();
 		$finder->files()->in($sourceDir."/_data/");
 		$finder->sortByName();
-		
+
 		foreach ($finder as $name => $file) {
-			
+
 			$ext           = $file->getExtension();
 			$data          = array();
 			$fileName      = $file->getFilename();
@@ -79,54 +103,56 @@ class Data {
 			$isListItems   = strpos($fileName,"listitems");
 			$pathName      = $file->getPathname();
 			$pathNameClean = str_replace($sourceDir."/","",$pathName);
-			
+
 			if (!$hidden && (($ext == "json") || ($ext == "yaml"))) {
-				
+
 				if ($isListItems === false) {
-					
+
 					if ($ext == "json") {
-						
+
 						$file = file_get_contents($pathName);
 						$data = json_decode($file,true);
 						if ($jsonErrorMessage = JSON::hasError()) {
 							JSON::lastErrorMsg($pathNameClean,$jsonErrorMessage,$data);
 						}
-						
+
 					} else if ($ext == "yaml") {
-						
+
 						$file = file_get_contents($pathName);
-						
+
 						try {
 							$data = YAML::parse($file);
 						} catch (ParseException $e) {
 							printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
 						}
-						
+
 						// single line of text won't throw a YAML error. returns as string
 						if (gettype($data) == "string") {
 							$data = array();
 						}
-						
+
 					}
-					
-					self::$store = array_replace_recursive(self::$store,$data);
-					
+
+					if (is_array($data)) {
+						self::$store = array_replace_recursive(self::$store,$data);
+					}
+
 				} else if ($isListItems !== false) {
-					
+
 					$data = ($ext == "json") ? self::getListItems("_data/".$fileName) : self::getListItems("_data/".$fileName,"yaml");
-					
+
 					if (!isset(self::$store["listItems"])) {
 						self::$store["listItems"] = array();
 					}
-					
+
 					self::$store["listItems"] = array_replace_recursive(self::$store["listItems"],$data);
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		if (is_array(self::$store)) {
 			foreach (self::$reservedKeys as $reservedKey) {
 				if (array_key_exists($reservedKey,self::$store)) {
@@ -134,15 +160,15 @@ class Data {
 				}
 			}
 		}
-		
+
 		self::$store["cacheBuster"]     = Config::getOption("cacheBuster");
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
-		
+
 		$dispatcherInstance->dispatch("data.gatherEnd");
-		
+
 	}
-	
+
 	/**
 	* Grab a copy of the $store
 	*
@@ -151,7 +177,7 @@ class Data {
 	public static function get() {
 		return self::$store;
 	}
-	
+
 	/**
 	* Generate the listItems array
 	* @param  {String}       the filename for the pattern to be parsed
@@ -160,90 +186,90 @@ class Data {
 	* @return {Array}        the final set of list items
 	*/
 	public static function getListItems($filepath,$ext = "json") {
-		
+
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
-		
+
 		// dispatch that the data gather has started
 		$dispatcherInstance->dispatch("data.getListItemsStart");
-		
+
 		// default vars
 		$sourceDir     = Config::getOption("sourceDir");
 		$listItems     = array();
 		$listItemsData = array();
-		
+
 		// add list item data, makes 'listItems' a reserved word
 		if (file_exists($sourceDir."/".$filepath)) {
-			
+
 			$file = file_get_contents($sourceDir."/".$filepath);
-			
+
 			if ($ext == "json") {
 				$listItemsData = json_decode($file, true);
 				if ($jsonErrorMessage = JSON::hasError()) {
 					JSON::lastErrorMsg($filepath,$jsonErrorMessage,$listItems);
 				}
 			} else {
-				
+
 				try {
 					$listItemsData = YAML::parse($file);
 				} catch (ParseException $e) {
 					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
 				}
-				
+
 				// single line of text won't throw a YAML error. returns as string
 				if (gettype($listItemsData) == "string") {
 					$listItemsData = array();
 				}
-				
+
 			}
-			
-			
+
+
 			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
-			
+
 			$i = 0;
 			$k = 1;
 			$c = count($listItemsData)+1;
-			
+
 			while ($k < $c) {
-				
+
 				shuffle($listItemsData);
 				$itemsArray = array();
-				
+
 				while ($i < $k) {
 					$itemsArray[] = $listItemsData[$i];
 					$i++;
 				}
-				
+
 				$listItems[$numbers[$k-1]] = $itemsArray;
-				
+
 				$i = 0;
 				$k++;
-				
+
 			}
-			
+
 		}
-		
+
 		$dispatcherInstance->dispatch("data.getListItemsEnd");
-		
+
 		return $listItems;
-		
+
 	}
-	
+
 	/**
 	* Return the value for an option
 	*
 	* @return {String}        the value of the option requested
 	*/
 	public static function getOption($optionName) {
-		
+
 		if (isset(self::$store[$optionName])) {
 			return self::$store[$optionName];
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	/**
 	* Get the final data array specifically for a pattern
 	* @param  {String}       the filename for the pattern to be parsed
@@ -252,59 +278,59 @@ class Data {
 	* @return {Array}        the final set of list items
 	*/
 	public static function getPatternSpecificData($patternPartial,$extraData = array()) {
-		
+
 		// if there is pattern-specific data make sure to override the default in $this->d
 		$d = self::get();
-		
+
 		if (isset($d["patternSpecific"]) && array_key_exists($patternPartial,$d["patternSpecific"])) {
-			
+
 			if (!empty($d["patternSpecific"][$patternPartial]["data"])) {
 				$d = array_replace_recursive($d, $d["patternSpecific"][$patternPartial]["data"]);
 			}
-			
+
 			if (!empty($d["patternSpecific"][$patternPartial]["listItems"])) {
-				
+
 				$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
-				
+
 				$k = 0;
 				$c = count($d["patternSpecific"][$patternPartial]["listItems"]);
-				
+
 				while ($k < $c) {
 					$section = $numbers[$k];
 					$d["listItems"][$section] = array_replace_recursive( $d["listItems"][$section], $d["patternSpecific"][$patternPartial]["listItems"][$section]);
 					$k++;
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		if (!empty($extraData)) {
 			$d = array_replace_recursive($d, $extraData);
 		}
-		
+
 		unset($d["patternSpecific"]);
-		
+
 		return $d;
-		
+
 	}
-	
+
 	/**
 	* Initialize a pattern specific data store under the patternSpecific option
 	* @param  {String}       the pattern to create an array for
 	*/
 	public static function initPattern($optionName) {
-		
+
 		if (!isset(self::$store["patternSpecific"])) {
 			self::$store["patternSpecific"] = array();
 		}
-		
+
 		if ((!isset(self::$store["patternSpecific"][$optionName])) || (!is_array(self::$store["patternSpecific"][$optionName]))) {
 			self::$store["patternSpecific"][$optionName] = array();
 		}
-		
+
 	}
-	
+
 	/**
 	* Print out the data var. For debugging purposes
 	*
@@ -313,52 +339,52 @@ class Data {
 	public static function printData() {
 		print_r(self::$store);
 	}
-	
+
 	/**
 	* Set an option on a sub element of the data array
 	* @param  {String}       name of the option
 	* @param  {String}       value for the option
 	*/
 	public static function setOptionLink($optionName,$optionValue) {
-		
+
 		if (!isset(self::$store["link"])) {
 			self::$store["link"] = array();
 		}
-		
+
 		self::$store["link"][$optionName] = $optionValue;
-		
+
 	}
-	
+
 	/**
 	* Set the pattern data option
 	* @param  {String}       name of the pattern
 	* @param  {String}       value for the pattern's data attribute
 	*/
 	public static function setPatternData($optionName,$optionValue) {
-		
+
 		if (isset(self::$store["patternSpecific"][$optionName])) {
 			self::$store["patternSpecific"][$optionName]["data"] = $optionValue;
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	/**
 	* Set the pattern listitems option
 	* @param  {String}       name of the pattern
 	* @param  {String}       value for the pattern's listItem attribute
 	*/
 	public static function setPatternListItems($optionName,$optionValue) {
-		
+
 		if (isset(self::$store["patternSpecific"][$optionName])) {
 			self::$store["patternSpecific"][$optionName]["listItems"] = $optionValue;
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 }
