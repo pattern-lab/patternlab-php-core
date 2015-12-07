@@ -34,12 +34,12 @@ class Data {
 
 	/**
 	* Go through data and replace any values that match items from the link.array
-	* @param  {String}       an entry from one of the list-based config entries
+	* @param  {String}       a string entry from the data to check for link.pattern
 	*
-	* @return {String}       trimmed version of the given $v var
+	* @return {String}       replaced version of link.pattern
 	*/
-	public static function compareReplaceListVars(&$value) {
-		if (is_string($value)) {
+	private static function compareReplaceListVars($value) {
+		if (is_string($value) && preg_match("/^link\.([\S]+)$/",$value)) {
 			$valueCheck = strtolower($value);
 			$valueThin  = str_replace("link.","",$valueCheck);
 			$linkStore  = self::getOption("link");
@@ -47,13 +47,33 @@ class Data {
 				$value = $linkStore[$valueThin];
 			}
 		}
+		return $value;
 	}
 
 	/**
-	* Set-up the array_walk_recursive so that the data can be properly saved in scope
+	* Work through a given array and decide if the walk should continue or if we should replace the var
+	* @param  {Array}       the array to be checked
+	*
+	* @return {Array}       the "fixed" array
+	*/
+	private static function recursiveWalk($array) {
+		foreach ($array as $k => $v) {
+        if (is_array($v)) {
+            $array[$k] = self::recursiveWalk($v);
+        } else {
+            $array[$k] = self::compareReplaceListVars($v);
+        }
+    }
+		return $array;
+	}
+
+	/**
+	* Set-up the recursive walk so that the data can be properly saved
 	*/
 	public static function compareReplaceListVarsInit() {
-		array_walk_recursive(self::$store,'\PatternLab\Data::compareReplaceListVars');
+
+		self::$store = self::recursiveWalk(self::$store);
+
 	}
 
 	/**
