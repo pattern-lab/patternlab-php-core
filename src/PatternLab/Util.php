@@ -28,7 +28,7 @@ class Util {
 		if (is_string($value)) {
 			$valueCheck = strtolower($value);
 			$valueThin  = str_replace("link.","",$valueCheck);
-			$linkStore  = Data::getOption("link");
+			$linkStore  = Data::getOption("patternLink");
 			if ((strpos($valueCheck, 'link.') !== false) && array_key_exists($valueThin,$linkStore)) {
 				$value = $linkStore[$valueThin];
 			}
