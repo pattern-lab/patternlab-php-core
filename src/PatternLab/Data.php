@@ -23,7 +23,7 @@ use \Symfony\Component\Yaml\Yaml;
 class Data {
 	
 	protected static $store        = array();
-	protected static $reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternLabHead","patternLabFoot");
+	protected static $reservedKeys = array("listItems","cacheBuster","patternLink","patternSpecific","patternLabHead","patternLabFoot");
 	
 	/**
 	* Clear all of the data in the $store
@@ -37,7 +37,7 @@ class Data {
 	*
 	* Reserved attributes:
 	*    - Data::$store["listItems"] : listItems from listitems.json, duplicated into separate arrays for Data::$store["listItems"]["one"], Data::$store["listItems"]["two"]... etc.
-	*    - Data::$store["link"] : the links to each pattern
+	*    - Data::$store["patternLink"] : the links to each pattern
 	*    - Data::$store["cacheBuster"] : the cache buster value to be appended to URLs
 	*    - Data::$store["patternSpecific"] : holds attributes from the pattern-specific data files
 	*
@@ -136,7 +136,7 @@ class Data {
 		}
 		
 		self::$store["cacheBuster"]     = Config::getOption("cacheBuster");
-		self::$store["link"]            = array();
+		self::$store["patternLink"]     = array();
 		self::$store["patternSpecific"] = array();
 		
 		$dispatcherInstance->dispatch("data.gatherEnd");
@@ -321,11 +321,11 @@ class Data {
 	*/
 	public static function setOptionLink($optionName,$optionValue) {
 		
-		if (!isset(self::$store["link"])) {
-			self::$store["link"] = array();
+		if (!isset(self::$store["patternLink"])) {
+			self::$store["patternLink"] = array();
 		}
 		
-		self::$store["link"][$optionName] = $optionValue;
+		self::$store["patternLink"][$optionName] = $optionValue;
 		
 	}
 	
