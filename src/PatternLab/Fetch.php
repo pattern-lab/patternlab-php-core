@@ -55,15 +55,15 @@ class Fetch {
 			Console::writeError("please provide a path for the starterkit before trying to fetch it...");
 		}
 
+		// figure out the options for the GH path
+		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
+
 		// set default attributes
 		$sourceDir        = Config::getOption("sourceDir");
 		$tempDir          = sys_get_temp_dir().DIRECTORY_SEPARATOR."pl-sk";
 		$tempDirSK        = $tempDir.DIRECTORY_SEPARATOR."pl-sk-archive";
-		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist";
-		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
-		
-		// figure out the options for the GH path
-		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
+		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR.$repo."-".$tag.DIRECTORY_SEPARATOR."dist";
+		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR.$repo."-".$tag.DIRECTORY_SEPARATOR."composer.json";
 		
 		//get the path to the GH repo and validate it
 		$tarballUrl = "https://github.com/".$org."/".$repo."/archive/".$tag.".tar.gz";
@@ -129,7 +129,7 @@ class Fetch {
 		Console::writeInfo("cleaning up the temp files...");
 		$fs = new Filesystem();
 		$fs->remove($tempFile);
-		$fs->remove($tempDir);
+		$fs->remove($tempDirSK);
 		
 		Console::writeInfo("the starterkit installation is complete...");
 		
