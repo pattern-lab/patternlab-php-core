@@ -57,7 +57,7 @@ class Fetch {
 		
 		// set default attributes
 		$sourceDir        = Config::getOption("sourceDir");
-		$tempDir          = sys_get_temp_dir();
+		$tempDir          = sys_get_temp_dir().DIRECTORY_SEPARATOR."pl-sk";
 		$tempDirSK        = $tempDir.DIRECTORY_SEPARATOR."pl-sk-archive";
 		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist";
 		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
@@ -74,6 +74,14 @@ class Fetch {
 		if (!$package = @file_get_contents($tarballUrl)) {
 			$error = error_get_last();
 			Console::writeError("the starterkit wasn't downloaded because:\n\n  ".$error["message"]);
+		}
+
+		// Create temp directory if doesn't exist
+		$fs = new Filesystem();
+		try {
+		    $fs->mkdir($tempDir, 0775);
+		} catch (IOExceptionInterface $e) {
+			Console::writeError("Error creating temporary directory at " . $e->getPath());
 		}
 		
 		// write the package to the temp directory
