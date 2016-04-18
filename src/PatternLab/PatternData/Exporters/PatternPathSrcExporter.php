@@ -32,7 +32,7 @@ class PatternPathSrcExporter extends \PatternLab\PatternData\Exporter {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
+			if ($patternStoreData["category"] == "pattern") {
 				
 				$nameDash = $patternStoreData["nameDash"];
 				$typeDash = $patternStoreData["typeDash"];

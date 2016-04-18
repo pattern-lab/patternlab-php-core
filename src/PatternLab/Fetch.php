@@ -34,13 +34,13 @@ class Fetch {
 		if (empty($package)) {
 			Console::writeError("please provide a path for the package before trying to fetch it...");
 		}
-
+		
 		// run composer
 		$composerPath = Config::getOption("coreDir").DIRECTORY_SEPARATOR."bin/composer.phar";
 		passthru("php ".$composerPath." require ".$package);
-				
-	}
 		
+	}
+	
 	/**
 	 * Fetch a package from GitHub
 	 * @param  {String}    the command option to provide the rule for
@@ -49,12 +49,12 @@ class Fetch {
 	 * @return {String}    the modified file contents
 	 */
 	public function fetchStarterKit($starterkit = "") {
-
+		
 		// double-checks options was properly set
 		if (empty($starterkit)) {
 			Console::writeError("please provide a path for the starterkit before trying to fetch it...");
 		}
-
+		
 		// set default attributes
 		$sourceDir        = Config::getOption("sourceDir");
 		$tempDir          = sys_get_temp_dir();
@@ -121,7 +121,7 @@ class Fetch {
 		Console::writeInfo("cleaning up the temp files...");
 		$fs = new Filesystem();
 		$fs->remove($tempFile);
-		$fs->remove($tempDir);
+		$fs->remove($tempDirSK);
 		
 		Console::writeInfo("the starterkit installation is complete...");
 		
@@ -165,13 +165,15 @@ class Fetch {
 		// set default vars
 		$fsOptions = array();
 		$emptyDir = true;
+		$validFiles = array("README",".gitkeep",".DS_Store","styleguide");
 		
 		// see if the source directory is empty
 		if (is_dir($sourceDir)) {
 			$objects  = new \DirectoryIterator($sourceDir);
 			foreach ($objects as $object) {
-				if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+				if (!$object->isDot() && !in_array($object->getFilename(),$validFiles)) {
 					$emptyDir = false;
+					break;
 				}
 			}
 		}

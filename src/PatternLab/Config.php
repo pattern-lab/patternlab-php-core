@@ -207,6 +207,7 @@ class Config {
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");
+		self::setExposedOption("patternExtension");
 		
 	}
 	
