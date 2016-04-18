@@ -67,6 +67,20 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					//$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
 					$patternPartialData["patternCSSExists"]        = false;
 					
+					// add the pattern data so it can be exported
+					$patternData = array();
+					//$patternFooterData["patternFooterData"]["cssEnabled"]      = (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) ? "true" : "false";
+					$patternData["cssEnabled"]        = false;
+					$patternData["lineage"]           = isset($patternStoreData["lineages"])  ? $patternStoreData["lineages"] : array();
+					$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
+					$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
+					$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
+					$patternData["patternExtension"]  = ".mustache";
+					$patternData["patternName"]       = $patternStoreData["nameClean"];
+					$patternData["patternPartial"]    = $patternStoreData["partial"];
+					$patternData["patternState"]      = $patternStoreData["state"];
+					$patternPartialData["patternData"] = json_encode($patternData);
+					
 					$patternPartials[]                             = $patternPartialData;
 				
 				}
@@ -80,5 +94,3 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 	}
 	
 }
-
-
