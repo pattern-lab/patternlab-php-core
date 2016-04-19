@@ -212,7 +212,8 @@ class Generator extends Builder {
 		                   "¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>",
 		                   "@}~}~~~",
 		                   "(>'.')> (>'.')> (>'.')> ",
-		                   "\(^-^)/"
+		                   "\(^-^)/",
+		                   "you've been at this awhile; perhaps it's time for a walk outside?"
 		                );
 		if (isset($sayings[$randomNumber])) {
 			Console::writeLine("<".$color.">".$sayings[$randomNumber]."...</".$color.">");
