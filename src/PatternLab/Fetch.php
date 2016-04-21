@@ -99,7 +99,11 @@ class Fetch {
 		$zippy = Zippy::load();
 		$zippy->addStrategy(new UnpackFileStrategy());
 		$zippy->getAdapterFor('tar.gz')->open($tempFile)->extract($tempDirSK);
-		
+
+		if (!is_dir($tempDirDist)) {
+			// try without repo dir
+			$tempDirDist  = $tempDirSK.DIRECTORY_SEPARATOR."dist";
+		}
 		// thrown an error if temp/dist/ doesn't exist
 		if (!is_dir($tempDirDist)) {
 			Console::writeError("the starterkit needs to contain a dist/ directory before it can be installed...");
