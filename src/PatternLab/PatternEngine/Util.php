@@ -15,18 +15,18 @@ namespace PatternLab\PatternEngine;
 use \PatternLab\Timer;
 
 class Util {
-	
+
 	protected $patternPaths  = array();
-	
+
 	/**
 	* Set-up the pattern paths var
 	*/
 	public function __construct($options) {
-		
+
 		$this->patternPaths = $options["patternPaths"];
-		
+
 	}
-	
+
 	/**
 	 * Helper function to find and replace the given parameters in a particular partial before handing it back to Mustache
 	 * @param  {String}    the file contents
@@ -66,7 +66,7 @@ class Util {
 		}
 		return $fileData;
 	}
-	
+
 	/**
 	 * Helper function for getting a Mustache template file name.
 	 * @param  {String}    the pattern type for the pattern
@@ -75,28 +75,28 @@ class Util {
 	 * @return {Array}     an array of rendered partials that match the given path
 	 */
 	public function getFileName($name,$ext) {
-		
+
 		$fileName = "";
 		$dirSep   = DIRECTORY_SEPARATOR;
-		
+
 		// test to see what kind of path was supplied
 		$posDash  = strpos($name,"-");
 		$posSlash = strpos($name,$dirSep);
-		
+
 		if (($posSlash === false) && ($posDash !== false)) {
 			$fileName = $this->getPatternFileName($name);
 		} else {
 			$fileName = $name;
 		}
-		
+
 		if (substr($fileName, 0 - strlen($ext)) !== $ext) {
 			$fileName .= $ext;
 		}
-		
+
 		return $fileName;
-		
+
 	}
-	
+
 	/**
 	 * Helper function to return the pattern file name
 	 * @param  {String}     the name of the pattern
@@ -104,11 +104,11 @@ class Util {
 	 * @return {String}     the file path to the pattern
 	 */
 	public function getPatternFileName($name) {
-		
+
 		$patternFileName = "";
-		
+
 		list($patternType,$pattern) = $this->getPatternInfo($name);
-		
+
 		// see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
 		if (isset($this->patternPaths[$patternType][$pattern])) {
 			$patternFileName = $this->patternPaths[$patternType][$pattern];
@@ -121,11 +121,11 @@ class Util {
 				}
 			}
 		}
-		
+
 		return $patternFileName;
-		
+
 	}
-	
+
 	/**
 	 * Helper function to return the parts of a partial name
 	 * @param  {String}     the name of the partial
@@ -133,9 +133,9 @@ class Util {
 	 * @return {Array}      the pattern type and the name of the pattern
 	 */
 	public function getPatternInfo($name) {
-		
+
 		$patternBits = explode("-",$name);
-		
+
 		$i = 1;
 		$k = 2;
 		$c = count($patternBits);
@@ -145,14 +145,14 @@ class Util {
 			$i++;
 			$k++;
 		}
-		
+
 		$patternBits = explode("-",$name,$k);
 		$pattern = $patternBits[count($patternBits)-1];
-		
+
 		return array($patternType, $pattern);
-		
+
 	}
-	
+
 	/**
 	 * Helper function for finding if a partial name has style modifier or parameters
 	 * @param  {String}     the pattern name
@@ -160,17 +160,17 @@ class Util {
 	 * @return {Array}      an array containing just the partial name, a style modifier, and any parameters
 	 */
 	public function getPartialInfo($partial) {
-		
+
 		$styleModifier = array();
 		$parameters	= array();
-		
+
 		if (strpos($partial, "(") !== false) {
 			$partialBits      = explode("(",$partial,2);
 			$partial          = trim($partialBits[0]);
 			$parametersString = substr($partialBits[1],0,(strlen($partialBits[1]) - strlen(strrchr($partialBits[1],")"))));
 			$parameters       = $this->parseParameters($parametersString);
 		}
-		
+
 		if (strpos($partial, ":") !== false) {
 			$partialBits      = explode(":",$partial,2);
 			$partial          = $partialBits[0];
@@ -181,11 +181,11 @@ class Util {
 			}
 			$styleModifier    = array("styleModifier" => $styleModifier);
 		}
-		
+
 		return array($partial,$styleModifier,$parameters);
-		
+
 	}
-	
+
 	/**
 	 * Helper function to parse the parameters and return them as an array
 	 * @param  {String}     the parameter string
@@ -193,7 +193,7 @@ class Util {
 	 * @return {Array}      the keys and values for the parameters
 	 */
 	private function parseParameters($string) {
-		
+
 		$parameters      = array();
 		$arrayParameters = array();
 		$arrayOptions    = array();
@@ -208,12 +208,12 @@ class Util {
 		$keyBuffer       = "";
 		$arrayKeyBuffer  = "";
 		$strLength       = strlen($string);
-		
+
 		for ($i = 0; $i < $strLength; $i++) {
-			
+
 			$previousChar = $char;
 			$char = $string[$i];
-			
+
 			if ($inKey && !$betweenDQuotes && !$betweenSQuotes && (($char == "\"") || ($char == "'"))) {
 				// if inKey, a quote, and betweenQuotes is false ignore quote, set betweenQuotes to true and empty buffer to kill spaces
 				($char == "\"") ? ($betweenDQuotes = true) : ($betweenSQuotes = true);
@@ -300,18 +300,18 @@ class Util {
 				$buffer   .= $char;
 			} else if (!$inValue && !$inKey && ($char == ",")) {
 				// if inValue is false, inKey false, and a comma set inKey true
-				if ($inArray && !$inOption) { 
+				if ($inArray && !$inOption) {
 					// don't do anything
 				} else {
 					$inKey = true;
 				}
-				
+
 			}
 		}
-		
+
 		return $parameters;
-		
+
 	}
-	
+
 
 }

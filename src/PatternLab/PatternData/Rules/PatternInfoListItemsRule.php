@@ -51,17 +51,17 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 			
 			$patternStoreData = array("category" => "pattern");
 			
-			$data = Data::getListItems($pathName,$ext);
+			$data = Data::getListItems("_patterns/".$pathName,$ext);
 			$patternStoreData["listItems"] = $data;
 			
+			// create a key for the data store
+			$patternStoreKey = $patternPartial;
+			
+			// if the pattern data store already exists make sure it is merged and overwrites this data
+			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+			PatternData::setOption($patternStoreKey, $patternStoreData);
+			
 		}
-		
-		// create a key for the data store
-		$patternStoreKey = $patternPartial;
-		
-		// if the pattern data store already exists make sure it is merged and overwrites this data
-		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
-		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	

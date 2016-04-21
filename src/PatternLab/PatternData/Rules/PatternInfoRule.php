@@ -30,7 +30,7 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 		$this->isDirProp  = false;
 		$this->isFileProp = true;
 		$this->searchProp = "";
-		$this->ignoreProp = "~";
+		$this->ignoreProp = "~||listitems";
 		
 	}
 	
