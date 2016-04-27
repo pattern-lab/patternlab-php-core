@@ -54,16 +54,16 @@ class Fetch {
 		if (empty($starterkit)) {
 			Console::writeError("please provide a path for the starterkit before trying to fetch it...");
 		}
-		
+
+		// figure out the options for the GH path
+		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
+
 		// set default attributes
 		$sourceDir        = Config::getOption("sourceDir");
 		$tempDir          = sys_get_temp_dir().DIRECTORY_SEPARATOR."pl-sk";
 		$tempDirSK        = $tempDir.DIRECTORY_SEPARATOR."pl-sk-archive";
-		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR."dist";
-		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
-		
-		// figure out the options for the GH path
-		list($org,$repo,$tag) = $this->getPackageInfo($starterkit);
+		$tempDirDist      = $tempDirSK.DIRECTORY_SEPARATOR.$repo."-".$tag.DIRECTORY_SEPARATOR."dist";
+		$tempComposerFile = $tempDirSK.DIRECTORY_SEPARATOR.$repo."-".$tag.DIRECTORY_SEPARATOR."composer.json";
 		
 		//get the path to the GH repo and validate it
 		$tarballUrl = "https://github.com/".$org."/".$repo."/archive/".$tag.".tar.gz";
@@ -99,7 +99,11 @@ class Fetch {
 		$zippy = Zippy::load();
 		$zippy->addStrategy(new UnpackFileStrategy());
 		$zippy->getAdapterFor('tar.gz')->open($tempFile)->extract($tempDirSK);
-		
+
+		if (!is_dir($tempDirDist)) {
+			// try without repo dir
+			$tempDirDist  = $tempDirSK.DIRECTORY_SEPARATOR."dist";
+		}
 		// thrown an error if temp/dist/ doesn't exist
 		if (!is_dir($tempDirDist)) {
 			Console::writeError("the starterkit needs to contain a dist/ directory before it can be installed...");
