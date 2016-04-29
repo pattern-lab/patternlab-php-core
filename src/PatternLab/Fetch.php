@@ -203,7 +203,7 @@ class Fetch {
 		// mirror dist to source
 		Console::writeInfo("installing the starterkit files...");
 		$fs = new Filesystem();
-		$fs->mirror($tempDirDist, $sourceDir, null, $options);
+		$fs->mirror($tempDirDist, $sourceDir, null);
 		Console::writeInfo("starterkit files have been installed...");
 		
 	}
