@@ -97,22 +97,16 @@ class Config {
 		// set the baseDir option
 		self::$options["baseDir"] = ($baseDir[strlen($baseDir)-1] == DIRECTORY_SEPARATOR) ? $baseDir : $baseDir.DIRECTORY_SEPARATOR;
 		
+		// set-up the paths
+		self::$userConfigDirClean  = self::$options["baseDir"].self::$userConfigDirClean;
+		self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
+		self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
+		self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
+		self::$plConfigPath        = self::$options["baseDir"]."vendor/pattern-lab/core/".self::$plConfigPath;
+		
 		// can't add __DIR__ above so adding here
-		if (!self::$dirAdded) {
-			
-			// set-up the paths
-			self::$userConfigDirClean  = self::$options["baseDir"].self::$userConfigDirClean;
-			self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
-			self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
-			self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
-			self::$plConfigPath        = self::$options["baseDir"]."vendor/pattern-lab/core/".self::$plConfigPath;
-			self::$dirAdded            = true;
-			
-			// just in case the config directory doesn't exist at all
-			if (!is_dir(self::$userConfigDir)) {
-				mkdir(self::$userConfigDir);
-			}
-			
+		if (!is_dir(self::$userConfigDir)) {
+			mkdir(self::$userConfigDir);
 		}
 		
 		// make sure migrate doesn't happen by default
