@@ -46,18 +46,13 @@ class Dispatcher {
 	protected static function loadListeners() {
 		
 		// default var
-		$packagesDir = Config::getOption("packagesDir");
-		
-		// see if the package dir exists. if it doesn't make it
-		if (!is_dir($packagesDir)) {
-			mkdir($packagesDir);
-		}
+		$configDir = Config::getOption("configDir");
 		
 		// make sure the listener data exists
-		if (file_exists($packagesDir."/listeners.json")) {
+		if (file_exists($configDir."/listeners.json")) {
 			
 			// get listener list data
-			$listenerList = json_decode(file_get_contents($packagesDir."/listeners.json"), true);
+			$listenerList = json_decode(file_get_contents($configDir."/listeners.json"), true);
 			
 			// get the listener info
 			foreach ($listenerList["listeners"] as $listenerName) {

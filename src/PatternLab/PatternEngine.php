@@ -57,18 +57,13 @@ class PatternEngine {
 	public static function loadRules() {
 		
 		// default var
-		$packagesDir = Config::getOption("packagesDir");
-		
-		// see if the package dir exists. if it doesn't it means composer hasn't been run
-		if (!is_dir($packagesDir)) {
-			Console::writeError("you haven't fully set-up Pattern Lab yet. please add a pattern engine...");
-		}
+		$configDir = Config::getOption("configDir");
 		
 		// make sure the pattern engine data exists
-		if (file_exists($packagesDir."/patternengines.json")) {
+		if (file_exists($configDir."/patternengines.json")) {
 			
 			// get pattern engine list data
-			$patternEngineList = json_decode(file_get_contents($packagesDir."/patternengines.json"), true);
+			$patternEngineList = json_decode(file_get_contents($configDir."/patternengines.json"), true);
 			
 			// get the pattern engine info
 			foreach ($patternEngineList["patternengines"] as $patternEngineName) {
@@ -78,7 +73,7 @@ class PatternEngine {
 			}
 			
 		} else {
-			Console::writeError("The pattern engines list isn't available in <path>".$packagesDir."</path>...");
+			Console::writeError("The pattern engines list isn't available in <path>".$configDir."</path>...");
 		}
 		
 	}

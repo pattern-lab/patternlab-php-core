@@ -6,7 +6,7 @@
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Set-ups the vars needed related to setting up and rendering templates. Meaning putting 
+ * Set-ups the vars needed related to setting up and rendering templates. Meaning putting
  *
  */
 
@@ -42,12 +42,12 @@ class Template {
 		
 		// set-up config vars
 		$patternExtension        = Config::getOption("patternExtension");
-		$pluginDir               = Config::getOption("packagesDir");
 		$sourceDir               = Config::getOption("sourceDir");
 		$styleguideKit           = Config::getOption("styleguideKit");
+		$styleguideKitPath       = Config::getOption("styleguideKitPath");
 		
 		// load pattern-lab's resources
-		$partialPath             = $pluginDir."/".$styleguideKit."/views/partials";
+		$partialPath             = $styleguideKitPath."/views/partials";
 		self::$htmlHead          = file_get_contents($partialPath."/general-header.".$patternExtension);
 		self::$htmlFoot          = file_get_contents($partialPath."/general-footer.".$patternExtension);
 		
@@ -62,8 +62,8 @@ class Template {
 		$filesystemLoaderClass   = $patternEngineBasePath."\Loaders\FilesystemLoader";
 		
 		$options                 = array();
-		$options["templatePath"] = $pluginDir."/".$styleguideKit."/views";
-		$options["partialsPath"] = $pluginDir."/".$styleguideKit."/views/partials";
+		$options["templatePath"] = $styleguideKitPath."/views";
+		$options["partialsPath"] = $styleguideKitPath."/views/partials";
 		
 		self::$filesystemLoader  = new $filesystemLoaderClass($options);
 		

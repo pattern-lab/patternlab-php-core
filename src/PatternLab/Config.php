@@ -48,7 +48,7 @@ class Config {
 	/**
 	* Get the value associated with an option from the Config
 	* @param  {String}       the name of the option to be checked
-	* 
+	*
 	* @return {String/Boolean} the value of the get or false if it wasn't found
 	*/
 	public static function getOption($optionName = "") {
@@ -67,7 +67,7 @@ class Config {
 	
 	/**
 	* Get the options set in the config
-	* 
+	*
 	* @return {Array}        the options from the config
 	*/
 	public static function getOptions() {
@@ -180,7 +180,6 @@ class Config {
 		// set-up the various dirs
 		self::$options["coreDir"]          = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
 		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
-		self::$options["packagesDir"]      = isset(self::$options["packagesDir"]) ? self::$options["baseDir"].self::cleanDir(self::$options["packagesDir"]) : self::$options["baseDir"]."packages";
 		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
 		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
 		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
@@ -214,7 +213,7 @@ class Config {
 	/**
 	* Check to see if the given array is an associative array
 	* @param  {Array}        the array to be checked
-	* 
+	*
 	* @return {Boolean}      whether it's an associative array
 	*/
 	protected static function isAssoc($array) {
@@ -248,7 +247,7 @@ class Config {
 	* Add an option and associated value to the base Config
 	* @param  {String}       the name of the option to be added
 	* @param  {String}       the value of the option to be added
-	* 
+	*
 	* @return {Boolean}      whether the set was successful
 	*/
 	public static function setOption($optionName = "", $optionValue = "") {
@@ -269,7 +268,7 @@ class Config {
 	/**
 	* Add an option to the exposedOptions array so it can be exposed on the front-end
 	* @param  {String}       the name of the option to be added to the exposedOption arrays
-	* 
+	*
 	* @return {Boolean}      whether the set was successful
 	*/
 	public static function setExposedOption($optionName = "") {
@@ -337,7 +336,7 @@ class Config {
 	* Update an option and associated value to the base Config
 	* @param  {String}       the name of the option to be updated
 	* @param  {String}       the value of the option to be updated
-	* 
+	*
 	* @return {Boolean}      whether the update was successful
 	*/
 	public static function updateOption($optionName = "", $optionValue = "") {
