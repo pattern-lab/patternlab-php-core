@@ -626,6 +626,8 @@ class InstallerUtil {
 		
 		foreach ($packages as $package) {
 			
+			print_r($package);
+			
 			// set-up package info
 			$extra     = $package["extra"];
 			$type      = $package["type"];
