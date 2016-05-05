@@ -48,19 +48,45 @@ class InstallerUtil {
 	* Common init sequence
 	*/
 	protected static function init() {
-
+		
 		// start the timer
 		Timer::start();
-
+		
 		// initialize the console to print out any issues
 		Console::init();
-
+		
 		// initialize the config for the pluginDir
 		$baseDir = __DIR__."/../../../../../";
 		Config::init($baseDir,false);
-
+		
+		// make sure the source dir is set-up
+		$sourceDir = Config::getOption("sourceDir");
+		if (!is_dir($sourceDir)) {
+			mkdir($sourceDir);
+		}
+		
 		Dispatcher::init();
 
+	}
+	
+	/**
+	* Include StarterKit in an array_filter
+	*/
+	public static function includeStarterKit($var) {
+		
+		$result = ($var["type"] == "patternlab-starterkit");
+		return $result;
+		
+	}
+	
+	/**
+	* Exclude StarterKit in an array_filter
+	*/
+	public static function excludeStarterKit($var) {
+		
+		$result = ($var["type"] != "patternlab-starterkit");
+		return $result;
+		
 	}
 
 	/**
@@ -388,123 +414,29 @@ class InstallerUtil {
 		return false;
 
 	}
-
+	
 	/**
-	 * Run the PL tasks when a package is installed
+	 * Run the PL tasks when Composer runs an install command
+	 * @param  {Array}      collected package info
 	 * @param  {Object}     a script event object from composer
 	 */
-	public static function postPackageInstall($event) {
-
-		// run the console and config inits
-		self::init();
-
-		// run the tasks based on what's in the extra dir
-		self::runTasks($event,"install");
-
+	public static function postInstallCmd($installerInfo, $event) {
+		
+		self::runTasks($installerInfo);
+		
 	}
-
+	
 	/**
-	 * Run the PL tasks when a package is updated
+	 * Run the PL tasks when Composer runs an update command
+	 * @param  {Array}      collected package info
 	 * @param  {Object}     a script event object from composer
 	 */
-	public static function postPackageUpdate($event) {
-
-		// run the console and config inits
-		self::init();
-
-		self::runTasks($event,"update");
-
+	public static function postUpdateCmd($installerInfo, $event) {
+		
+		self::runTasks($installerInfo);
+		
 	}
-
-	/**
-	 * Ask questions after the create package is done
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function postCreateProjectCmd($event) {
-
-		// see if there is an extra component
-		$extra = $event->getComposer()->getPackage()->getExtra();
-
-		if (isset($extra["patternlab"])) {
-
-			self::init();
-			Console::writeLine("");
-
-			// see if we have any starterkits to suggest
-			if (isset($extra["patternlab"]["starterKitSuggestions"]) && is_array($extra["patternlab"]["starterKitSuggestions"])) {
-
-				$suggestions = $extra["patternlab"]["starterKitSuggestions"];
-
-				// suggest starterkits
-				Console::writeInfo("suggested starterkits that work with this edition:", false, true);
-				foreach ($suggestions as $i => $suggestion) {
-
-					// write each suggestion
-					$num = $i + 1;
-					Console::writeLine($num.": ".$suggestion, true);
-
-				}
-
-				// prompt for input on the suggestions
-				Console::writeLine("");
-				$prompt  = "choose an option or hit return to skip:";
-				$options = "(ex. 1)";
-				$input   = Console::promptInput($prompt,$options);
-				$result  = (int)$input - 1;
-
-				if (isset($suggestions[$result])) {
-
-					Console::writeLine("");
-					$f = new Fetch();
-					$result = $f->fetchStarterKit($suggestions[$result]);
-
-					if ($result) {
-
-						Console::writeLine("");
-						$g = new Generator();
-						$g->generate(array("foo" => "bar"));
-
-						Console::writeLine("");
-						Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
-
-					}
-
-				} else {
-
-					Console::writeWarning("you will need to install a StarterKit before using Pattern Lab...");
-
-				}
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Make sure certain things are set-up before running the installation of a package
-	 * @param  {Object}     a script event object from composer
-	 */
-	public static function preInstallCmd($event) {
-
-		// run the console and config inits
-		self::init();
-
-		// default vars
-		$sourceDir   = Config::getOption("sourceDir");
-		$packagesDir = Config::getOption("packagesDir");
-
-		// check directories
-		if (!is_dir($sourceDir)) {
-			mkdir($sourceDir);
-		}
-
-		if (!is_dir($packagesDir)) {
-			mkdir($packagesDir);
-		}
-
-	}
-
+	
 	/**
 	 * Make sure pattern engines and listeners are removed on uninstall
 	 * @param  {Object}     a script event object from composer
@@ -518,7 +450,7 @@ class InstallerUtil {
 		$package   = $event->getOperation()->getPackage();
 		$type      = $package->getType();
 		$name      = $package->getName();
-		$pathBase  = Config::getOption("packagesDir")."/".$name;
+		$pathBase  = $package->getTargetDir();
 
 		// see if the package has a listener and remove it
 		self::scanForListener($pathBase,true);
@@ -530,6 +462,50 @@ class InstallerUtil {
 
 		// go over .json in patternlab-components/, remove references to packagename
 
+	}
+	
+	/**
+	 * Prompt the user to install a starterkit
+	 * @param  {Array}     the starterkit suggestions
+	 */
+	protected static function promptStarterKitInstall($starterKitSuggestions) {
+		
+		Console::writeLine("");
+		
+		// suggest starterkits
+		Console::writeInfo("suggested starterkits that work with this edition:", false, true);
+		foreach ($starterKitSuggestions as $i => $suggestion) {
+			$num = $i + 1;
+			Console::writeLine($num.": ".$suggestion, true);
+		}
+		
+		// prompt for input on the suggestions
+		Console::writeLine("");
+		
+		$prompt  = "choose an option or hit return to skip:";
+		$options = "(ex. 1)";
+		$input   = Console::promptInput($prompt,$options);
+		$result  = (int)$input - 1;
+		
+		if (isset($starterKitSuggestions[$result])) {
+			
+			Console::writeLine("");
+			$f = new Fetch();
+			$result = $f->fetchStarterKit($suggestions[$result]);
+			
+			if ($result) {
+				
+				Console::writeLine("");
+				$g = new Generator();
+				$g->generate(array("foo" => "bar"));
+				
+				Console::writeLine("");
+				Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
+				
+			}
+			
+		}
+		
 	}
 
 	/**
@@ -550,30 +526,39 @@ class InstallerUtil {
 
 	/**
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
-	 * @param  {Object}     a script event object from composer
-	 * @param  {String}     the type of event starting the runTasks command
+	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
-	protected static function runTasks($event,$type) {
-
-		// get package info
-		$package   = ($type == "install") ? $event->getOperation()->getPackage() : $event->getOperation()->getTargetPackage();
-		$extra     = $package->getExtra();
-		$type      = $package->getType();
-		$name      = $package->getName();
-		$pathBase  = Config::getOption("packagesDir")."/".$name;
-		$pathDist  = $pathBase."/dist/";
-
-		// make sure we're only evaluating pattern lab packages
-		if (strpos($type,"patternlab-") !== false) {
-
+	protected static function runTasks($installerInfo) {
+		
+		// initialize a bunch of stuff like config and console
+		self::init();
+		
+		// make sure user is prompted to install starterkit
+		if (!empty($installerInfo["starterKitSuggestions"])) {
+			self::promptStarterKitInstall($installerInfo["starterKitSuggestions"]);
+		}
+		
+		// reorder packages so the starterkit is first if it's being installed as a package
+		$packages = $installerInfo["packages"];
+		$packages = array_merge(array_filter($packages, "self::includeStarterKit"), array_filter($packages, "self::excludeStarterKit"));
+		
+		foreach ($packages as $package) {
+			
+			// set-up package info
+			$extra     = $package["extra"];
+			$type      = $package["type"];
+			$name      = $package["name"];
+			$pathBase  = $package["pathBase"];
+			$pathDist  = $package["pathDist"];
+			
 			// make sure that it has the name-spaced section of data to be parsed. if it exists parse it
-			if (isset($extra["patternlab"])) {
-				self::parseComposerExtraList($extra["patternlab"], $name, $pathDist);
+			if (!empty($extra)) {
+				self::parseComposerExtraList($extra, $name, $pathDist);
 			}
-
+			
 			// see if the package has a listener
 			self::scanForListener($pathBase);
-
+			
 			// address other specific needs based on type
 			if ($type == "patternlab-patternengine") {
 				self::scanForPatternEngineRule($pathBase);
@@ -582,9 +567,9 @@ class InstallerUtil {
 			} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
 				Config::updateConfigOption("styleguideKit",$name);
 			}
-
+			
 		}
-
+		
 	}
 
 	/**
@@ -594,7 +579,7 @@ class InstallerUtil {
 	protected static function scanForListener($pathPackage,$remove = false) {
 
 		// get listener list path
-		$pathList = Config::getOption("packagesDir")."/listeners.json";
+		$pathList = Config::getOption("configDir")."/listeners.json";
 
 		// make sure listeners.json exists. if not create it
 		if (!file_exists($pathList)) {
@@ -637,7 +622,7 @@ class InstallerUtil {
 	protected static function scanForPatternEngineRule($pathPackage,$remove = false) {
 
 		// get listener list path
-		$pathList = Config::getOption("packagesDir")."/patternengines.json";
+		$pathList = Config::getOption("configDir")."/patternengines.json";
 
 		// make sure patternengines.json exists. if not create it
 		if (!file_exists($pathList)) {
