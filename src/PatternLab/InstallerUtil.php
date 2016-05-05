@@ -90,6 +90,88 @@ class InstallerUtil {
 	}
 	
 	/**
+	 * Extract the classes in the given file.
+	 *
+	 * This method taken from Symfony ClassLoader component.
+	 *
+	 * @see \Symfony\Component\ClassLoader\ClassMapGenerator::findClasses()
+	 * @license http://symfony.com/doc/current/contributing/code/license.html MIT license
+	 *
+	 * @param string $path The file to check
+	 *
+	 * @return array The found classes
+	 */
+	private static function findClasses($path) {
+		
+		$contents = file_get_contents($path);
+		$tokens = token_get_all($contents);
+		
+		$classes = array();
+		
+		$namespace = '';
+		for ($i = 0; isset($tokens[$i]); ++$i) {
+			$token = $tokens[$i];
+			
+			if (!isset($token[1])) {
+				continue;
+			}
+			
+			$class = '';
+			
+			switch ($token[0]) {
+				case T_NAMESPACE:
+					$namespace = '';
+					// If there is a namespace, extract it
+					while (isset($tokens[++$i][1])) {
+						if (in_array($tokens[$i][0], array(T_STRING, T_NS_SEPARATOR))) {
+							$namespace .= $tokens[$i][1];
+						}
+					}
+					$namespace .= '\\';
+					break;
+				case T_CLASS:
+				case T_INTERFACE:
+				case T_TRAIT:
+					// Skip usage of ::class constant
+					$isClassConstant = false;
+					for ($j = $i - 1; $j > 0; --$j) {
+						if (!isset($tokens[$j][1])) {
+							break;
+						}
+						
+						if (T_DOUBLE_COLON === $tokens[$j][0]) {
+							$isClassConstant = true;
+							break;
+						} elseif (!in_array($tokens[$j][0], array(T_WHITESPACE, T_DOC_COMMENT, T_COMMENT))) {
+							break;
+						}
+					}
+					
+					if ($isClassConstant) {
+						break;
+					}
+					
+					// Find the classname
+					while (isset($tokens[++$i][1])) {
+						$t = $tokens[$i];
+						if (T_STRING === $t[0]) {
+							$class .= $t[1];
+						} elseif ('' !== $class && T_WHITESPACE === $t[0]) {
+							break;
+						}
+					}
+					
+					$classes[] = ltrim($namespace.$class, '\\');
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return $classes;
+	}
+	
+	/**
 	 * Parse the component types to figure out what needs to be moved and added to the component JSON files
 	 * @param  {String}    file path to move
 	 * @param  {String}    file path to move to
@@ -597,8 +679,8 @@ class InstallerUtil {
 		foreach ($finder as $file) {
 			
 			// create the name
-			$dirs         = explode(DIRECTORY_SEPARATOR,$file->getPath());
-			$listenerName = "\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$file->getFilename());
+			$classes      = self::findClasses($file->getPathname());
+			$listenerName = "\\".$classes[0];
 			
 			// check to see what we should do with the listener info
 			if (!$remove && !in_array($listenerName,$listenerList["listeners"])) {
@@ -639,9 +721,9 @@ class InstallerUtil {
 		// iterate over the returned objects
 		foreach ($finder as $file) {
 			
-			/// create the name
-			$dirs              = explode(DIRECTORY_SEPARATOR,$file->getPath());
-			$patternEngineName = "\\".$dirs[count($dirs)-3]."\\".$dirs[count($dirs)-2]."\\".$dirs[count($dirs)-1]."\\".str_replace(".php","",$file->getFilename());
+			// create the name
+			$classes           = self::findClasses($file->getPathname());
+			$patternEngineName = "\\".$classes[0];
 			
 			// check what we should do with the pattern engine info
 			if (!$remove && !in_array($patternEngineName, $patternEngineList["patternengines"])) {
