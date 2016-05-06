@@ -653,11 +653,7 @@ class InstallerUtil {
 		if ($installerInfo["projectInstall"]) {
 			
 			Console::writeLine("");
-			$g = new Generator();
-			$g->generate(array("foo" => "bar"));
-			
-			Console::writeLine("");
-			Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
+			Console::writeInfo("Need better intro copy here...", false, true);
 			
 		}
 		
