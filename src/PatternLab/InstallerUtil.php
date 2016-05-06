@@ -651,6 +651,13 @@ class InstallerUtil {
 				Config::updateConfigOption("styleguideKit",$name);
 			}
 			
+			// override any configs that have been set-up
+			if (!empty($installerInfo["configOverrides"])) {
+				foreach ($installerInfo["configOverrides"] as $option => $value) {
+					Config::updateConfigOption($option,$value, true); // forces the update
+				}
+			}
+			
 		}
 		
 	}
