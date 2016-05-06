@@ -622,12 +622,7 @@ class InstallerUtil {
 		
 		// reorder packages so the starterkit is first if it's being installed as a package
 		$packages = $installerInfo["packages"];
-		
-		print_r($packages);
-		
 		$packages = array_merge(array_filter($packages, "self::includeStarterKit"), array_filter($packages, "self::excludeStarterKit"));
-		
-		print_r($packages);
 		
 		foreach ($packages as $package) {
 			
