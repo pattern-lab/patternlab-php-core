@@ -283,8 +283,9 @@ class Config {
 	* Update a single config option based on a change in composer.json
 	* @param  {String}       the name of the option to be changed
 	* @param  {String}       the new value of the option to be changed
+	* @param  {Boolean}      whether to force the update of the option
 	*/
-	public static function updateConfigOption($optionName,$optionValue) {
+	public static function updateConfigOption($optionName,$optionValue, $force = false) {
 		
 		if (is_string($optionValue) && strpos($optionValue,"<prompt>") !== false) {
 			
@@ -296,7 +297,7 @@ class Config {
 			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeTag("ok","config option ".$optionName." updated...", false, true);
 			
-		} else if (!isset(self::$options[$optionName]) || (self::$options["overrideConfig"] == "a")) {
+		} else if (!isset(self::$options[$optionName]) || (self::$options["overrideConfig"] == "a") || $force) {
 			
 			// if the option isn't set or the config is always to override update the config
 			self::writeUpdateConfigOption($optionName,$optionValue);
