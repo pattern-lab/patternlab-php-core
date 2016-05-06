@@ -641,13 +641,13 @@ class InstallerUtil {
 				Config::updateConfigOption("styleguideKitPath",$pathBase);
 			}
 			
-			// override any configs that have been set-up
-			if (!empty($installerInfo["configOverrides"])) {
-				foreach ($installerInfo["configOverrides"] as $option => $value) {
-					Config::updateConfigOption($option,$value, true); // forces the update
-				}
+		}
+		
+		// override any configs that have been set-up
+		if (!empty($installerInfo["configOverrides"])) {
+			foreach ($installerInfo["configOverrides"] as $option => $value) {
+				Config::updateConfigOption($option,$value, true); // forces the update
 			}
-			
 		}
 		
 		if ($installerInfo["projectInstall"]) {
