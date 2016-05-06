@@ -575,17 +575,6 @@ class InstallerUtil {
 			$f = new Fetch();
 			$result = $f->fetchStarterKit($suggestions[$result]);
 			
-			if ($result) {
-				
-				Console::writeLine("");
-				$g = new Generator();
-				$g->generate(array("foo" => "bar"));
-				
-				Console::writeLine("");
-				Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
-				
-			}
-			
 		}
 		
 	}
@@ -657,6 +646,17 @@ class InstallerUtil {
 					Config::updateConfigOption($option,$value, true); // forces the update
 				}
 			}
+			
+		}
+		
+		if ($installerInfo["projectInstall"]) {
+			
+			Console::writeLine("");
+			$g = new Generator();
+			$g->generate(array("foo" => "bar"));
+			
+			Console::writeLine("");
+			Console::writeInfo("type <desc>php core/console --server</desc> to start the built-in server and see Pattern Lab...", false, true);
 			
 		}
 		
