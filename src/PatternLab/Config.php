@@ -377,7 +377,6 @@ class Config {
 		}
 		
 		// reload the options
-		print "trying to load options";
 		self::loadOptions($options);
 		
 		// dump the YAML
