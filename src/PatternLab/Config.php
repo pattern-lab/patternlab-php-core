@@ -376,6 +376,9 @@ class Config {
 			$options[$optionName] = $optionValue;
 		}
 		
+		// reload the options
+		self::loadOptions($options);
+		
 		// dump the YAML
 		$configOutput = Yaml::dump($options, 3);
 		
