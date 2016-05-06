@@ -638,6 +638,7 @@ class InstallerUtil {
 				Config::updateConfigOption("starterKitPath",$pathBase);
 			} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
 				Config::updateConfigOption("styleguideKit",$name);
+				Config::updateConfigOption("styleguideKitPath",$pathBase);
 			}
 			
 			// override any configs that have been set-up
