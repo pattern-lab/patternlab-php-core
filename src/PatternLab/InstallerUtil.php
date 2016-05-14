@@ -521,20 +521,14 @@ class InstallerUtil {
 	
 	/**
 	 * Make sure pattern engines and listeners are removed on uninstall
-	 * @param  {Object}     a script event object from composer
+	 * @param  {String}     the name of the package to be removed
+	 * @param  {String}     the type of the package to be removed
+	 * @param  {String}     the path of the package to be removed
 	 */
-	public static function prePackageUninstallCmd($event) {
+	public static function prePackageUninstallCmd($name, $type, $pathBase) {
 		
 		// run the console and config inits
 		self::init();
-		
-		// get package info
-		$package   = $event->getOperation()->getPackage();
-		$type      = $package->getType();
-		$name      = $package->getName();
-		$pathBase  = $event->getComposer()->getInstallationManager()->getInstallPath($package);
-		
-		print "pathBase: ".$pathBase;
 		
 		// see if the package has a listener and remove it
 		self::scanForListener($pathBase,true);
