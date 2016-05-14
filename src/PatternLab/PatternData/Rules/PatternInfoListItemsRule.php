@@ -26,7 +26,7 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 		parent::__construct($options);
 		
 		$this->depthProp  = 3; // 3 means that depth won't be checked
-		$this->extProp    = "json||yaml";
+		$this->extProp    = "json||yaml||yml";
 		$this->isDirProp  = false;
 		$this->isFileProp = true;
 		$this->searchProp = ".listitems.";
