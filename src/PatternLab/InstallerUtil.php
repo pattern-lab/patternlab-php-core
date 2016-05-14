@@ -515,9 +515,7 @@ class InstallerUtil {
 	 */
 	public static function postUpdateCmd($installerInfo, $event) {
 		
-		if ($installerInfo["packagesRemove"]) {
-			self::packagesRemove($installerInfo);
-		} else {
+		if (!$installerInfo["packagesRemove"]) {
 			self::packagesInstall($installerInfo);
 		}
 		
@@ -638,31 +636,25 @@ class InstallerUtil {
 	
 	/**
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file on uninstall
-	 * @param  {Array}      the info culled from installing various pattern lab-related packages
+	 * @param  {Array}      the info culled from a pattern lab-related package that's being removed
 	 */
-	public static function packagesRemove($installerInfo) {
+	public static function packageRemove($packageInfo) {
 		
 		// run the console and config inits
 		self::init();
 		
-		$packages = $installerInfo["packages"];
+		// see if the package has a listener and remove it
+		self::scanForListener($packageInfo["pathBase"],true);
 		
-		foreach ($packages as $package) {
-			
-			// see if the package has a listener and remove it
-			self::scanForListener($pathBase,true);
-			
-			// see if the package is a pattern engine and remove the rule
-			if ($type == "patternlab-patternengine") {
-				self::scanForPatternEngineRule($pathBase,true);
-			}
-			
-			// remove the component package file if it exists
-			$jsonFile = Config::getOption("componentDir")."/packages/".str_replace("/","-",$name).".json";
-			if (file_exists($jsonFile)) {
-				unlink($jsonFile);
-			}
-			
+		// see if the package is a pattern engine and remove the rule
+		if ($packageInfo["type"] == "patternlab-patternengine") {
+			self::scanForPatternEngineRule($packageInfo["pathBase"],true);
+		}
+		
+		// remove the component package file if it exists
+		$jsonFile = Config::getOption("componentDir")."/packages/".str_replace("/","-",$packageInfo["name"]).".json";
+		if (file_exists($jsonFile)) {
+			unlink($jsonFile);
 		}
 		
 	}
