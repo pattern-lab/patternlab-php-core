@@ -542,7 +542,11 @@ class InstallerUtil {
 			self::scanForPatternEngineRule($pathBase,true);
 		}
 		
-		// go over .json in patternlab-components/, remove references to packagename
+		// remove the component package file if it exists
+		$jsonFile = Config::getOption("componentDir")."/packages/".str_replace("/","-",$name).".json";
+		if (file_exists($jsonFile)) {
+			unlink($jsonFile);
+		}
 		
 	}
 	
