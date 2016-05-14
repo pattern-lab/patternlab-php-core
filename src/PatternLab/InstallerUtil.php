@@ -573,7 +573,7 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
+	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file on install
 	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
 	protected static function packagesInstall($installerInfo) {
@@ -637,12 +637,10 @@ class InstallerUtil {
 	}
 	
 	/**
-	 * Make sure pattern engines and listeners are removed on uninstall
-	 * @param  {String}     the name of the package to be removed
-	 * @param  {String}     the type of the package to be removed
-	 * @param  {String}     the path of the package to be removed
+	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file on uninstall
+	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
-	public static function packagesRemove($name, $type, $pathBase) {
+	public static function packagesRemove($installerInfo) {
 		
 		// run the console and config inits
 		self::init();
