@@ -532,7 +532,9 @@ class InstallerUtil {
 		$package   = $event->getOperation()->getPackage();
 		$type      = $package->getType();
 		$name      = $package->getName();
-		$pathBase  = $package->getTargetDir();
+		$pathBase  = $event->getComposer()->getInstallationManager()->getInstallPath($package);
+		
+		print "pathBase: ".$pathBase;
 		
 		// see if the package has a listener and remove it
 		self::scanForListener($pathBase,true);
