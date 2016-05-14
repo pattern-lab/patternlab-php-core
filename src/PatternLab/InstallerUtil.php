@@ -504,44 +504,21 @@ class InstallerUtil {
 	 */
 	public static function postInstallCmd($installerInfo, $event) {
 		
-		self::runTasks($installerInfo);
+		self::packagesInstall($installerInfo);
 		
 	}
 	
 	/**
-	 * Run the PL tasks when Composer runs an update command
+	 * Run the PL tasks when Composer runs an update command. this also runs after a package is removed.
 	 * @param  {Array}      collected package info
 	 * @param  {Object}     a script event object from composer
 	 */
 	public static function postUpdateCmd($installerInfo, $event) {
 		
-		self::runTasks($installerInfo);
-		
-	}
-	
-	/**
-	 * Make sure pattern engines and listeners are removed on uninstall
-	 * @param  {String}     the name of the package to be removed
-	 * @param  {String}     the type of the package to be removed
-	 * @param  {String}     the path of the package to be removed
-	 */
-	public static function prePackageUninstallCmd($name, $type, $pathBase) {
-		
-		// run the console and config inits
-		self::init();
-		
-		// see if the package has a listener and remove it
-		self::scanForListener($pathBase,true);
-		
-		// see if the package is a pattern engine and remove the rule
-		if ($type == "patternlab-patternengine") {
-			self::scanForPatternEngineRule($pathBase,true);
-		}
-		
-		// remove the component package file if it exists
-		$jsonFile = Config::getOption("componentDir")."/packages/".str_replace("/","-",$name).".json";
-		if (file_exists($jsonFile)) {
-			unlink($jsonFile);
+		if ($installerInfo["packagesRemove"]) {
+			self::packagesRemove($installerInfo);
+		} else {
+			self::packagesInstall($installerInfo);
 		}
 		
 	}
@@ -599,7 +576,7 @@ class InstallerUtil {
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file
 	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
-	protected static function runTasks($installerInfo) {
+	protected static function packagesInstall($installerInfo) {
 		
 		// initialize a bunch of stuff like config and console
 		self::init();
@@ -654,6 +631,39 @@ class InstallerUtil {
 			
 			Console::writeLine("");
 			Console::writeInfo("Need better intro copy here...", false, true);
+			
+		}
+		
+	}
+	
+	/**
+	 * Make sure pattern engines and listeners are removed on uninstall
+	 * @param  {String}     the name of the package to be removed
+	 * @param  {String}     the type of the package to be removed
+	 * @param  {String}     the path of the package to be removed
+	 */
+	public static function packagesRemove($name, $type, $pathBase) {
+		
+		// run the console and config inits
+		self::init();
+		
+		$packages = $installerInfo["packages"];
+		
+		foreach ($packages as $package) {
+			
+			// see if the package has a listener and remove it
+			self::scanForListener($pathBase,true);
+			
+			// see if the package is a pattern engine and remove the rule
+			if ($type == "patternlab-patternengine") {
+				self::scanForPatternEngineRule($pathBase,true);
+			}
+			
+			// remove the component package file if it exists
+			$jsonFile = Config::getOption("componentDir")."/packages/".str_replace("/","-",$name).".json";
+			if (file_exists($jsonFile)) {
+				unlink($jsonFile);
+			}
 			
 		}
 		
