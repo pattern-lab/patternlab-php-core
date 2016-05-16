@@ -81,11 +81,14 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 			$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
 			
 			$patternStoreData = array("category"   => $category,
-									  "nameClean"  => $title,
 									  "desc"       => $markdown,
 									  "descExists" => true,
 									  "meta"       => $yaml,
 									  "full"       => $doc);
+
+			if (isset($title)) {
+				$patternStoreData["nameClean"] = $title;
+			}
 			
 			// if the pattern data store already exists make sure this data overwrites it
 			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
