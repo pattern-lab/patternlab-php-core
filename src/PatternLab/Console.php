@@ -56,6 +56,13 @@ class Console {
 		$colorTheme["warning"]  = "yellow";
 		$colorTheme["error"]    = "red";
 		$colorTheme["strong"]   = "bold";
+		$colorTheme["fire1"]    = "color[196]";
+		$colorTheme["fire2"]    = "color[202]";
+		$colorTheme["fire3"]    = "color[208]";
+		$colorTheme["fire4"]    = "color[214]";
+		$colorTheme["fire5"]    = "color[220]";
+		$colorTheme["fire6"]    = "color[226]";
+		$colorTheme["cool"]     = "color[19]";
 		self::$color->setTheme($colorTheme);
 		
 	}
