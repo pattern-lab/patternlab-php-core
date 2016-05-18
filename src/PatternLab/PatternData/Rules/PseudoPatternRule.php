@@ -26,7 +26,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		parent::__construct($options);
 
 		$this->depthProp  = 3; // 3 means that depth won't be checked
-		$this->extProp    = "json||yaml";
+		$this->extProp    = "json||yaml||yml";
 		$this->isDirProp  = false;
 		$this->isFileProp = true;
 		$this->searchProp = "~";
@@ -112,7 +112,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 									"pathOrigDash" => $patternPathOrigDash);
 
 		// add any subtype info if necessary
-		if ($depth == 2) {
+		if ($depth > 1) {
 			$patternStoreData["subtype"]     = $patternSubtype;
 			$patternStoreData["subtypeDash"] = $patternSubtypeDash;
 			$patternStoreData["breadcrumb"]  = $patternType." > ".$patternSubtype;

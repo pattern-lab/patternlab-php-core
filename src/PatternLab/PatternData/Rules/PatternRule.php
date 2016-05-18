@@ -94,7 +94,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "extraOutput"      => array());
 		
 		// add any subtype info if necessary
-		if ($depth == 2) {
+		if ($depth > 1) {
 			$patternStoreData["subtype"]     = $patternSubtype;
 			$patternStoreData["subtypeDash"] = $patternSubtypeDash;
 			$patternStoreData["breadcrumb"]  = $patternTypeClean." > ".$patternSubtypeClean;
