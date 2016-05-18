@@ -628,8 +628,16 @@ class InstallerUtil {
 		if ($installerInfo["projectInstall"]) {
 			
 			Console::writeLine("");
-			Console::writeInfo("Need better intro copy here...", false, true);
-			
+			Console::writeLine("<h1><fire3>Thank you for installing...</fire3></h1>", false, true);
+			Console::writeLine("<fire1>(                               (             </fire1>");
+			Console::writeLine("<fire2>)\ )        )   )               )\ )         )</fire2>");
+			Console::writeLine("<fire3>(()/(   ) ( /(( /(  (  (        (()/(    ) ( /(</fire3>");
+			Console::writeLine("<fire4>/(_)| /( )\())\())))\ )(   (    /(_))( /( )\())</fire4>");
+			Console::writeLine("<fire5>(</fire5><cool>_</cool><fire5>)) )(_)|</fire5><cool>_</cool><fire5>))(</fire5><cool>_</cool><fire5>))//((_|()\  )\ )(</fire5><cool>_</cool><fire5>))  )(_)|(_)\</fire5>");
+			Console::writeLine("<cool>| _ </cool><fire6>((</fire6><cool>_</cool><fire6>)</fire6><cool>_| |_| |_</cool><fire6>(</fire6><cool>_</cool><fire6>))  ((</fire6><cool>_</cool><fire6>)</fire6><cool>_</cool><fire6>(</fire6><cool>_</cool><fire6>/(</fire6><cool>| |  </cool><fire6>((</fire6><cool>_</cool><fire6>)</fire6><cool>_| |</cool><fire6>(</fire6><cool>_</cool><fire6>)</fire6>");
+			Console::writeLine("<cool>|  _/ _` |  _|  _/ -_)| '_| ' \</cool><fire6>))</fire6><cool> |__/ _` | '_ \  </cool>");
+			Console::writeLine("<cool>|_| \__,_|\__|\__\___||_| |_||_||____\__,_|_.__/  </cool>", false, true);
+
 		}
 		
 	}
