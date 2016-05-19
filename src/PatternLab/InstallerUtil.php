@@ -580,8 +580,8 @@ class InstallerUtil {
 		self::init();
 		
 		// make sure user is prompted to install starterkit
-		if (!empty($installerInfo["starterKitSuggestions"])) {
-			self::promptStarterKitInstall($installerInfo["starterKitSuggestions"]);
+		if (!empty($installerInfo["suggestedStarterKits"])) {
+			self::promptStarterKitInstall($installerInfo["suggestedStarterKits"]);
 		}
 		
 		// reorder packages so the starterkit is first if it's being installed as a package
