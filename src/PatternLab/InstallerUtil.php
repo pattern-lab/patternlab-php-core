@@ -548,7 +548,7 @@ class InstallerUtil {
 			
 			Console::writeLine("");
 			$f = new Fetch();
-			$result = $f->fetchStarterKit($suggestions[$result]);
+			$result = $f->fetchStarterKit($starterKitSuggestions[$result]);
 			
 		}
 		
