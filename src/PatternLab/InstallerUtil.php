@@ -585,35 +585,39 @@ class InstallerUtil {
 		}
 		
 		// reorder packages so the starterkit is first if it's being installed as a package
-		$packages = $installerInfo["packages"];
-		$packages = array_merge(array_filter($packages, "self::includeStarterKit"), array_filter($packages, "self::excludeStarterKit"));
-		
-		foreach ($packages as $package) {
+		if (isset($installerInfo["packages"])) {
 			
-			// set-up package info
-			$extra     = $package["extra"];
-			$type      = $package["type"];
-			$name      = $package["name"];
-			$pathBase  = $package["pathBase"];
-			$pathDist  = $package["pathDist"];
+			$packages = $installerInfo["packages"];
+			$packages = array_merge(array_filter($packages, "self::includeStarterKit"), array_filter($packages, "self::excludeStarterKit"));
 			
-			// make sure that it has the name-spaced section of data to be parsed. if it exists parse it
-			if (!empty($extra)) {
-				self::parseComposerExtraList($extra, $name, $pathDist);
-			}
-			
-			// see if the package has a listener
-			self::scanForListener($pathBase);
-			
-			// address other specific needs based on type
-			if ($type == "patternlab-patternengine") {
-				self::scanForPatternEngineRule($pathBase);
-			} else if ($type == "patternlab-starterkit") {
-				Config::updateConfigOption("starterKit",$name);
-				Config::updateConfigOption("starterKitPath",$pathBase);
-			} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
-				Config::updateConfigOption("styleguideKit",$name);
-				Config::updateConfigOption("styleguideKitPath",$pathBase);
+			foreach ($packages as $package) {
+				
+				// set-up package info
+				$extra     = $package["extra"];
+				$type      = $package["type"];
+				$name      = $package["name"];
+				$pathBase  = $package["pathBase"];
+				$pathDist  = $package["pathDist"];
+				
+				// make sure that it has the name-spaced section of data to be parsed. if it exists parse it
+				if (!empty($extra)) {
+					self::parseComposerExtraList($extra, $name, $pathDist);
+				}
+				
+				// see if the package has a listener
+				self::scanForListener($pathBase);
+				
+				// address other specific needs based on type
+				if ($type == "patternlab-patternengine") {
+					self::scanForPatternEngineRule($pathBase);
+				} else if ($type == "patternlab-starterkit") {
+					Config::updateConfigOption("starterKit",$name);
+					Config::updateConfigOption("starterKitPath",$pathBase);
+				} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
+					Config::updateConfigOption("styleguideKit",$name);
+					Config::updateConfigOption("styleguideKitPath",$pathBase);
+				}
+				
 			}
 			
 		}
