@@ -27,8 +27,6 @@
 			"PatternLab":   "src/"
 		}
 	},
-	"minimum-stability": "dev",
-	"prefer-stable": true,
 	"require": {
 		"php": ">=5.3.6",
 		"michelf/php-markdown": "~1.5",
