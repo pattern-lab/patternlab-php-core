@@ -37,9 +37,11 @@ class Config {
 	*/
 	protected static function cleanDir($dir) {
 		
-		$dir = trim($dir);
-		$dir = ($dir[0] == DIRECTORY_SEPARATOR) ? ltrim($dir, DIRECTORY_SEPARATOR) : $dir;
-		$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		if (isset($dir[0])) {
+			$dir = trim($dir);
+			$dir = ($dir[0] == DIRECTORY_SEPARATOR) ? ltrim($dir, DIRECTORY_SEPARATOR) : $dir;
+			$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
+		}
 		
 		return $dir;
 		
