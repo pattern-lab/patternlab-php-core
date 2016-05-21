@@ -95,7 +95,6 @@ class Config {
 			}
 		}
 		
-		Console::writeInfo($styleguideKitPathFinal);
 		return $styleguideKitPathFinal;
 		
 	}
