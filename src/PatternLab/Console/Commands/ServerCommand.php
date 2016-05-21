@@ -49,7 +49,7 @@ class ServerCommand extends Command {
 			$host = $port ? $host.":".$port : $host.":8080";
 			
 			// start-up the server with the router
-			Console::writeInfo("server started on ".$host.". use ctrl+c to exit...");
+			Console::writeInfo("server started on http://".$host." - use ctrl+c to exit...");
 			passthru("cd ".$publicDir." && ".$_SERVER["_"]." -S ".$host." ".$coreDir."/server/router.php");
 			
 		}
