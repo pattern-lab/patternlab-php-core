@@ -48,8 +48,10 @@ class Template {
 		
 		// load pattern-lab's resources
 		$partialPath             = $styleguideKitPath."/views/partials";
-		self::$htmlHead          = file_get_contents($partialPath."/general-header.".$patternExtension);
-		self::$htmlFoot          = file_get_contents($partialPath."/general-footer.".$patternExtension);
+		$generalHeaderPath       = $partialPath."/general-header.".$patternExtension;
+		$generalFooterPath       = $partialPath."/general-footer.".$patternExtension;
+		self::$htmlHead       = (file_exists($generalHeaderPath)) ? file_get_contents($generalHeaderPath) : "";
+		self::$htmlFoot       = (file_exists($generalFooterPath)) ? file_get_contents($generalFooterPath) : "";
 		
 		// gather the user-defined header and footer information
 		$patternHeadPath         = $sourceDir."/_meta/_00-head.".$patternExtension;
