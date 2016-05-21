@@ -75,6 +75,32 @@ class Config {
 	}
 	
 	/**
+	* Review the given styleguideKitPath to handle pre-2.1.0 backwards compatibility
+	* @param  {String}       styleguideKitPath from config.yml
+	*
+	* @return {String}       the final, post-2.1.0-style styleguideKitPath
+	*/
+	protected static function getStyleguideKitPath($styleguideKitPath) {
+		
+		$styleguideKitPathFinal = "";
+		if ($styleguideKitPath[0] == DIRECTORY_SEPARATOR) {
+			if (strpos($styleguideKitPath, DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR === 0)) {
+				$styleguideKitPathFinal = $styleguideKitPath; // mistaken set-up, pass to final for clean-up
+			} else if (strpos($styleguideKitPath, self::$options["baseDir"]) === 0) {
+				$styleguideKitPathFinal = str_replace(self::$options["baseDir"], "", $styleguideKitPath); // just need to peel off the base
+			} else if (strpos($styleguideKitPath, DIRECTORY_SEPARATOR."vendor") !== false) {
+				$parts = explode(DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR, $styleguideKitPath); // set on another machine's config.yml? try to be smart about it
+				$styleguideKitPathFinal = "vendor".DIRECTORY_SEPARATOR.$parts[1];
+				Console::writeInfo("Please double-check the styleguideKitPath option in <path>./config/config.yml</path>. It should be a path relative to the root of your Pattern Lab project...");
+			}
+		}
+		
+		Console::writeInfo($styleguideKitPathFinal);
+		return $styleguideKitPathFinal;
+		
+	}
+	
+	/**
 	* Adds the config options to a var to be accessed from the rest of the system
 	* If it's an old config or no config exists this will update and generate it.
 	* @param  {Boolean}       whether we should print out the status of the config being loaded
@@ -172,17 +198,20 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		self::$options["configDir"]        = self::$userConfigDir;
-		self::$options["coreDir"]          = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
-		self::$options["exportDir"]        = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
-		self::$options["publicDir"]        = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
-		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
-		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
-		self::$options["componentDir"]     = self::$options["publicDir"]."/patternlab-components";
-		self::$options["dataDir"]          = self::$options["sourceDir"]."/_data";
-		self::$options["patternExportDir"] = self::$options["exportDir"]."/patterns";
-		self::$options["patternPublicDir"] = self::$options["publicDir"]."/patterns";
-		self::$options["patternSourceDir"] = self::$options["sourceDir"]."/_patterns";
+		self::$options["configDir"]         = self::$userConfigDir;
+		self::$options["coreDir"]           = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
+		self::$options["exportDir"]         = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
+		self::$options["publicDir"]         = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
+		self::$options["scriptsDir"]        = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
+		self::$options["sourceDir"]         = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
+		self::$options["componentDir"]      = self::$options["publicDir"]."/patternlab-components";
+		self::$options["dataDir"]           = self::$options["sourceDir"]."/_data";
+		self::$options["patternExportDir"]  = self::$options["exportDir"]."/patterns";
+		self::$options["patternPublicDir"]  = self::$options["publicDir"]."/patterns";
+		self::$options["patternSourceDir"]  = self::$options["sourceDir"]."/_patterns";
+		
+		// handle a pre-2.1.0 styleguideKitPath before saving it
+		self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
 		
 		// make sure styleguideExcludes is set to an array even if it's empty
 		if (is_string(self::$options["styleGuideExcludes"])) {

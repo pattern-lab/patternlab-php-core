@@ -610,12 +610,11 @@ class InstallerUtil {
 				// address other specific needs based on type
 				if ($type == "patternlab-patternengine") {
 					self::scanForPatternEngineRule($pathBase);
-				} else if ($type == "patternlab-starterkit") {
-					Config::updateConfigOption("starterKit",$name);
-					Config::updateConfigOption("starterKitPath",$pathBase);
 				} else if (($type == "patternlab-styleguidekit") && (strpos($name,"-assets-") === false)) {
+					$dir = str_replace(Config::getOption("baseDir"), "", $pathBase);
+					$dir = ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) ? rtrim($dir, DIRECTORY_SEPARATOR) : $dir;
 					Config::updateConfigOption("styleguideKit",$name);
-					Config::updateConfigOption("styleguideKitPath",$pathBase);
+					Config::updateConfigOption("styleguideKitPath",$dir);
 				}
 				
 			}
