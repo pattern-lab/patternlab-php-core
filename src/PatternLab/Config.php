@@ -214,7 +214,9 @@ class Config {
 		self::$options["patternSourceDir"]  = self::$options["sourceDir"]."/_patterns";
 		
 		// handle a pre-2.1.0 styleguideKitPath before saving it
-		self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
+		if (isset(self::$options["styleguideKitPath"])) {
+			self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
+		}
 		
 		// double-check a few directories are real
 		if (!is_dir(self::$options["sourceDir"])) {
