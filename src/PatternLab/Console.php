@@ -478,6 +478,16 @@ class Console {
 	}
 	
 	/**
+	* Alias for writeInfo because I keep wanting to use it
+	* @param  {String}        the content to be written out
+	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
+	* @param  {Boolean}       if there should be two breaks added to the end of the line
+	*/
+	public static function log($line,$doubleSpace = false,$doubleBreak = false) {
+		self::writeInfo($line,$doubleSpace = false,$doubleBreak = false);
+	}
+	
+	/**
 	* Write out a line to the console
 	* @param  {String}        the content to be written out
 	* @param  {Boolean}       if there should be two spaces added to the beginning of the line
