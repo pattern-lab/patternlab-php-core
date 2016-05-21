@@ -80,10 +80,10 @@ class Config {
 	*
 	* @return {String}       the final, post-2.1.0-style styleguideKitPath
 	*/
-	protected static function getStyleguideKitPath($styleguideKitPath) {
+	protected static function getStyleguideKitPath($styleguideKitPath = "") {
 		
 		$styleguideKitPathFinal = "";
-		if ($styleguideKitPath[0] == DIRECTORY_SEPARATOR) {
+		if (isset($styleguideKitPath[0]) && ($styleguideKitPath[0] == DIRECTORY_SEPARATOR)) {
 			if (strpos($styleguideKitPath, DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR === 0)) {
 				$styleguideKitPathFinal = $styleguideKitPath; // mistaken set-up, pass to final for clean-up
 			} else if (strpos($styleguideKitPath, self::$options["baseDir"]) === 0) {
