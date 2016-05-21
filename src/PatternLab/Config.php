@@ -93,6 +93,8 @@ class Config {
 				$styleguideKitPathFinal = "vendor".DIRECTORY_SEPARATOR.$parts[1];
 				Console::writeInfo("Please double-check the styleguideKitPath option in <path>./config/config.yml</path>. It should be a path relative to the root of your Pattern Lab project...");
 			}
+		} else {
+			$styleguideKitPathFinal = $styleguideKitPath; // fingers crossed everything is fine
 		}
 		
 		return $styleguideKitPathFinal;
@@ -211,6 +213,18 @@ class Config {
 		
 		// handle a pre-2.1.0 styleguideKitPath before saving it
 		self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
+		
+		// double-check a few directories are real
+		if (!is_dir(self::$options["sourceDir"])) {
+			Console::writeError("hrm... i can't seem to find the directory with your source files. are you sure they're at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing sourceDir. sorry, stopping pattern lab... :(");
+		}
+		if (!is_dir(self::$options["publicDir"])) {
+			Console::writeError("hrm... i can't seem to find the directory where you want to write your styleguide. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing publicDir. sorry, stopping pattern lab... :(");
+		}
+		if (!is_dir(self::$options["styleguideKitPath"])) {
+			Console::writeError("hrm... i can't seem to find the directory where your styleguide files are located. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["styleguideKitPath"])."</path>? you can fix this in <path>./config/config.yml</path> by editing styleguideKitPath. sorry, stopping pattern lab... :(");
+		}
+		
 		
 		// make sure styleguideExcludes is set to an array even if it's empty
 		if (is_string(self::$options["styleGuideExcludes"])) {
