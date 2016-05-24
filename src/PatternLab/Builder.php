@@ -16,6 +16,7 @@ use \PatternLab\Annotations;
 use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
+use \PatternLab\FileUtil;
 use \PatternLab\Parsers\Documentation;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
 use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
@@ -121,7 +122,7 @@ class Builder {
 		
 		// double-check that the data directory exists
 		if (!is_dir($dataDir)) {
-			mkdir($dataDir);
+			FileUtil::makeDir($dataDir);
 		}
 		
 		$output = "";
