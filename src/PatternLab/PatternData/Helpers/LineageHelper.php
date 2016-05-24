@@ -95,7 +95,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
+			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"])) && isset($patternStoreData["partial"])) {
 				
 				$patternLineagesR = array();
 				
@@ -123,7 +123,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 									if (PatternData::getOption($haystackKey)) {
 										
 										$path = PatternData::getPatternOption($haystackKey,"pathDash");
-										$patternLineagesR[] = array("lineagePattern" => $haystackKey, 
+										$patternLineagesR[] = array("lineagePattern" => $haystackKey,
 																	"lineagePath"    => "../../patterns/".$path."/".$path.".html");
 																
 									}

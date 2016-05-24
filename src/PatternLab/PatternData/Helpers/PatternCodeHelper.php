@@ -57,7 +57,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		// iterate to process each pattern
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && !$patternStoreData["hidden"]) {
+			if (($patternStoreData["category"] == "pattern") && isset($patternStoreData["hidden"]) && !$patternStoreData["hidden"]) {
 				
 				$data = Data::getPatternSpecificData($patternStoreKey);
 				

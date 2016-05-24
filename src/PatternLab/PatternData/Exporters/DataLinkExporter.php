@@ -17,27 +17,29 @@ use \PatternLab\PatternData;
 use \PatternLab\Timer;
 
 class DataLinkExporter extends \PatternLab\PatternData\Exporter {
-
+	
 	public function __construct($options = array()) {
-
+		
 		parent::__construct($options);
-
+		
 	}
-
+	
 	public function run() {
-
+		
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
-
+			
 			if ($patternStoreData["category"] == "pattern") {
-
-				$value = "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
-				Data::setOptionLink($patternStoreKey, $value);
-
+				
+				if (isset($patternStoreData["pathDash"])) {
+					$value = "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
+					Data::setOptionLink($patternStoreKey, $value);
+				}
+				
 			}
-
+			
 		}
-
+		
 	}
-
+	
 }
