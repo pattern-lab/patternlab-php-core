@@ -46,6 +46,10 @@ class Template {
 		$styleguideKit           = Config::getOption("styleguideKit");
 		$styleguideKitPath       = Config::getOption("styleguideKitPath");
 		
+		if (!$styleguideKitPath || !is_dir($styleguideKitPath)) {
+			Console::writeError("your styleguide won't render because i can't find your styleguide files. are you sure they're at <path>".Console::getHumanReadablePath($styleguideKitPath)."</path>? you can fix this in <path>./config/config.yml</path> by editing styleguideKitPath...");
+		}
+		
 		// load pattern-lab's resources
 		$partialPath             = $styleguideKitPath."/views/partials";
 		$generalHeaderPath       = $partialPath."/general-header.".$patternExtension;

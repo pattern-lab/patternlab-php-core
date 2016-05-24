@@ -218,22 +218,9 @@ class Config {
 			self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
 		}
 		
-		// double-check a few directories are real
-		// refactor this at some point. it's verbose
-		if (!isset(self::$options["sourceDir"])) {
-			Console::writeError("please make sure sourceDir is set in <path>./config/config.yml</path> by adding 'sourceDir=some/path'. sorry, stopping pattern lab... :(");
-		} else if (!is_dir(self::$options["sourceDir"])) {
-			Console::writeError("hrm... i can't seem to find the directory with your source files. are you sure they're at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing sourceDir. sorry, stopping pattern lab... :(");
-		}
-		if (!isset(self::$options["publicDir"])) {
-			Console::writeError("please make sure publicDir is set in <path>./config/config.yml</path> by adding 'publicDir=some/path'. sorry, stopping pattern lab... :(");
-		} else if (!is_dir(self::$options["publicDir"])) {
-			Console::writeError("hrm... i can't seem to find the directory where you want to write your styleguide. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing publicDir. sorry, stopping pattern lab... :(");
-		}
-		if (isset(self::$options["styleguideKitPath"]) && !is_dir(self::$options["styleguideKitPath"])) {
-			Console::writeError("hrm... i can't seem to find the directory where your styleguide files are located. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["styleguideKitPath"])."</path>? you can fix this in <path>./config/config.yml</path> by editing styleguideKitPath. sorry, stopping pattern lab... :(");
-		}
-		
+		// double-check a few directories are real and set-up
+		FileUtil::checkPathFromConfig(self::$options["sourceDir"], self::$userConfigPath, "sourceDir");
+		FileUtil::checkPathFromConfig(self::$options["publicDir"], self::$userConfigPath, "publicDir");
 		
 		// make sure styleguideExcludes is set to an array even if it's empty
 		if (is_string(self::$options["styleGuideExcludes"])) {
