@@ -14,6 +14,7 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Console;
+use \PatternLab\FileUtil;
 use \PatternLab\Timer;
 use \Symfony\Component\Filesystem\Filesystem;
 use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -62,7 +63,13 @@ class InstallerUtil {
 		// make sure the source dir is set-up
 		$sourceDir = Config::getOption("sourceDir");
 		if (!is_dir($sourceDir)) {
-			mkdir($sourceDir);
+			FileUtil::makeDir($sourceDir);
+		}
+		
+		// make sure the public dir is set-up
+		$publicDir = Config::getOption("publicDir");
+		if (!is_dir($publicDir)) {
+			FileUtil::makeDir($publicDir);
 		}
 		
 		Dispatcher::init();
