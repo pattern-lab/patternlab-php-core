@@ -367,7 +367,8 @@ class Console {
 		$lengthLong = 0;
 		foreach ($commandOptions as $option => $attributes) {
 			$optionShort = (!empty($attributes["optionShort"][0]) && (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != ""))) ? "|-".$attributes["optionShort"] : "";
-			$optionList .= "[--".$attributes["optionLong"].$optionShort."] ";
+			$optionExtra = (!empty($attributes["optionExtra"])) ? " ".$attributes["optionExtra"] : "";
+			$optionList .= "[--".$attributes["optionLong"].$optionShort.$optionExtra."] ";
 			$lengthLong = ($attributes["optionLongLength"] > $lengthLong) ? $attributes["optionLongLength"] : $lengthLong;
 		}
 		
@@ -382,7 +383,7 @@ class Console {
 		self::writeLine("");
 		self::writeLine("<h1>".$commandLongUC." Command Options</h1>",true,true);
 		self::writeLine("<h2>Usage</h2>:",true,true);
-		self::writeLine("  php ".self::$self." --".$commandLong.$commandShortInc." ".$commandExampleList.$optionList,true,true);
+		self::writeLine("  php ".self::$self." --".$commandLong.$commandShortInc." ".$optionList,true,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
