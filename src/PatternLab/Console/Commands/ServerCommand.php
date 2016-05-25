@@ -52,10 +52,17 @@ class ServerCommand extends Command {
 			$null = Console::findCommandOption("quiet");
 			$null = $null ? " >& /dev/null" : "";
 			
+			$php  = isset($_SERVER["_"]) ? $_SERVER["_"] : Config::getOption("phpBin");
+			
+			if (!$php) {
+				$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
+				Console::writeError("please add the option `phpBin` with the path to PHP to <path>".$configPath."</path> before running the server...");
+			}
+			
 			// start-up the server with the router
 			Console::writeInfo("server started on http://".$host." - use ctrl+c to exit...");
 			
-			passthru("cd ".$publicDir." && ".$_SERVER["_"]." -S ".$host." ".$coreDir."/server/router.php".$null);
+			passthru("cd ".$publicDir." && ".$php." -S ".$host." ".$coreDir."/server/router.php".$null);
 			
 		}
 		
