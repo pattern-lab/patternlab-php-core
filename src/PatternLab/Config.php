@@ -334,7 +334,7 @@ class Config {
 			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
 			if (strpos($prompt, "<default>") !== false) {
 				$default = explode("<default>",$prompt);
-				$default = explode("</default>",$default[1]));
+				$default = explode("</default>",$default[1]);
 				$default = $default[0];
 			}
 			
