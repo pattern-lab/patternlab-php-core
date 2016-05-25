@@ -111,6 +111,12 @@ class Builder {
 	*/
 	protected function generateIndex() {
 		
+		// bomb if missing index.html
+		if (!file_exists(Config::getOption("publicDir")."/index.html")) {
+			$index = Console::getHumanReadablePath(Config::getOption("publicDir")).DIRECTORY_SEPARATOR."index.html";
+			Console::writeError("<path>".$index."</path> is missing. grab a copy from your StyleguideKit...");
+		}
+		
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
 		
