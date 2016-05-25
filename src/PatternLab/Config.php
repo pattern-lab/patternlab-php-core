@@ -329,9 +329,16 @@ class Config {
 		if (is_string($optionValue) && strpos($optionValue,"<prompt>") !== false) {
 			
 			// prompt for input using the supplied query
-			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
 			$options = "";
-			$input   = Console::promptInput($prompt,$options,false);
+			$default = "";
+			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
+			if (strpos($prompt, "<default>") !== false) {
+				$default = explode("<default>",$prompt);
+				$default = explode("</default>",$default[1]));
+				$default = $default[0];
+			}
+			
+			$input = Console::promptInput($prompt,$options,$default,false);
 			
 			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeTag("ok","config option ".$optionName." updated...", false, true);
@@ -352,7 +359,7 @@ class Config {
 				// prompt for input
 				$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
-				$input   = Console::promptInput($prompt,$options);
+				$input   = Console::promptInput($prompt,$options,"Y");
 				
 				if ($input == "y") {
 					self::writeUpdateConfigOption($optionName,$optionValue);

@@ -484,7 +484,7 @@ class InstallerUtil {
 				// prompt for input using the supplied query
 				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. merge or replace with the contents of <path>".$packageName."</path> package?";
 				$options = "M/r";
-				$input   = Console::promptInput($prompt,$options);
+				$input   = Console::promptInput($prompt,$options,"M");
 				
 				if ($input == "m") {
 					Console::writeTag("ok","contents of <path>".$humanReadablePath."</path> have been merged with the package's content...", false, true);
@@ -548,7 +548,7 @@ class InstallerUtil {
 		
 		$prompt  = "choose an option or hit return to skip:";
 		$options = "(ex. 1)";
-		$input   = Console::promptInput($prompt,$options);
+		$input   = Console::promptInput($prompt,$options,"1");
 		$result  = (int)$input - 1;
 		
 		if (isset($starterKitSuggestions[$result])) {

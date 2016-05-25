@@ -532,12 +532,13 @@ class Console {
 	* Prompt the user for some input
 	* @param  {String}        the text for the prompt
 	* @param  {String}        the text for the options
+	* @param  {String}        the text for the default option
 	* @param  {Boolean}       if we should lowercase the input before sending it back
 	* @param  {String}        the tag that should be used when drawing the content
 	*
 	* @return {String}        trimmed input given by the user
 	*/
-	public static function promptInput($prompt = "", $options = "", $lowercase = true, $tag = "info") {
+	public static function promptInput($prompt = "", $options = "", $default = "", $lowercase = true, $tag = "info") {
 		
 		// check prompt
 		if (empty($prompt)) {
@@ -552,11 +553,18 @@ class Console {
 		// make sure no end-of-line is added
 		$prompt .= " <nophpeol>";
 		
-		// open the terminal and wait for feedback
-		$stdin = fopen("php://stdin", "r");
-		Console::writeTag($tag,$prompt);
-		$input = trim(fgets($stdin));
-		fclose($stdin);
+		// make sure we're not running in no interaction mode. if so just use the default for the input
+		if ((isset($_ENV['COMPOSER_NO_INTERACTION']) && $_ENV['COMPOSER_NO_INTERACTION'])) {
+			$input = $default;
+		} else {
+			
+			// open the terminal and wait for feedback
+			$stdin = fopen("php://stdin", "r");
+			Console::writeTag($tag,$prompt);
+			$input = trim(fgets($stdin));
+			fclose($stdin);
+			
+		}
 		
 		// check to see if it should be lowercased before sending back
 		return ($lowercase) ? strtolower($input) : $input;
