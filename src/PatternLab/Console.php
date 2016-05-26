@@ -554,15 +554,17 @@ class Console {
 		$prompt .= " <nophpeol>";
 		
 		// make sure we're not running in no interaction mode. if so just use the default for the input
-		if ((isset($_ENV['COMPOSER_NO_INTERACTION']) && $_ENV['COMPOSER_NO_INTERACTION'])) {
-			$input = $default;
-		} else {
+		if (InstallerUtil::$isInteractive) {
 			
 			// open the terminal and wait for feedback
 			$stdin = fopen("php://stdin", "r");
 			Console::writeTag($tag,$prompt);
 			$input = trim(fgets($stdin));
 			fclose($stdin);
+			
+		} else {
+			
+			$input = $default;
 			
 		}
 		

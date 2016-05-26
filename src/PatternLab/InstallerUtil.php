@@ -22,6 +22,8 @@ use \Symfony\Component\Finder\Finder;
 
 class InstallerUtil {
 	
+	public static $isInteractive;
+	
 	/**
 	 * Move the component files from the package to their location in the patternlab-components dir
 	 * @param  {String/Array}   the items to create a fileList for
@@ -583,8 +585,8 @@ class InstallerUtil {
 	 */
 	protected static function packagesInstall($installerInfo, $event) {
 		
-		print "arguments:";
-		print_r($event->getArguments());
+		// mark if this is an interactive call or not
+		self::$isInteractive = $event->getIO()->isInteractive();
 		
 		// initialize a bunch of stuff like config and console
 		self::init();
