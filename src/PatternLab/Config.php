@@ -202,6 +202,7 @@ class Config {
 		
 		// set-up the various dirs
 		self::$options["configDir"]         = self::$userConfigDir;
+		self::$options["configPath"]        = self::$userConfigPath;
 		self::$options["coreDir"]           = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
 		self::$options["exportDir"]         = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
 		self::$options["publicDir"]         = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
@@ -218,22 +219,9 @@ class Config {
 			self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
 		}
 		
-		// double-check a few directories are real
-		// refactor this at some point. it's verbose
-		if (!isset(self::$options["sourceDir"])) {
-			Console::writeError("please make sure sourceDir is set in <path>./config/config.yml</path> by adding 'sourceDir=some/path'. sorry, stopping pattern lab... :(");
-		} else if (!is_dir(self::$options["sourceDir"])) {
-			Console::writeError("hrm... i can't seem to find the directory with your source files. are you sure they're at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing sourceDir. sorry, stopping pattern lab... :(");
-		}
-		if (!isset(self::$options["publicDir"])) {
-			Console::writeError("please make sure publicDir is set in <path>./config/config.yml</path> by adding 'publicDir=some/path'. sorry, stopping pattern lab... :(");
-		} else if (!is_dir(self::$options["publicDir"])) {
-			Console::writeError("hrm... i can't seem to find the directory where you want to write your styleguide. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["sourceDir"])."</path>? you can fix this in <path>./config/config.yml</path> by editing publicDir. sorry, stopping pattern lab... :(");
-		}
-		if (isset(self::$options["styleguideKitPath"]) && !is_dir(self::$options["styleguideKitPath"])) {
-			Console::writeError("hrm... i can't seem to find the directory where your styleguide files are located. are you sure it's at <path>".Console::getHumanReadablePath(self::$options["styleguideKitPath"])."</path>? you can fix this in <path>./config/config.yml</path> by editing styleguideKitPath. sorry, stopping pattern lab... :(");
-		}
-		
+		// double-check a few directories are real and set-up
+		FileUtil::checkPathFromConfig(self::$options["sourceDir"], self::$userConfigPath, "sourceDir");
+		FileUtil::checkPathFromConfig(self::$options["publicDir"], self::$userConfigPath, "publicDir");
 		
 		// make sure styleguideExcludes is set to an array even if it's empty
 		if (is_string(self::$options["styleGuideExcludes"])) {
@@ -341,9 +329,16 @@ class Config {
 		if (is_string($optionValue) && strpos($optionValue,"<prompt>") !== false) {
 			
 			// prompt for input using the supplied query
-			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
 			$options = "";
-			$input   = Console::promptInput($prompt,$options,false);
+			$default = "";
+			$prompt  = str_replace("</prompt>","",str_replace("<prompt>","",$optionValue));
+			if (strpos($prompt, "<default>") !== false) {
+				$default = explode("<default>",$prompt);
+				$default = explode("</default>",$default[1]);
+				$default = $default[0];
+			}
+			
+			$input = Console::promptInput($prompt,$options,$default,false);
 			
 			self::writeUpdateConfigOption($optionName,$input);
 			Console::writeTag("ok","config option ".$optionName." updated...", false, true);
@@ -364,7 +359,7 @@ class Config {
 				// prompt for input
 				$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
 				$options = "Y/n";
-				$input   = Console::promptInput($prompt,$options);
+				$input   = Console::promptInput($prompt,$options,"Y");
 				
 				if ($input == "y") {
 					self::writeUpdateConfigOption($optionName,$optionValue);

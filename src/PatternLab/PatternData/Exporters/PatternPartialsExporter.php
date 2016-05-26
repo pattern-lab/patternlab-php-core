@@ -42,7 +42,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"]) && (!$patternStoreData["noviewall"]) && ($patternStoreData["depth"] > 1) && (!in_array($patternStoreData["type"],$styleGuideExcludes))) {
+			if (($patternStoreData["category"] == "pattern") && isset($patternStoreData["hidden"]) && (!$patternStoreData["hidden"]) && (!$patternStoreData["noviewall"]) && ($patternStoreData["depth"] > 1) && (!in_array($patternStoreData["type"],$styleGuideExcludes))) {
 				
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					

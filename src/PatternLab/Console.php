@@ -367,7 +367,8 @@ class Console {
 		$lengthLong = 0;
 		foreach ($commandOptions as $option => $attributes) {
 			$optionShort = (!empty($attributes["optionShort"][0]) && (($attributes["optionShort"][0] != "z") || ($attributes["optionShort"] != ""))) ? "|-".$attributes["optionShort"] : "";
-			$optionList .= "[--".$attributes["optionLong"].$optionShort."] ";
+			$optionExtra = (!empty($attributes["optionExtra"])) ? " ".$attributes["optionExtra"] : "";
+			$optionList .= "[--".$attributes["optionLong"].$optionShort.$optionExtra."] ";
 			$lengthLong = ($attributes["optionLongLength"] > $lengthLong) ? $attributes["optionLongLength"] : $lengthLong;
 		}
 		
@@ -382,7 +383,7 @@ class Console {
 		self::writeLine("");
 		self::writeLine("<h1>".$commandLongUC." Command Options</h1>",true,true);
 		self::writeLine("<h2>Usage</h2>:",true,true);
-		self::writeLine("  php ".self::$self." --".$commandLong.$commandShortInc." ".$commandExampleList.$optionList,true,true);
+		self::writeLine("  php ".self::$self." --".$commandLong.$commandShortInc." ".$optionList,true,true);
 		
 		// write out the available options
 		if (count($commandOptions) > 0) {
@@ -531,12 +532,13 @@ class Console {
 	* Prompt the user for some input
 	* @param  {String}        the text for the prompt
 	* @param  {String}        the text for the options
+	* @param  {String}        the text for the default option
 	* @param  {Boolean}       if we should lowercase the input before sending it back
 	* @param  {String}        the tag that should be used when drawing the content
 	*
 	* @return {String}        trimmed input given by the user
 	*/
-	public static function promptInput($prompt = "", $options = "", $lowercase = true, $tag = "info") {
+	public static function promptInput($prompt = "", $options = "", $default = "", $lowercase = true, $tag = "info") {
 		
 		// check prompt
 		if (empty($prompt)) {
@@ -551,11 +553,20 @@ class Console {
 		// make sure no end-of-line is added
 		$prompt .= " <nophpeol>";
 		
-		// open the terminal and wait for feedback
-		$stdin = fopen("php://stdin", "r");
-		Console::writeTag($tag,$prompt);
-		$input = trim(fgets($stdin));
-		fclose($stdin);
+		// make sure we're not running in no interaction mode. if so just use the default for the input
+		if (InstallerUtil::$isInteractive) {
+			
+			// open the terminal and wait for feedback
+			$stdin = fopen("php://stdin", "r");
+			Console::writeTag($tag,$prompt);
+			$input = trim(fgets($stdin));
+			fclose($stdin);
+			
+		} else {
+			
+			$input = $default;
+			
+		}
 		
 		// check to see if it should be lowercased before sending back
 		return ($lowercase) ? strtolower($input) : $input;

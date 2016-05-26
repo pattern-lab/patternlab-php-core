@@ -91,8 +91,8 @@ class Fetch {
 		Console::writeInfo("finished downloading the starterkit...");
 		
 		// make sure the temp dir exists before copying into it
-		if (!is_dir($tempDirSK)) { 
-			mkdir($tempDirSK); 
+		if (!is_dir($tempDirSK)) {
+			mkdir($tempDirSK);
 		}
 		
 		// extract, if the zip is supposed to be unpacked do that (e.g. stripdir)
@@ -195,7 +195,7 @@ class Fetch {
 			
 			$prompt    = "a starterkit is already installed. merge the new files with it or replace it?";
 			$options   = "M/r";
-			$input     = Console::promptInput($prompt,$options);
+			$input     = Console::promptInput($prompt,$options,"M");
 			$fsOptions = ($input == "r") ? array("delete" => true, "override" => true) : array("delete" => false, "override" => false);
 			
 		}

@@ -74,7 +74,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 				
 			} else if ($patternStoreData["category"] == "pattern") {
 				
-				if (!$patternStoreData["hidden"]) {
+				if (isset($patternStoreData["hidden"]) && !$patternStoreData["hidden"]) {
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html",
@@ -124,7 +124,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 						
 						// add a view all link
 						$navItems["patternTypes"][$patternTypeKey]["patternTypeItems"][$patternSubtypeKey]["patternSubtypeItems"][$subItemsCount] = array(
-																												 "patternPath"    => $patternType."-".$patternSubtype."/index.html", 
+																												 "patternPath"    => $patternType."-".$patternSubtype."/index.html",
 																												 "patternName"    => "View All",
 																												 "patternType"    => $patternType,
 																												 "patternSubtype" => $patternSubtype,
@@ -144,7 +144,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			// add an overall view all link to the menus with sub-menus
 			if (!empty($navItems["patternTypes"][$patternTypeKey]["patternTypeItems"])) {
 				
-				$navItems["patternTypes"][$patternTypeKey]["patternItems"][] = array("patternPath"    => $patternType."/index.html", 
+				$navItems["patternTypes"][$patternTypeKey]["patternItems"][] = array("patternPath"    => $patternType."/index.html",
 																					 "patternName"    => "View All",
 																					 "patternType"    => $patternType,
 																					 "patternSubtype" => "all",

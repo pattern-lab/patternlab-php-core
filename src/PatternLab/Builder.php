@@ -16,6 +16,7 @@ use \PatternLab\Annotations;
 use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
+use \PatternLab\FileUtil;
 use \PatternLab\Parsers\Documentation;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
 use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
@@ -110,6 +111,12 @@ class Builder {
 	*/
 	protected function generateIndex() {
 		
+		// bomb if missing index.html
+		if (!file_exists(Config::getOption("publicDir")."/index.html")) {
+			$index = Console::getHumanReadablePath(Config::getOption("publicDir")).DIRECTORY_SEPARATOR."index.html";
+			Console::writeError("<path>".$index."</path> is missing. grab a copy from your StyleguideKit...");
+		}
+		
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
 		
@@ -121,7 +128,7 @@ class Builder {
 		
 		// double-check that the data directory exists
 		if (!is_dir($dataDir)) {
-			mkdir($dataDir);
+			FileUtil::makeDir($dataDir);
 		}
 		
 		$output = "";
@@ -236,7 +243,7 @@ class Builder {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"])) {
+			if (($patternStoreData["category"] == "pattern") && isset($patternStoreData["hidden"]) && (!$patternStoreData["hidden"])) {
 				
 				$path          = $patternStoreData["pathDash"];
 				$pathName      = (isset($patternStoreData["pseudo"])) ? $patternStoreData["pathOrig"] : $patternStoreData["pathName"];

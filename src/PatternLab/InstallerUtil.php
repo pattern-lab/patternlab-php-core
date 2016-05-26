@@ -14,12 +14,15 @@ namespace PatternLab;
 
 use \PatternLab\Config;
 use \PatternLab\Console;
+use \PatternLab\FileUtil;
 use \PatternLab\Timer;
 use \Symfony\Component\Filesystem\Filesystem;
 use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use \Symfony\Component\Finder\Finder;
 
 class InstallerUtil {
+	
+	public static $isInteractive;
 	
 	/**
 	 * Move the component files from the package to their location in the patternlab-components dir
@@ -62,7 +65,13 @@ class InstallerUtil {
 		// make sure the source dir is set-up
 		$sourceDir = Config::getOption("sourceDir");
 		if (!is_dir($sourceDir)) {
-			mkdir($sourceDir);
+			FileUtil::makeDir($sourceDir);
+		}
+		
+		// make sure the public dir is set-up
+		$publicDir = Config::getOption("publicDir");
+		if (!is_dir($publicDir)) {
+			FileUtil::makeDir($publicDir);
 		}
 		
 		Dispatcher::init();
@@ -477,7 +486,7 @@ class InstallerUtil {
 				// prompt for input using the supplied query
 				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. merge or replace with the contents of <path>".$packageName."</path> package?";
 				$options = "M/r";
-				$input   = Console::promptInput($prompt,$options);
+				$input   = Console::promptInput($prompt,$options,"M");
 				
 				if ($input == "m") {
 					Console::writeTag("ok","contents of <path>".$humanReadablePath."</path> have been merged with the package's content...", false, true);
@@ -504,7 +513,7 @@ class InstallerUtil {
 	 */
 	public static function postInstallCmd($installerInfo, $event) {
 		
-		self::packagesInstall($installerInfo);
+		self::packagesInstall($installerInfo, $event);
 		
 	}
 	
@@ -516,7 +525,7 @@ class InstallerUtil {
 	public static function postUpdateCmd($installerInfo, $event) {
 		
 		if (!$installerInfo["packagesRemove"]) {
-			self::packagesInstall($installerInfo);
+			self::packagesInstall($installerInfo, $event);
 		}
 		
 	}
@@ -541,7 +550,7 @@ class InstallerUtil {
 		
 		$prompt  = "choose an option or hit return to skip:";
 		$options = "(ex. 1)";
-		$input   = Console::promptInput($prompt,$options);
+		$input   = Console::promptInput($prompt,$options,"1");
 		$result  = (int)$input - 1;
 		
 		if (isset($starterKitSuggestions[$result])) {
@@ -574,7 +583,10 @@ class InstallerUtil {
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file on install
 	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
-	protected static function packagesInstall($installerInfo) {
+	protected static function packagesInstall($installerInfo, $event) {
+		
+		// mark if this is an interactive call or not
+		self::$isInteractive = $event->getIO()->isInteractive();
 		
 		// initialize a bunch of stuff like config and console
 		self::init();
