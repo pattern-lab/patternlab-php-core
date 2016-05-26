@@ -583,6 +583,7 @@ class InstallerUtil {
 	 */
 	protected static function packagesInstall($installerInfo, $event) {
 		
+		Console::log("print args:");
 		print_r($event->getArguments());
 		
 		// initialize a bunch of stuff like config and console
