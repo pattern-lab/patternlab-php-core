@@ -554,7 +554,6 @@ class Console {
 		$prompt .= " <nophpeol>";
 		
 		// make sure we're not running in no interaction mode. if so just use the default for the input
-		print_r($_ENV);
 		if ((isset($_ENV['COMPOSER_NO_INTERACTION']) && $_ENV['COMPOSER_NO_INTERACTION'])) {
 			$input = $default;
 		} else {
