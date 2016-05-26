@@ -511,7 +511,7 @@ class InstallerUtil {
 	 */
 	public static function postInstallCmd($installerInfo, $event) {
 		
-		self::packagesInstall($installerInfo);
+		self::packagesInstall($installerInfo, $event);
 		
 	}
 	
@@ -523,7 +523,7 @@ class InstallerUtil {
 	public static function postUpdateCmd($installerInfo, $event) {
 		
 		if (!$installerInfo["packagesRemove"]) {
-			self::packagesInstall($installerInfo);
+			self::packagesInstall($installerInfo, $event);
 		}
 		
 	}
@@ -581,7 +581,9 @@ class InstallerUtil {
 	 * Handle some Pattern Lab specific tasks based on what's found in the package's composer.json file on install
 	 * @param  {Array}      the info culled from installing various pattern lab-related packages
 	 */
-	protected static function packagesInstall($installerInfo) {
+	protected static function packagesInstall($installerInfo, $event) {
+		
+		print_r($event->getArguments());
 		
 		// initialize a bunch of stuff like config and console
 		self::init();
