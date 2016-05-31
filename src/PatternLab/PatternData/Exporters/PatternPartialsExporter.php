@@ -51,6 +51,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
 					$patternPartialData["patternPartialCode"]      = $patternStoreData["code"];
+					$patternPartialData["patternState"]            = $patternStoreData["state"];
 					
 					$patternPartialData["patternLineageExists"]    = isset($patternStoreData["lineages"]);
 					$patternPartialData["patternLineages"]         = isset($patternStoreData["lineages"]) ? $patternStoreData["lineages"] : array();
