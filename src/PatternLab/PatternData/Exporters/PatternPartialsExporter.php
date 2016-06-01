@@ -86,6 +86,21 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				
 				}
 				
+			} else if (($patternStoreData["category"] == "patternSubtype") && (!in_array($patternStoreData["type"],$styleGuideExcludes))) {
+				
+				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["name"] == $subtype))) {
+					
+					$patternPartialData                            = array();
+					$patternPartialData["patternName"]             = ucwords($patternStoreData["nameClean"]);
+					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/index.html";
+					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
+					$patternPartialData["patternSectionSubtype"]   = isset($patternStoreData["descExists"]);
+					$patternPartialData["patternDesc"]             = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
+					
+					$patternPartials[] =  $patternPartialData;
+					
+				}
+				
 			}
 			
 		}
