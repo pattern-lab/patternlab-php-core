@@ -129,7 +129,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 			} else {
 
 				try {
-					$patternDataBase = YAML::parse($file);
+					$patternDataBase = YAML::parse($data);
 				} catch (ParseException $e) {
 					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
 				}
