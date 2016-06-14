@@ -77,7 +77,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "nameClean"        => $patternClean,
 								  "type"             => $patternType,
 								  "typeDash"         => $patternTypeDash,
-								  "breadcrumb"       => $patternTypeClean,
+								  "breadcrumb"       => array("patternType" => $patternTypeClean),
 								  "state"            => $patternState,
 								  "hidden"           => $hidden,
 								  "noviewall"        => $noviewall,
@@ -97,7 +97,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		if ($depth > 1) {
 			$patternStoreData["subtype"]     = $patternSubtype;
 			$patternStoreData["subtypeDash"] = $patternSubtypeDash;
-			$patternStoreData["breadcrumb"]  = $patternTypeClean." > ".$patternSubtypeClean;
+			$patternStoreData["breadcrumb"]  = array("patternType" => $patternTypeClean, "patternSubtype" => $patternSubtypeClean);
 		}
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
