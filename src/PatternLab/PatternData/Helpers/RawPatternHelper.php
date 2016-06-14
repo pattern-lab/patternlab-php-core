@@ -47,7 +47,7 @@ class RawPatternHelper extends \PatternLab\PatternData\Helper {
 				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
 				
 				// load the raw data so it can be modified/rendered
-				$path = $patternSourceDir."/".$srcPath.".".$patternExtension;
+				$path = $patternSourceDir.DIRECTORY_SEPARATOR.$srcPath.".".$patternExtension;
 				if (file_exists($path)) {
 					PatternData::setPatternOption($patternStoreKey,"patternRaw",file_get_contents($path));
 				} else {

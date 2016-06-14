@@ -40,7 +40,8 @@ class Annotations {
 	public static function gather() {
 		
 		// set-up default var
-		$sourceDir = Config::getOption("sourceDir");
+		$annotationsDir = Config::getOption("annotationsDir");
+		
 		// set-up the dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
 		
@@ -51,14 +52,14 @@ class Annotations {
 		self::$store["comments"] = array();
 		
 		// iterate over all of the files in the annotations dir
-		if (!is_dir($sourceDir."/_annotations")) {
-			Console::writeWarning("<path>_annotations/</path><warning> doesn't exist so you won't have annotations...");
-			mkdir($sourceDir."/_annotations");
+		if (!is_dir($annotationsDir)) {
+			Console::writeWarning("<path>".Console::getHumanReadablePath($annotationsDir)."</path><warning> doesn't exist so you won't have annotations...");
+			mkdir($annotationsDir);
 		}
 		
 		// find the markdown-based annotations
 		$finder = new Finder();
-		$finder->files()->name("*.md")->in($sourceDir."/_annotations");
+		$finder->files()->name("*.md")->in($annotationsDir);
 		$finder->sortByName();
 		
 		foreach ($finder as $name => $file) {
@@ -89,13 +90,14 @@ class Annotations {
 		}
 		
 		// read in the old style annotations.js, modify the data and generate JSON array to merge
-		if (file_exists($sourceDir."/_annotations/annotations.js")) {
-			$text = file_get_contents($sourceDir."/_annotations/annotations.js");
+		$oldStyleAnnotationsPath = $annotationsDir.DIRECTORY_SEPARATOR."annotations.js";
+		if (file_exists($oldStyleAnnotationsPath)) {
+			$text = file_get_contents($oldStyleAnnotationsPath);
 			$text = str_replace("var comments = ","",$text);
 			$text = rtrim($text,";");
 			$data = json_decode($text,true);
 			if ($jsonErrorMessage = JSON::hasError()) {
-				JSON::lastErrorMsg("_annotations/annotations.js",$jsonErrorMessage,$data);
+				JSON::lastErrorMsg(Console::getHumanReadablePath($oldStyleAnnotationsPath),$jsonErrorMessage,$data);
 			}
 		}
 		

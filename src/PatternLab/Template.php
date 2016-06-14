@@ -42,7 +42,7 @@ class Template {
 		
 		// set-up config vars
 		$patternExtension        = Config::getOption("patternExtension");
-		$sourceDir               = Config::getOption("sourceDir");
+		$metaDir                 = Config::getOption("metaDir");
 		$styleguideKit           = Config::getOption("styleguideKit");
 		$styleguideKitPath       = Config::getOption("styleguideKitPath");
 		
@@ -51,15 +51,15 @@ class Template {
 		}
 		
 		// load pattern-lab's resources
-		$partialPath             = $styleguideKitPath."/views/partials";
-		$generalHeaderPath       = $partialPath."/general-header.".$patternExtension;
-		$generalFooterPath       = $partialPath."/general-footer.".$patternExtension;
-		self::$htmlHead       = (file_exists($generalHeaderPath)) ? file_get_contents($generalHeaderPath) : "";
-		self::$htmlFoot       = (file_exists($generalFooterPath)) ? file_get_contents($generalFooterPath) : "";
+		$partialPath             = $styleguideKitPath.DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR."partials";
+		$generalHeaderPath       = $partialPath.DIRECTORY_SEPARATOR."general-header.".$patternExtension;
+		$generalFooterPath       = $partialPath.DIRECTORY_SEPARATOR."general-footer.".$patternExtension;
+		self::$htmlHead          = (file_exists($generalHeaderPath)) ? file_get_contents($generalHeaderPath) : "";
+		self::$htmlFoot          = (file_exists($generalFooterPath)) ? file_get_contents($generalFooterPath) : "";
 		
 		// gather the user-defined header and footer information
-		$patternHeadPath         = $sourceDir."/_meta/_00-head.".$patternExtension;
-		$patternFootPath         = $sourceDir."/_meta/_01-foot.".$patternExtension;
+		$patternHeadPath         = $metaDir.DIRECTORY_SEPARATOR."_00-head.".$patternExtension;
+		$patternFootPath         = $metaDir.DIRECTORY_SEPARATOR."_01-foot.".$patternExtension;
 		self::$patternHead       = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
 		self::$patternFoot       = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
 		
@@ -68,8 +68,8 @@ class Template {
 		$filesystemLoaderClass   = $patternEngineBasePath."\Loaders\FilesystemLoader";
 		
 		$options                 = array();
-		$options["templatePath"] = $styleguideKitPath."/views";
-		$options["partialsPath"] = $styleguideKitPath."/views/partials";
+		$options["templatePath"] = $styleguideKitPath.DIRECTORY_SEPARATOR."views";
+		$options["partialsPath"] = $options["templatePath"].DIRECTORY_SEPARATOR."partials";
 		
 		self::$filesystemLoader  = new $filesystemLoaderClass($options);
 		

@@ -201,18 +201,20 @@ class Config {
 		}
 		
 		// set-up the various dirs
-		self::$options["configDir"]         = self::$userConfigDir;
-		self::$options["configPath"]        = self::$userConfigPath;
-		self::$options["coreDir"]           = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
-		self::$options["exportDir"]         = isset(self::$options["exportDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
-		self::$options["publicDir"]         = isset(self::$options["publicDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
-		self::$options["scriptsDir"]        = isset(self::$options["scriptsDir"])  ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
-		self::$options["sourceDir"]         = isset(self::$options["sourceDir"])   ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
-		self::$options["componentDir"]      = self::$options["publicDir"]."/patternlab-components";
-		self::$options["dataDir"]           = self::$options["sourceDir"]."/_data";
-		self::$options["patternExportDir"]  = self::$options["exportDir"]."/patterns";
-		self::$options["patternPublicDir"]  = self::$options["publicDir"]."/patterns";
-		self::$options["patternSourceDir"]  = self::$options["sourceDir"]."/_patterns";
+		self::$options["configDir"]        = self::$userConfigDir;
+		self::$options["configPath"]       = self::$userConfigPath;
+		self::$options["coreDir"]          = is_dir(self::$options["baseDir"]."_core") ? self::$options["baseDir"]."_core" : self::$options["baseDir"]."core";
+		self::$options["exportDir"]        = isset(self::$options["exportDir"])        ? self::$options["baseDir"].self::cleanDir(self::$options["exportDir"])   : self::$options["baseDir"]."exports";
+		self::$options["publicDir"]        = isset(self::$options["publicDir"])        ? self::$options["baseDir"].self::cleanDir(self::$options["publicDir"])   : self::$options["baseDir"]."public";
+		self::$options["scriptsDir"]       = isset(self::$options["scriptsDir"])       ? self::$options["baseDir"].self::cleanDir(self::$options["scriptsDir"])  : self::$options["baseDir"]."scripts";
+		self::$options["sourceDir"]        = isset(self::$options["sourceDir"])        ? self::$options["baseDir"].self::cleanDir(self::$options["sourceDir"])   : self::$options["baseDir"]."source";
+		self::$options["componentDir"]     = isset(self::$options["componentDir"])     ? self::$options["publicDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["componentDir"]) : self::$options["publicDir"].DIRECTORY_SEPARATOR."patternlab-components";
+		self::$options["dataDir"]          = isset(self::$options["dataDir"])          ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["dataDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_data";
+		self::$options["patternExportDir"] = isset(self::$options["patternExportDir"]) ? self::$options["exportDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["patternExportDir"]) : self::$options["exportDir"].DIRECTORY_SEPARATOR."patterns";
+		self::$options["patternPublicDir"] = isset(self::$options["patternPublicDir"]) ? self::$options["publicDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["patternPublicDir"]) : self::$options["publicDir"].DIRECTORY_SEPARATOR."patterns";
+		self::$options["patternSourceDir"] = isset(self::$options["patternSourceDir"]) ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["patternSourceDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_patterns";
+		self::$options["metaDir"]          = isset(self::$options["metaDir"])          ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["metaDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_meta/";
+		self::$options["annotationsDir"]   = isset(self::$options["annotationsDir"])   ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["annotationsDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_annotations/";
 		
 		// handle a pre-2.1.0 styleguideKitPath before saving it
 		if (isset(self::$options["styleguideKitPath"])) {

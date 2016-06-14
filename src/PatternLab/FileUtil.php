@@ -210,13 +210,13 @@ class FileUtil {
 		// scan source/ & public/ to figure out what directories might need to be cleaned up
 		$publicDir  = Config::getOption("publicDir");
 		$sourceDir  = Config::getOption("sourceDir");
-		$publicDirs = glob($publicDir."/*",GLOB_ONLYDIR);
-		$sourceDirs = glob($sourceDir."/*",GLOB_ONLYDIR);
+		$publicDirs = glob($publicDir.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR);
+		$sourceDirs = glob($sourceDir.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
 		$ignoreDirs = array("styleguide","patternlab-components");
 		foreach ($ignoreDirs as $ignoreDir) {
-			$key = array_search($publicDir."/".$ignoreDir,$publicDirs);
+			$key = array_search($publicDir.DIRECTORY_SEPARATOR.$ignoreDir,$publicDirs);
 			if ($key !== false){
 				unset($publicDirs[$key]);
 			}
@@ -224,9 +224,9 @@ class FileUtil {
 		
 		// compare source dirs against public. remove those dirs w/ an underscore in source/ from the public/ list
 		foreach ($sourceDirs as $dir) {
-			$cleanDir = str_replace($sourceDir."/","",$dir);
+			$cleanDir = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$dir);
 			if ($cleanDir[0] == "_") {
-				$key = array_search($publicDir."/".str_replace("_","",$cleanDir),$publicDirs);
+				$key = array_search($publicDir.DIRECTORY_SEPARATOR.str_replace("_","",$cleanDir),$publicDirs);
 				if ($key !== false){
 					unset($publicDirs[$key]);
 				}

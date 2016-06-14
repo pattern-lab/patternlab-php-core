@@ -65,7 +65,7 @@ class Watcher extends Builder {
 		// DEPRECATED
 		/*if ($reload) {
 			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
-			$fp = popen("php ".$path." -s", "r"); 
+			$fp = popen("php ".$path." -s", "r");
 			Console::writeLine("starting page auto-reload...");
 		}*/
 		
@@ -82,11 +82,12 @@ class Watcher extends Builder {
 		Console::writeLine("watching your site for changes...");
 		
 		// default vars
-		$publicDir  = Config::getOption("publicDir");
-		$sourceDir  = Config::getOption("sourceDir");
-		$ignoreExts = Config::getOption("ie");
-		$ignoreDirs = Config::getOption("id");
-		$patternExt = Config::getOption("patternExtension");
+		$publicDir        = Config::getOption("publicDir");
+		$sourceDir        = Config::getOption("sourceDir");
+		$patternSourceDir = Config::getOption("patternSourceDir");
+		$ignoreExts       = Config::getOption("ie");
+		$ignoreDirs       = Config::getOption("id");
+		$patternExt       = Config::getOption("patternExtension");
 		
 		// run forever
 		while (true) {
@@ -95,7 +96,7 @@ class Watcher extends Builder {
 			$cp = clone $o->patterns;
 			
 			// iterate over the patterns & related data and regenerate the entire site if they've changed
-			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($patternSourceDir), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -103,7 +104,7 @@ class Watcher extends Builder {
 			foreach($patternObjects as $name => $object) {
 				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName      = str_replace($sourceDir."/_patterns".DIRECTORY_SEPARATOR,"",$name);
+				$fileName      = str_replace($patternSourceDir.DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
 				if ($object->isFile() && (($object->getExtension() == $patternExt) || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
@@ -168,10 +169,10 @@ class Watcher extends Builder {
 			}
 			
 			// iterate over annotations, data, meta and any other _ dirs
-			$watchDirs = glob($sourceDir."/_*",GLOB_ONLYDIR);
+			$watchDirs = glob($sourceDir.DIRECTORY_SEPARATOR."_*",GLOB_ONLYDIR);
 			foreach ($watchDirs as $watchDir) {
 				
-				if (str_replace($sourceDir."/","",$watchDir) != "_patterns") {
+				if ($watchDir != $patternSourceDir) {
 					
 					// iterate over the data files and regenerate the entire site if they've changed
 					$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($watchDir), \RecursiveIteratorIterator::SELF_FIRST);
@@ -181,7 +182,7 @@ class Watcher extends Builder {
 					
 					foreach($objects as $name => $object) {
 						
-						$fileName = str_replace($sourceDir."/","",$name);
+						$fileName = str_replace($sourceDir.DIRECTORY_SEPARATOR,"",$name);
 						$mt = $object->getMTime();
 						
 						if (!isset($o->$fileName)) {
@@ -205,7 +206,7 @@ class Watcher extends Builder {
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
 			if ($moveStatic) {
 				
-				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir."/"), \RecursiveIteratorIterator::SELF_FIRST);
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourceDir.DIRECTORY_SEPARATOR), \RecursiveIteratorIterator::SELF_FIRST);
 				
 				// make sure dots are skipped
 				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);

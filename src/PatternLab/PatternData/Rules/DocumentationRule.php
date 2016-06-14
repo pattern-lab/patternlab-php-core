@@ -54,7 +54,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 			$patternSourceDir = Config::getOption("patternSourceDir");
 			
 			// parse data
-			$text = file_get_contents($patternSourceDir."/".$pathName);
+			$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
 			list($yaml,$markdown) = Documentation::parse($text);
 			
 			// grab the title and unset it from the yaml so it doesn't get duped in the meta
@@ -67,8 +67,8 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 			$patternSubtypeDoc = false;
 			if ($depth == 1) {
 				// go through all of the directories to see if this one matches our doc
-				foreach (glob($patternSourceDir."/".$patternType."/*",GLOB_ONLYDIR) as $dir) {
-					$dir = str_replace($patternSourceDir."/".$patternType."/","",$dir);
+				foreach (glob($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR) as $dir) {
+					$dir = str_replace($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR,"",$dir);
 					if ($dir == $doc) {
 						$patternSubtypeDoc = true;
 						break;
