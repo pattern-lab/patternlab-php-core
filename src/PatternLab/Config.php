@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Console;
 use \PatternLab\FileUtil;
 use \PatternLab\Timer;
+use \Shudrum\Component\ArrayFinder\ArrayFinder;
 use \Symfony\Component\Yaml\Yaml;
 use \Symfony\Component\Yaml\Exception\ParseException;
 
@@ -53,14 +54,11 @@ class Config {
 	*
 	* @return {String/Boolean} the value of the get or false if it wasn't found
 	*/
-	public static function getOption($optionName = "") {
+	public static function getOption($key = "") {
 		
-		if (empty($optionName)) {
-			return false;
-		}
-		
-		if (array_key_exists($optionName,self::$options)) {
-			return self::$options[$optionName];
+		if (!empty($key)) {
+			$arrayFinder = new ArrayFinder(self::$options);
+			return $arrayFinder->get($key);
 		}
 		
 		return false;
@@ -138,46 +136,44 @@ class Config {
 			mkdir(self::$userConfigDir);
 		}
 		
-		// make sure migrate doesn't happen by default
-		$migrate     = false;
-		$diffVersion = false;
-		
-		// double-check the default config file exists
-		if (!file_exists(self::$plConfigPath)) {
-			Console::writeError("make sure <path>".self::$plConfigPath."</path> exists before trying to have Pattern Lab build the config.yml file automagically...");
-		}
-		
-		// set the default config using the pattern lab config
-		try {
-			$data = Yaml::parse(file_get_contents(self::$plConfigPath));
-		} catch (ParseException $e) {
-			Console::writeError("Config parse error in <path>".self::$plConfigPath."</path>: ".$e->getMessage());
-		}
-		
-		// load the options from the default file
-		self::loadOptions($data);
-		
-		// make sure these are copied
-		$defaultOptions = self::$options;
-		
 		// check to see if the user config exists, if not create it
 		if ($verbose) {
 			Console::writeLine("configuring pattern lab...");
 		}
 		
-		if (!file_exists(self::$userConfigPath)) {
-			$migrate = true;
-		} else {
+		// make sure migrate doesn't happen by default
+		$migrate        = false;
+		$diffVersion    = false;
+		$defaultOptions = array();
+		$userOptions    = array();
+		
+		// double-check the default config file exists
+		if (!file_exists(self::$plConfigPath)) {
+			Console::writeError("the default options for Pattern Lab don't seem to exist at <path>".Console::getHumanReadablePath(self::$plConfigPath)."</path>. please check on the install location of pattern lab...");
+		}
+		
+		// set the default config using the pattern lab config
+		try {
+			$defaultOptions = Yaml::parse(file_get_contents(self::$plConfigPath));
+			$defaultOptions = array_merge(self::$options, $defaultOptions);
+		} catch (ParseException $e) {
+			Console::writeError("Config parse error in <path>".Console::getHumanReadablePath(self::$plConfigPath)."</path>: ".$e->getMessage());
+		}
+		
+		// double-check the user's config exists. if not mark that we should migrate the default one
+		if (file_exists(self::$userConfigPath)) {
 			try {
-				$data = Yaml::parse(file_get_contents(self::$userConfigPath));
+				$userOptions   = Yaml::parse(file_get_contents(self::$userConfigPath));
+				self::$options = array_merge(self::$options, $userOptions);
 			} catch (ParseException $e) {
-				Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
+				Console::writeError("Config parse error in <path>".Console::getHumanReadablePath(self::$userConfigPath)."</path>: ".$e->getMessage());
 			}
-			self::loadOptions($data);
+		} else {
+			$migrate = true;
 		}
 		
 		// compare version numbers
-		$diffVersion = (self::$options["v"] != $defaultOptions["v"]) ? true : false;
+		$diffVersion = (isset($userOptions["v"]) && ($userOptions["v"] == $defaultOptions["v"])) ? false : true;
 		
 		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
@@ -190,7 +186,7 @@ class Config {
 					exit;
 				}
 			} else {
-				self::$options = self::writeNewConfigFile(self::$options,$defaultOptions);
+				self::$options = self::writeNewConfigFile(self::$options, $defaultOptions);
 			}
 		}
 		
@@ -257,29 +253,6 @@ class Config {
 	}
 	
 	/**
-	* Load the options into self::$options
-	* @param  {Array}        the data to be added
-	* @param  {String}       any addition that may need to be added to the option key
-	*/
-	public static function loadOptions($data,$parentKey = "") {
-		
-		foreach ($data as $key => $value) {
-			
-			$key = $parentKey.trim($key);
-			
-			if (is_array($value) && self::isAssoc($value)) {
-				self::loadOptions($value,$key.".");
-			} else if (is_array($value) && !self::isAssoc($value)) {
-				self::$options[$key] = $value;
-			} else {
-				self::$options[$key] = trim($value);
-			}
-			
-		}
-		
-	}
-	
-	/**
 	* Add an option and associated value to the base Config
 	* @param  {String}       the name of the option to be added
 	* @param  {String}       the value of the option to be added
@@ -292,12 +265,9 @@ class Config {
 			return false;
 		}
 		
-		if (!array_key_exists($optionName,self::$options)) {
-			self::$options[$optionName] = $optionValue;
-			return true;
-		}
-		
-		return false;
+		$arrayFinder = new ArrayFinder(self::$options);
+		$arrayFinder->set($key, $value);
+		self::$options = $arrayFinder->get();
 		
 	}
 	
@@ -377,29 +347,15 @@ class Config {
 	}
 	
 	/**
-	* Update an option and associated value to the base Config
-	* @param  {String}       the name of the option to be updated
-	* @param  {String}       the value of the option to be updated
+	* Add an option and associated value to the base Config. BC wrap for setOption
+	* @param  {String}       the name of the option to be added
+	* @param  {String}       the value of the option to be added
 	*
-	* @return {Boolean}      whether the update was successful
+	* @return {Boolean}      whether the set was successful
 	*/
 	public static function updateOption($optionName = "", $optionValue = "") {
 		
-		if (empty($optionName) || empty($optionValue)) {
-			return false;
-		}
-		
-		if (array_key_exists($optionName,self::$options)) {
-			if (is_array(self::$options[$optionName])) {
-				$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
-				self::$options[$optionName] = array_merge(self::$options[$optionName], $optionValue);
-			} else {
-				self::$options[$optionName] = $optionValue;
-			}
-			return true;
-		}
-		
-		return false;
+		return self::setOption($optionName, $optionValue);
 		
 	}
 	
@@ -425,7 +381,7 @@ class Config {
 		}
 		
 		// reload the options
-		self::loadOptions($options);
+		self::$options = $options;
 		
 		// dump the YAML
 		$configOutput = Yaml::dump($options, 3);
