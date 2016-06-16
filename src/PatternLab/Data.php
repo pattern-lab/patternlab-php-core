@@ -16,6 +16,7 @@ use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Dispatcher;
 use \PatternLab\Timer;
+use \Shudrum\Component\ArrayFinder\ArrayFinder;
 use \Symfony\Component\Finder\Finder;
 use \Symfony\Component\Yaml\Exception\ParseException;
 use \Symfony\Component\Yaml\Yaml;
@@ -198,6 +199,8 @@ class Data {
 		return self::$store;
 	}
 
+
+	
 	/**
 	* Generate the listItems array
 	* @param  {String}       the filename for the pattern to be parsed
@@ -274,20 +277,19 @@ class Data {
 		return $listItems;
 
 	}
-
+	
 	/**
-	* Return the value for an option
+	* Get an option for the data store
+	* @param  {String}       a string in dot notation dictating where the option is in the data structure
 	*
-	* @return {String}        the value of the option requested
+	* @return {Array}        the store
 	*/
-	public static function getOption($optionName) {
-
-		if (isset(self::$store[$optionName])) {
-			return self::$store[$optionName];
+	public static function getOption($key = "") {
+		if (!empty($key)) {
+			$arrayFinder = new ArrayFinder(self::$store);
+			return $arrayFinder->get($key);
 		}
-
 		return false;
-
 	}
 
 	/**
@@ -359,7 +361,34 @@ class Data {
 	public static function printData() {
 		print_r(self::$store);
 	}
-
+	
+	/**
+	* Replace the data store
+	* @param  {Array}        the new store
+	*/
+	public static function replaceStore($store) {
+		self::$store = $store;
+	}
+	
+	/**
+	* Set an option for the data store
+	* @param  {String}       a string in dot notation dictating where the option is in the data structure
+	* @param  {Mixed}        the value for the key
+	*
+	* @return {Array}        the store
+	*/
+	public static function setOption($key = "", $value = "") {
+		
+		if (empty($key)) {
+			return false;
+		}
+		
+		$arrayFinder = new ArrayFinder(self::$store);
+		$arrayFinder->set($key, $value);
+		self::$store = $arrayFinder->get();
+		
+	}
+	
 	/**
 	* Set an option on a sub element of the data array
 	* @param  {String}       name of the option
