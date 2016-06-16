@@ -70,7 +70,7 @@ class Watcher extends Builder {
 		}*/
 		
 		if ($noCacheBuster) {
-			Config::updateOption("cacheBuster",0);
+			Config::setOption("cacheBuster",0);
 		}
 		
 		$c  = false;           // track that one loop through the pattern file listing has completed

@@ -56,7 +56,7 @@ class Generator extends Builder {
 		$watchVerbose  = (isset($options["watchVerbose"]))  ? $options["watchVerbose"] : false;
 		
 		if ($noCacheBuster) {
-			Config::updateOption("cacheBuster",0);
+			Config::setOption("cacheBuster",0);
 		}
 		
 		// gather up all of the data to be used in patterns
