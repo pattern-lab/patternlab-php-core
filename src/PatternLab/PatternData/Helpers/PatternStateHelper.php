@@ -112,7 +112,7 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 						$lineagePattern = $patternLineageInfo["lineagePattern"];
 						$patternState   = PatternData::getPatternOption($lineagePattern,"state");
 						if (($patternState != "") && ($patternState != null)) {
-							PatternData::setPatternSubOption($patternStoreKey,"lineages",$patternLineageKey,"lineageState",$patternState);
+							PatternData::setPatternSubOption($patternStoreKey,"lineagesR",$patternLineageKey,"lineageState",$patternState);
 						}
 						
 					}
