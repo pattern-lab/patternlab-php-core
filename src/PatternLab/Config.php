@@ -374,11 +374,16 @@ class Config {
 			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 		}
 		
-		print "foo ".$optionName." ".$optionValue;
+		// set this option for the current running of the app
 		self::setOption($optionName, $optionValue);
 		
+		// modify the yaml file results
+		$arrayFinder = new ArrayFinder($options);
+		$arrayFinder->set($optionName, $optionValue);
+		$options = $arrayFinder->get();
+		
 		// dump the YAML
-		$configOutput = Yaml::dump(self::$options, 3);
+		$configOutput = Yaml::dump($options, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
