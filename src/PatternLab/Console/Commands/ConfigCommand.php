@@ -77,7 +77,7 @@ class ConfigCommand extends Command {
 			$updateOptionBits = explode("=",$updateOption);
 			if (count($updateOptionBits) == 1) {
 				Console::writeError("the --set value should look like <info>optionName=\"optionValue\"</info>. nothing was updated...");
-			} 
+			}
 			
 			// set the name and value that were passed
 			$updateName   = $updateOptionBits[0];
@@ -90,6 +90,7 @@ class ConfigCommand extends Command {
 				Console::writeError("the --set option you provided, <info>".$updateName."</info>, does not exists in the config. nothing will be updated...");
 			} else {
 				Config::updateConfigOption($updateName,$updateValue);
+				Console::writeInfo("config option updated...");
 			}
 			
 		} else {

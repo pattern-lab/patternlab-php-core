@@ -266,7 +266,7 @@ class Config {
 		}
 		
 		$arrayFinder = new ArrayFinder(self::$options);
-		$arrayFinder->set($key, $value);
+		$arrayFinder->set($optionName, $optionValue);
 		self::$options = $arrayFinder->get();
 		
 	}
@@ -323,7 +323,8 @@ class Config {
 		} else if (self::$options["overrideConfig"] == "q") {
 			
 			// standardize the values for comparison
-			$currentOptionValue = is_array(self::$options[$optionName]) ? implode(", ",self::$options[$optionName]) : self::$options[$optionName];
+			$currentOption      = self::getOption($optionName);
+			$currentOptionValue = is_array($currentOption) ? implode(", ",$currentOption) : $currentOption;
 			$newOptionValue     = is_array($optionValue) ? implode(", ",$optionValue) : $optionValue;
 			
 			if ($currentOptionValue != $newOptionValue) {
@@ -373,18 +374,11 @@ class Config {
 			Console::writeError("Config parse error in <path>".self::$userConfigPath."</path>: ".$e->getMessage());
 		}
 		
-		if (isset($options[$optionName]) && is_array($options[$optionName])) {
-			$optionValue = is_array($optionValue) ? $optionValue : array($optionValue);
-			$options[$optionName] = array_merge($options[$optionName], $optionValue);
-		} else {
-			$options[$optionName] = $optionValue;
-		}
-		
-		// reload the options
-		self::$options = $options;
+		print "foo ".$optionName." ".$optionValue;
+		self::setOption($optionName, $optionValue);
 		
 		// dump the YAML
-		$configOutput = Yaml::dump($options, 3);
+		$configOutput = Yaml::dump(self::$options, 3);
 		
 		// write out the new config file
 		file_put_contents(self::$userConfigPath,$configOutput);
