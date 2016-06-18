@@ -94,7 +94,9 @@ class Annotations {
 		if (file_exists($oldStyleAnnotationsPath)) {
 			$text = file_get_contents($oldStyleAnnotationsPath);
 			$text = str_replace("var comments = ","",$text);
-			$text = rtrim($text,";");
+			if ($text[strlen($text)-1] == ";") {
+				$text = rtrim($text,";");
+			}
 			$data = json_decode($text,true);
 			if ($jsonErrorMessage = JSON::hasError()) {
 				JSON::lastErrorMsg(Console::getHumanReadablePath($oldStyleAnnotationsPath),$jsonErrorMessage,$data);
