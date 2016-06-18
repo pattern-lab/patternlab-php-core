@@ -37,3 +37,6 @@ cacheBusterOn: "true"
 exportDir: "export"
 publicDir: "public"
 sourceDir: "source"
+
+# defaultPattern to show on load
+defaultPattern: "all"

@@ -235,6 +235,7 @@ class Config {
 		// which of these should be exposed in the front-end?
 		self::$options["exposedOptions"] = array();
 		self::setExposedOption("cacheBuster");
+		self::setExposedOption("defaultPattern");
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");
