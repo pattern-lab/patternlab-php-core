@@ -1,7 +1,7 @@
 ## Configuration Options for Pattern Lab
 
 # pattern lab version
-v: "2.0.0-DP1"
+v: "2.2.1"
 
 # what to do when included config var conflicts, q for question, a for always override, n for never override
 overrideConfig: "q"
