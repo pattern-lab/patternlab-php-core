@@ -92,7 +92,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 			
 			// if the pattern data store already exists make sure this data overwrites it
 			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
-			PatternData::setOption($patternStoreKey, $patternStoreData); 
+			PatternData::setOption($patternStoreKey, $patternStoreData);
 			
 		}
 		

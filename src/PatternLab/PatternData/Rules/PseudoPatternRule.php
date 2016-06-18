@@ -37,12 +37,14 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 	public function run($depth, $ext, $path, $pathName, $name) {
 
 		// load default vars
-		$patternSubtype     = PatternData::getPatternSubtype();
-		$patternSubtypeDash = PatternData::getPatternSubtypeDash();
-		$patternType        = PatternData::getPatternType();
-		$patternTypeDash    = PatternData::getPatternTypeDash();
-		$dirSep             = PatternData::getDirSep();
-		$frontMeta          = PatternData::getFrontMeta();
+		$patternSubtype      = PatternData::getPatternSubtype();
+		$patternSubtypeClean = PatternData::getPatternSubtypeClean();
+		$patternSubtypeDash  = PatternData::getPatternSubtypeDash();
+		$patternType         = PatternData::getPatternType();
+		$patternTypeClean    = PatternData::getPatternTypeClean();
+		$patternTypeDash     = PatternData::getPatternTypeDash();
+		$dirSep              = PatternData::getDirSep();
+		$frontMeta           = PatternData::getFrontMeta();
 
 		// should this pattern get rendered?
 		$hidden             = ($name[0] == "_");
@@ -95,7 +97,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 									"nameClean"    => $patternClean,
 									"type"         => $patternType,
 									"typeDash"     => $patternTypeDash,
-									"breadcrumb"   => $patternType,
+									"breadcrumb"   => array("patternType" => $patternTypeClean),
 									"state"        => $patternState,
 									"hidden"       => $hidden,
 									"noviewall"    => $noviewall,
@@ -115,12 +117,12 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		if ($depth > 1) {
 			$patternStoreData["subtype"]     = $patternSubtype;
 			$patternStoreData["subtypeDash"] = $patternSubtypeDash;
-			$patternStoreData["breadcrumb"]  = $patternType." > ".$patternSubtype;
+			$patternStoreData["breadcrumb"]  = array("patternType" => $patternTypeClean, "patternSubtype" => $patternSubtypeClean);
 		}
 
 		$patternDataBase = array();
-		if (file_exists(Config::getOption("patternSourceDir")."/".$path."/".$patternBaseData)) {
-			$data = file_get_contents(Config::getOption("patternSourceDir")."/".$path."/".$patternBaseData);
+		if (file_exists(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$patternBaseData)) {
+			$data = file_get_contents(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$patternBaseData);
 			if ($ext == "json") {
 				$patternDataBase = json_decode($data,true);
 				if ($jsonErrorMessage = JSON::hasError()) {
@@ -144,7 +146,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 
 		// get the data for the pseudo-pattern
-		$data = file_get_contents(Config::getOption("patternSourceDir")."/".$pathName);
+		$data = file_get_contents(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$pathName);
 		if ($ext == "json") {
 			$patternData = json_decode($data,true);
 			if ($jsonErrorMessage = JSON::hasError()) {

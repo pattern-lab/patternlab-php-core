@@ -45,6 +45,8 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 		$patternSubtypePath     = $pathName;                                    // 00-atoms/02-blocks
 		$patternSubtypePathDash = str_replace($dirSep,"-",$patternSubtypePath); // 00-atoms-02-blocks (file path)
 		
+		$patternPartial         = "viewall-".$patternTypeDash."-".$patternSubtypeDash;
+		
 		// create a key for the data store
 		$patternStoreKey        = $patternTypeDash."-".$patternSubtypeDash."-plsubtype";
 		
@@ -53,9 +55,10 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 										"name"       => $patternSubtype,
 										"nameDash"   => $patternSubtypeDash,
 										"nameClean"  => $patternSubtypeClean,
+										"partial"    => $patternPartial,
 										"type"       => $patternType,
 										"typeDash"   => $patternTypeDash,
-										"breadcrumb" => $patternTypeClean,
+										"breadcrumb" => array("patternType" => $patternTypeClean),
 										"depth"      => $depth,
 										"ext"        => $ext,
 										"path"       => $path,
