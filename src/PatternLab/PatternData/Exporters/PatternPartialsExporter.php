@@ -47,7 +47,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
 					$patternPartialData                            = array();
-					$patternPartialData["patternName"]             = ucwords($patternStoreData["nameClean"]);
+					$patternPartialData["patternName"]             = strtoupper($patternStoreData["nameClean"]);
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
 					$patternPartialData["patternPartialCode"]      = $patternStoreData["code"];
@@ -65,22 +65,17 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartialData["patternDescAdditions"]    = isset($patternStoreData["partialViewDescAdditions"]) ? $patternStoreData["partialViewDescAdditions"] : array();
 					$patternPartialData["patternExampleAdditions"] = isset($patternStoreData["partialViewExampleAdditions"]) ? $patternStoreData["partialViewExampleAdditions"] : array();
 					
-					//$patternPartialData["patternCSSExists"]        = Config::$options["enableCSS"];
-					$patternPartialData["patternCSSExists"]        = false;
-					
 					// add the pattern data so it can be exported
-					$patternData = array();
-					//$patternFooterData["patternFooterData"]["cssEnabled"]      = (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) ? "true" : "false";
-					$patternData["cssEnabled"]        = false;
-					$patternData["lineage"]           = isset($patternStoreData["lineages"])  ? $patternStoreData["lineages"] : array();
-					$patternData["lineageR"]          = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
-					$patternData["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
-					$patternData["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
-					$patternData["patternExtension"]  = ".mustache";
-					$patternData["patternName"]       = $patternStoreData["nameClean"];
-					$patternData["patternPartial"]    = $patternStoreData["partial"];
-					$patternData["patternState"]      = $patternStoreData["state"];
-					$patternPartialData["patternData"] = json_encode($patternData);
+					$patternData                                   = array();
+					$patternData["lineage"]                        = isset($patternStoreData["lineages"])  ? $patternStoreData["lineages"] : array();
+					$patternData["lineageR"]                       = isset($patternStoreData["lineagesR"]) ? $patternStoreData["lineagesR"] : array();
+					$patternData["patternBreadcrumb"]              = $patternStoreData["breadcrumb"];
+					$patternData["patternDesc"]                    = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
+					$patternData["patternExtension"]               = Config::getOption("patternExtension");
+					$patternData["patternName"]                    = $patternStoreData["nameClean"];
+					$patternData["patternPartial"]                 = $patternStoreData["partial"];
+					$patternData["patternState"]                   = $patternStoreData["state"];
+					$patternPartialData["patternData"]             = json_encode($patternData);
 					
 					$patternPartials[]                             = $patternPartialData;
 				
@@ -91,10 +86,10 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["name"] == $subtype))) {
 					
 					$patternPartialData                            = array();
-					$patternPartialData["patternName"]             = ucwords($patternStoreData["nameClean"]);
+					$patternPartialData["patternName"]             = strtoupper($patternStoreData["nameClean"]);
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/index.html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
-					$patternPartialData["patternSectionSubtype"]   = isset($patternStoreData["descExists"]);
+					$patternPartialData["patternSectionSubtype"]   = true;
 					$patternPartialData["patternDesc"]             = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
 					
 					$patternPartials[] =  $patternPartialData;
