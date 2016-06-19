@@ -236,6 +236,7 @@ class Config {
 		self::$options["exposedOptions"] = array();
 		self::setExposedOption("cacheBuster");
 		self::setExposedOption("defaultPattern");
+		self::setExposedOption("defaultShowPatternInfo");
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");

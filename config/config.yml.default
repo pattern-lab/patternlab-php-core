@@ -40,3 +40,6 @@ sourceDir: "source"
 
 # defaultPattern to show on load
 defaultPattern: "all"
+
+# show pattern info by default on the "view all" views
+defaultShowPatternInfo: true
