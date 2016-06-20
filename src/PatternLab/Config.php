@@ -155,7 +155,7 @@ class Config {
 		// set the default config using the pattern lab config
 		try {
 			$defaultOptions = Yaml::parse(file_get_contents(self::$plConfigPath));
-			$defaultOptions = array_merge(self::$options, $defaultOptions);
+			self::$options  = array_merge(self::$options, $defaultOptions);
 		} catch (ParseException $e) {
 			Console::writeError("Config parse error in <path>".Console::getHumanReadablePath(self::$plConfigPath)."</path>: ".$e->getMessage());
 		}
