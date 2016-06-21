@@ -92,7 +92,7 @@ class Annotations {
 		// read in the old style annotations.js, modify the data and generate JSON array to merge
 		$oldStyleAnnotationsPath = $annotationsDir.DIRECTORY_SEPARATOR."annotations.js";
 		if (file_exists($oldStyleAnnotationsPath)) {
-			$text = file_get_contents($oldStyleAnnotationsPath);
+			$text = trim(file_get_contents($oldStyleAnnotationsPath));
 			$text = str_replace("var comments = ","",$text);
 			if ($text[strlen($text)-1] == ";") {
 				$text = rtrim($text,";");
