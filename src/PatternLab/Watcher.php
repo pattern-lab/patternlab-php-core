@@ -21,6 +21,7 @@ use \PatternLab\Builder;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Data;
+use \PatternLab\Dispatcher;
 use \PatternLab\FileUtil;
 use \PatternLab\PatternData;
 use \PatternLab\Util;
@@ -60,6 +61,12 @@ class Watcher extends Builder {
 		
 		// make sure a copy of the given options are saved for using when running generate
 		$this->options = $options;
+		
+		// set-up the Dispatcher
+		$dispatcherInstance = Dispatcher::getInstance();
+		$dispatcherInstance->dispatch("watcher.start");
+		popen("php /Users/dmolsen/Sites/patternlab-project/dev/development-edition/vendor/pattern-lab/plugin-reload/src/PatternLab/Reload/AutoReloadServer.php", "r");
+		print "hello world";
 		
 		// automatically start the auto-refresh tool
 		// DEPRECATED
