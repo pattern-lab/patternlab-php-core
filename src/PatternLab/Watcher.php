@@ -66,14 +66,6 @@ class Watcher extends Builder {
 		$dispatcherInstance = Dispatcher::getInstance();
 		$dispatcherInstance->dispatch("watcher.start");
 		
-		// automatically start the auto-refresh tool
-		// DEPRECATED
-		/*if ($reload) {
-			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
-			$fp = popen("php ".$path." -s", "r");
-			Console::writeLine("starting page auto-reload...");
-		}*/
-		
 		if ($noCacheBuster) {
 			Config::setOption("cacheBuster",0);
 		}
