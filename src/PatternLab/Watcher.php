@@ -65,8 +65,6 @@ class Watcher extends Builder {
 		// set-up the Dispatcher
 		$dispatcherInstance = Dispatcher::getInstance();
 		$dispatcherInstance->dispatch("watcher.start");
-		popen("php /Users/dmolsen/Sites/patternlab-project/dev/development-edition/vendor/pattern-lab/plugin-reload/src/PatternLab/Reload/AutoReloadServer.php", "r");
-		print "hello world";
 		
 		// automatically start the auto-refresh tool
 		// DEPRECATED
