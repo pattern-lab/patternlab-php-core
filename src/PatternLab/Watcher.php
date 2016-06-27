@@ -86,6 +86,25 @@ class Watcher extends Builder {
 		$ignoreDirs       = Config::getOption("id");
 		$patternExt       = Config::getOption("patternExtension");
 		
+		// build the file extensions based on the rules
+		$fileExtensions   = array();
+		$patternRules     = PatternData::getRules();
+		foreach ($patternRules as $patternRule) {
+			$extensions = $patternRule->getProp("extProp");
+			if (strpos($extensions,"&&") !== false) {
+				$extensions = explode("&&",$extensions);
+			} else if (strpos($extensions,"||") !== false) {
+				$extensions = explode("||",$extensions);
+			} else {
+				$extensions = array($extensions);
+			}
+			foreach ($extensions as $extension) {
+				if (!in_array($extension, $fileExtensions)) {
+					$fileExtensions[] = $extension;
+				}
+			}
+		}
+		
 		// run forever
 		while (true) {
 			
@@ -104,7 +123,7 @@ class Watcher extends Builder {
 				$fileName      = str_replace($patternSourceDir.DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
-				if ($object->isFile() && (($object->getExtension() == $patternExt) || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
+				if ($object->isFile() && in_array($object->getExtension(), $fileExtensions)) {
 					
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
