@@ -41,7 +41,7 @@ class PatternPathSrcExporter extends \PatternLab\PatternData\Exporter {
 					$patternPathDests[$typeDash] = array();
 				}
 				
-				$patternPathDests[$typeDash][$nameDash] = $patternStoreData["pathName"];
+				$patternPathDests[$typeDash][$nameDash] = (isset($patternStoreData["pseudo"])) ? $patternStoreData["pathOrig"] : $patternStoreData["pathName"];;
 				
 			}
 			
