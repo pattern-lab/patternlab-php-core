@@ -43,7 +43,7 @@ class Rule {
 			return false;
 		}
 		
-		if (($this->compareProp($ext,$this->extProp)) && ($isDir == $this->isDirProp) && ($isFile == $this->isFileProp)) {
+		if (($this->compareProp($ext,$this->extProp, true)) && ($isDir == $this->isDirProp) && ($isFile == $this->isFileProp)) {
 			$result = true;
 			if ($this->searchProp != "") {
 				$result = $this->compareProp($name,$this->searchProp);
@@ -66,7 +66,7 @@ class Rule {
 	*
 	* @return {Boolean}      whether the compare was successful or not
 	*/
-	protected function compareProp($name,$propCompare) {
+	protected function compareProp($name, $propCompare, $exact = false) {
 		
 		if (($name == "") && ($propCompare == "")) {
 			$result = true;
@@ -76,18 +76,18 @@ class Rule {
 			$result = true;
 			$props  = explode("&&",$propCompare);
 			foreach ($props as $prop) {
-				$pos    = (strpos($name,$prop) !== false) ? true : false;
+				$pos    = $this->testProp($name, $prop, $exact);
 				$result = ($result && $pos);
 			}
 		} else if (strpos($propCompare,"||") !== false) {
 			$result = false;
 			$props  = explode("||",$propCompare);
 			foreach ($props as $prop) {
-				$pos    = (strpos($name,$prop) !== false) ? true : false;
+				$pos    = $this->testProp($name, $prop, $exact);
 				$result = ($result || $pos);
 			}
 		} else {
-			$result = (strpos($name,$propCompare) !== false) ? true : false;
+			$result = $this->testProp($name, $propCompare, $exact);
 		}
 		
 		return $result;
@@ -135,6 +135,23 @@ class Rule {
 		$this->$propName = $this->$propValue;
 		return true;
 		
+	}
+	
+	/**
+	* Test the given property
+	* @param  {String}       the value of the property to be tested
+	* @param  {String}       the value of the property to be tested against
+	* @param  {Boolean}      if this should be an exact match or just a string appearing in another
+	*
+	* @return {Boolean}      the test result
+	*/
+	protected function testProp($propToTest, $propToTestAgainst, $beExact) {
+		if ($beExact) {
+			$result = ($propToTest === $propToTestAgainst);
+		} else {
+			$result = (strpos($propToTest,$propToTestAgainst) !== false) ? true : false;
+		}
+		return $result;
 	}
 	
 	/**
