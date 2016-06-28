@@ -45,38 +45,6 @@ class Builder {
 	}
 	
 	/**
-	* Finds Media Queries in CSS files in the source/css/ dir
-	*
-	* @return {Array}        an array of the appropriate MQs
-	*/
-	protected function gatherMQs() {
-		
-		$mqs = array();
-		
-		// iterate over all of the other files in the source directory
-		$finder = new Finder();
-		$finder->files()->name("*.css")->in(Config::getOption("sourceDir"));
-		$finder->sortByName();
-		
-		foreach ($finder as $file) {
-			
-			$data = file_get_contents($file->getPathname());
-			preg_match_all("/@media.*(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
-			foreach ($matches[3] as $match) {
-				if (!in_array($match,$mqs)) {
-					$mqs[] = $match;
-				}
-			}
-			
-		}
-		
-		usort($mqs, "strnatcmp");
-		
-		return $mqs;
-		
-	}
-	
-	/**
 	* Generates the annotations js file
 	*/
 	protected function generateAnnotations() {
@@ -151,7 +119,6 @@ class Builder {
 			}
 		}
 		$ishControls["ishControlsHide"] = $controlsToHide;
-		$ishControls["mqs"]             = $this->gatherMQs();
 		$output      .= "var ishControls = ".json_encode($ishControls).";";
 		
 		// load and write out the items for the navigation
