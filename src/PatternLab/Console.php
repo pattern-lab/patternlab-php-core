@@ -164,6 +164,42 @@ class Console {
 	}
 	
 	/**
+	* Get the path to PHP binary
+	*
+	* @return {String}      the path to the PHP executable
+	*/
+	public static function getPathPHP() {
+		
+		$path = isset($_SERVER["_"]) ? $_SERVER["_"] : Config::getOption("phpBin");
+		
+		if (!$path) {
+			$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
+			Console::writeError("please add the option `phpBin` with the path to PHP to <path>".$configPath."</path> to run this process...");
+		}
+		
+		return $path;
+		
+	}
+	
+	/**
+	* Get the path to the calling script. Should be core/console but let's not make that assumption
+	*
+	* @return {String}      the path to the calling script
+	*/
+	public static function getPathConsole() {
+		
+		$console = isset($_SERVER["SCRIPT_NAME"]) ? $_SERVER["SCRIPT_NAME"] : Config::getOption("phpScriptName");
+		
+		if (!$console) {
+			$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
+			Console::writeError("please add the option `phpScriptName` with the path to your console option (e.g. core/console) to <path>".$configPath."</path> to run this process...");
+		}
+		
+		return Config::getOption("baseDir").$console;
+		
+	}
+	
+	/**
 	* Load all of the rules related to Pattern Data
 	*/
 	public static function loadCommands() {
