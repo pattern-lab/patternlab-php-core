@@ -1,0 +1,113 @@
+<?php
+
+/*!
+ * Process Spawner
+ *
+ * Copyright (c) 2016 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license
+ *
+ * Provide a single instance of spawning background processes related to Pattern Lab
+ * Hopefully makes ctrl+c truly clean-up the mess of background processes
+ *
+ */
+
+namespace PatternLab\Console;
+
+use \PatternLab\Config;
+use \PatternLab\Console;
+use \PatternLab\Console\Commands\WatchCommand;
+use \PatternLab\Console\ProcessSpawnerEvent;
+use \PatternLab\Dispatcher;
+use \PatternLab\Timer;
+use \Symfony\Component\Process\Process;
+
+class ProcessSpawner {
+	
+	protected $pluginProcesses;
+	
+	/**
+	* Set-up a default var
+	*/
+	public function __construct() {
+		
+		// dispatch event and build the appropriate processes
+		$event = new ProcessSpawnerEvent();
+		$dispatcherInstance = Dispatcher::getInstance();
+		$dispatcherInstance->dispatch('processSpawner.getPluginProcesses',$event);
+		$this->pluginProcesses = $event->getPluginProcesses();
+		
+	}
+	
+	/**
+	* Spawn the passed commands and those collected from plugins
+	* @param  {Array}       a list of commands to spawn
+	* @param  {Boolean}     if this should be run in quiet mode
+	*/
+	public function spawn($commands = array(), $quiet = false) {
+		
+		// set-up a default
+		$processes = array();
+		
+		// add the default processes sent to the spawner
+		if (!empty($commands)) {
+			foreach ($commands as $command) {
+				$processes[] = $this->buildProcess($command);
+			}
+		}
+		
+		// add the processes sent to the spawner from plugins
+		foreach ($this->pluginProcesses as $pluginProcess) {
+			$processes[] = $this->buildProcess($pluginProcess);
+		}
+		
+		// start the processes
+		foreach ($processes as $process) {
+			$process["process"]->start();
+		}
+		
+		// now monitor and output as appropriate
+		while (true) {
+			foreach ($processes as $process) {
+				if ($process["process"]->isRunning()) {
+					if (!$quiet && $process["output"]) {
+						print $process["process"]->getIncrementalOutput();
+					}
+				}
+			}
+			usleep(100000);
+		}
+		
+	}
+	
+	protected function buildProcess($commandOptions) {
+		
+		if (is_string($commandOptions)) {
+			
+			$process = new Process(escapeshellcmd((string) $commandOptions));
+			return array("process" => $process, "output" => true);
+			
+		} else if (is_array($commandOptions)) {
+			
+			$commandline = escapeshellcmd((string) $commandOptions["command"]);
+			$cwd         = isset($commandOptions["cwd"])     ? $commandOptions["cwd"]     : null;
+			$env         = isset($commandOptions["env"])     ? $commandOptions["env"]     : null;
+			$input       = isset($commandOptions["input"])   ? $commandOptions["input"]   : null;
+			$timeout     = isset($commandOptions["timeout"]) ? $commandOptions["timeout"] : 60;
+			$options     = isset($commandOptions["options"]) ? $commandOptions["options"] : array();
+			$idle        = isset($commandOptions["idle"])    ? $commandOptions["idle"]    : null;
+			$output      = isset($commandOptions["output"])  ? $commandOptions["output"]  : true;
+			
+			$process = new Process($commandline, $cwd, $env, $input, $timeout, $options);
+			
+			// double-check idle
+			if (!empty($idle)) {
+				$process->setIdleTimeout($idle);
+			}
+			
+			return array("process" => $process, "output" => $output);
+			
+		}
+		
+	}
+	
+}
