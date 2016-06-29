@@ -10,16 +10,22 @@
 
 namespace PatternLab\Console;
 
+use \PatternLab\Config;
+use \PatternLab\Console;
 use \PatternLab\Timer;
 
 class Command {
+	
+	protected $pathPHP;
+	protected $pathConsole;
 	
 	/**
 	* Set-up a default var
 	*/
 	public function __construct() {
 		
-		// nothing here yet
+		$this->pathPHP     = Console::getPathPHP();
+		$this->pathConsole = Console::getPathConsole();
 		
 	}
 	
