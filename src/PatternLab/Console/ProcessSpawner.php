@@ -79,6 +79,10 @@ class ProcessSpawner {
 		
 	}
 	
+	/**
+	* Build the process from the given commandOptions
+	* @param  {Array}       the options from which to build the process
+	*/
 	protected function buildProcess($commandOptions) {
 		
 		if (is_string($commandOptions)) {
