@@ -13,6 +13,7 @@ namespace PatternLab\Console\Commands;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
+use \PatternLab\Console\ProcessSpawner;
 use \PatternLab\Generator;
 use \PatternLab\Timer;
 use \PatternLab\Watcher;
@@ -29,6 +30,7 @@ class WatchCommand extends Command {
 		Console::setCommandOption($this->command,"patternsonly","Watches only the patterns. Does NOT clean <path>public/</path>.","To watch and generate only the patterns:","p");
 		Console::setCommandOption($this->command,"nocache","Set the cacheBuster value to 0.","To watch and turn off the cache buster:","n");
 		Console::setCommandOption($this->command,"sk","Watch for changes to the StarterKit and copy to <path>source/</path>. The <info>--sk</info> flag should only be used if one is actively developing a StarterKit.","To watch for changes to the StarterKit:");
+		Console::setCommandOption($this->command,"noprocs","Disable plug-in related processes. For use with <info>--server --with-watch</info>.","To disable plug-in related processes:");
 		Console::setCommandSample($this->command,"To watch only patterns and turn off the cache buster:","--patternsonly --nocache");
 		//Console::setCommandOption($this->command,"autoreload","Turn on the auto-reload service.","To turn on auto-reload:","r");
 		
@@ -53,6 +55,12 @@ class WatchCommand extends Command {
 			
 		} else {
 			
+			// collect any processes that might be related to watch (e.g. reload). spawn them.
+			if (!Console::findCommandOption("noprocs")) {
+				$process = new ProcessSpawner;
+				$process->run();
+			}
+			
 			// load the generator
 			$g = new Generator();
 			$g->generate($options);
@@ -63,6 +71,20 @@ class WatchCommand extends Command {
 			
 		}
 		
+	}
+	
+	public function build() {
+		
+		$command = $this->pathPHP." ".$this->pathConsole." --".$this->command;
+		
+		if (Console::findCommandOption("p|patternsonly")) {
+			$command .= " --patternsonly";
+		}
+		if (Console::findCommandOption("n|nocache")) {
+			$command .= " --nocache";
+		}
+		
+		return $command;
 		
 	}
 	
