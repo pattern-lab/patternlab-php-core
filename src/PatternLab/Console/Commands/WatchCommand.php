@@ -32,7 +32,6 @@ class WatchCommand extends Command {
 		Console::setCommandOption($this->command,"sk","Watch for changes to the StarterKit and copy to <path>source/</path>. The <info>--sk</info> flag should only be used if one is actively developing a StarterKit.","To watch for changes to the StarterKit:");
 		Console::setCommandOption($this->command,"no-procs","Disable plug-in related processes. For use with <info>--server --with-watch</info>.","To disable plug-in related processes:");
 		Console::setCommandSample($this->command,"To watch only patterns and turn off the cache buster:","--patternsonly --nocache");
-		//Console::setCommandOption($this->command,"autoreload","Turn on the auto-reload service.","To turn on auto-reload:","r");
 		
 	}
 	
@@ -42,9 +41,6 @@ class WatchCommand extends Command {
 		$options                  = array();
 		$options["moveStatic"]    = (Console::findCommandOption("p|patternsonly")) ? false : true;
 		$options["noCacheBuster"] = Console::findCommandOption("n|nocache");
-		
-		// DEPRECATED
-		// $options["autoReload"]    = Console::findCommandOption("r|autoreload");
 		
 		// see if the starterKit flag was passed so you know what dir to watch
 		if (Console::findCommandOption("sk")) {
