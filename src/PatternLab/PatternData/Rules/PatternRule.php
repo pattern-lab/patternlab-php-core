@@ -101,7 +101,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		}
 		
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive($patternStoreData, PatternData::getOption($patternStoreKey)) : $patternStoreData;
 		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
