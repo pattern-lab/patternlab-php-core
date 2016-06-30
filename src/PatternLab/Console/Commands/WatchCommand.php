@@ -54,7 +54,7 @@ class WatchCommand extends Command {
 			// collect any processes that might be related to watch (e.g. reload). spawn them.
 			if (!Console::findCommandOption("no-procs")) {
 				$process = new ProcessSpawner;
-				$process->run();
+				$process->spawn();
 			}
 			
 			// load the generator
