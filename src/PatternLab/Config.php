@@ -326,14 +326,17 @@ class Config {
 			
 			// standardize the values for comparison
 			$currentOption      = self::getOption($optionName);
-			$currentOptionValue = is_array($currentOption) ? implode(", ",$currentOption) : $currentOption;
-			$newOptionValue     = is_array($optionValue) ? implode(", ",$optionValue) : $optionValue;
+			$currentOptionValue = $currentOption;
+			$newOptionValue     = $optionValue;
 			
 			if ($currentOptionValue != $newOptionValue) {
 				
 				// prompt for input
-				$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
-				$options = "Y/n";
+				if (is_array($currentOptionValue)) {
+					$prompt  = "update the config option <desc>".$optionName."</desc> with the value from the package install?";
+				} else {
+					$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
+				}$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options,"Y");
 				
 				if ($input == "y") {
