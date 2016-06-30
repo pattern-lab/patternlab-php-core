@@ -51,19 +51,31 @@ class WatchCommand extends Command {
 			
 		} else {
 			
-			// collect any processes that might be related to watch (e.g. reload). spawn them.
-			if (!Console::findCommandOption("no-procs")) {
+			if (Console::findCommandOption("no-procs")) {
+				
+				// don't have to worry about loading processes so launch watcher
+				
+				// load the generator
+				$g = new Generator();
+				$g->generate($options);
+				
+				// load the watcher
+				$w = new Watcher();
+				$w->watch($options);
+				
+			} else {
+				
+				// a vanilla --watch command needs to have a --no-procs version built
+				// so we don't get caught in while() loops. re-request the console command
+				$commands     = array();
+				$commands[]   = array("command" => $this->build()." --no-procs", "timeout" => null, "idle" => 600);
+				
+				Console::writeInfo("spawning the watch process...");
+				
 				$process = new ProcessSpawner;
-				$process->spawn();
+				$process->spawn($commands);
+				
 			}
-			
-			// load the generator
-			$g = new Generator();
-			$g->generate($options);
-			
-			// load the watcher
-			$w = new Watcher();
-			$w->watch($options);
 			
 		}
 		
