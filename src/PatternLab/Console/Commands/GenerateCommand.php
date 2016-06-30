@@ -14,6 +14,7 @@ use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Console\Command;
 use \PatternLab\Generator;
+use \PatternLab\Saying;
 use \PatternLab\Timer;
 
 class GenerateCommand extends Command {
@@ -39,7 +40,9 @@ class GenerateCommand extends Command {
 		
 		$g = new Generator();
 		$g->generate($options);
-		$g->printSaying();
+		
+		$s = new Saying();
+		$s->say();
 		
 	}
 	
