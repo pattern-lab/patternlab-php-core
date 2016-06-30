@@ -60,21 +60,25 @@ class ProcessSpawner {
 			$processes[] = $this->buildProcess($pluginProcess);
 		}
 		
-		// start the processes
-		foreach ($processes as $process) {
-			$process["process"]->start();
-		}
-		
-		// now monitor and output as appropriate
-		while (true) {
+		// if there are processes to spawn do so
+		if (!empty($processes)) {
+			
+			// start the processes
 			foreach ($processes as $process) {
-				if ($process["process"]->isRunning()) {
-					if (!$quiet && $process["output"]) {
-						print $process["process"]->getIncrementalOutput();
+				$process["process"]->start();
+			}
+			
+			// check on them and produce output
+			while (true) {
+				foreach ($processes as $process) {
+					if ($process["process"]->isRunning()) {
+						if (!$quiet && $process["output"]) {
+							print $process["process"]->getIncrementalOutput();
+						}
 					}
 				}
+				usleep(100000);
 			}
-			usleep(100000);
 		}
 		
 	}
