@@ -279,23 +279,10 @@ class Watcher extends Builder {
 			// taking out the garbage. basically killing mustache after each run.
 			if (gc_enabled()) gc_collect_cycles();
 			
-			// output anything the reload server might send our way
-			// DEPRECATED
-			/*
-			if ($reload) {
-				$output = fgets($fp, 100);
-				if ($output != "\n") print $output;
-			}
-			*/
-			
 			// pause for .05 seconds to give the CPU a rest
 			usleep(50000);
 			
 		}
-		
-		// close the auto-reload process, this shouldn't do anything
-		// DEPRECATED
-		// fclose($fp);
 		
 	}
 	
