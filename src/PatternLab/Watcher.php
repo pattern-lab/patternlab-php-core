@@ -23,6 +23,7 @@ use \PatternLab\Console;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
 use \PatternLab\FileUtil;
+use \PatternLab\InstallerUtil;
 use \PatternLab\PatternData;
 use \PatternLab\Util;
 use \PatternLab\Timer;
@@ -324,22 +325,28 @@ class Watcher extends Builder {
 		
 	}
 	
-	public function watchStarterKit() {
-			
-		// double-checks options was properly set
-		/*$starterKit = Config::getOption("starterKit");
-		if (!$starterKit) {
-			Console::writeError("need to have a starterkit set in the config...");
-		}*/
+	protected function starterKitPathPrompt() {
+		
+		// need to figure this out long-term
+		InstallerUtil::$isInteractive = true;
+		$input = Console::promptInput("Tell me the path to the starterkit you want to watch.","e.g. vendor/pattern-lab/starterkit-mustache-demo/dist","baz",false);
 		
 		// set-up the full starterkit path
-		$starterKitPath = Config::getOption("baseDir")."vendor/pattern-lab/starterkit-mustache-demo/dist";
+		$starterKitPath = Config::getOption("baseDir").$input;
 		if (!is_dir($starterKitPath)) {
-			Console::writeError("the starterkit doesn't seem to exist...");
+			Console::writeWarning("that doesn't seem to be a real directory. let's try again...");
+			$starterKitPath = $this->starterKitPathPrompt();
 		}
 		
+		return $starterKitPath;
+		
+	}
+	
+	public function watchStarterKit() {
+		
 		// default vars
-		$sourceDir   = Config::getOption("sourceDir");
+		$starterKitPath = $this->starterKitPathPrompt();
+		$sourceDir      = Config::getOption("sourceDir");
 		
 		$fs = new Filesystem();
 		
