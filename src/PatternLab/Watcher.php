@@ -327,20 +327,19 @@ class Watcher extends Builder {
 	public function watchStarterKit() {
 			
 		// double-checks options was properly set
-		$starterKit = Config::getOption("starterKit");
+		/*$starterKit = Config::getOption("starterKit");
 		if (!$starterKit) {
 			Console::writeError("need to have a starterkit set in the config...");
-		}
+		}*/
 		
 		// set-up the full starterkit path
-		$starterKitPath = Config::getOption("packagesDir").DIRECTORY_SEPARATOR.$starterKit.DIRECTORY_SEPARATOR."dist";
+		$starterKitPath = Config::getOption("baseDir")."vendor/pattern-lab/starterkit-mustache-demo/dist";
 		if (!is_dir($starterKitPath)) {
 			Console::writeError("the starterkit doesn't seem to exist...");
 		}
 		
 		// default vars
 		$sourceDir   = Config::getOption("sourceDir");
-		$packagesDir = Config::getOption("packagesDir");
 		
 		$fs = new Filesystem();
 		
