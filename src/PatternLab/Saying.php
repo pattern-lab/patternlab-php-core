@@ -82,8 +82,6 @@ class Saying {
 		// i just didn't want to indent the crap above
 		$this->sayings = $sayings;
 		
-		print_r($sayings);
-		
 	}
 	
 	/**
