@@ -47,7 +47,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
 					$patternPartialData                            = array();
-					$patternPartialData["patternName"]             = $patternStoreData["nameClean"];
+					$patternPartialData["patternName"]             = strtoupper($patternStoreData["nameClean"]);
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
 					$patternPartialData["patternPartialCode"]      = $patternStoreData["code"];
@@ -86,7 +86,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["name"] == $subtype))) {
 					
 					$patternPartialData                            = array();
-					$patternPartialData["patternName"]             = $patternStoreData["nameClean"];
+					$patternPartialData["patternName"]             = strtoupper($patternStoreData["nameClean"]);
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/index.html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
 					$patternPartialData["patternSectionSubtype"]   = true;
