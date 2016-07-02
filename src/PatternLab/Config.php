@@ -327,32 +327,57 @@ class Config {
 			
 			// standardize the values for comparison
 			$currentOption      = self::getOption($optionName);
-			$currentOptionValue = isset($currentOption["plugins"]) ? $currentOption["plugins"] : $currentOption;
-			$newOptionValue     = isset($optionValue["plugins"]) ? $optionValue["plugins"] : $optionValue;
+			$currentOptionValue = $currentOption;
+			$newOptionValue     = $optionValue;
+			$optionNameOutput   = $optionName;
+			
+			// dive into plugins to do a proper comparison to
+			if ($optionName == "plugins") {
+				
+				// replace the data in anticipation of it being used
+				$optionValue = array_replace_recursive($currentOption, $newOptionValue);
+				
+				// get the key of the plugin that is being added/updated
+				reset($newOptionValue);
+				$newOptionKey = key($newOptionValue);
+				
+				if (!array_key_exists($newOptionKey, $currentOptionValue)) {
+					
+					// if the key doesn't exist just write out the new config and move on
+					self::writeUpdateConfigOption($optionName,$optionValue);
+					return;
+					
+				} else {
+					
+					// see if the existing configs for the plugin exists. if so just return with no changes
+					if ($newOptionValue[$newOptionKey] == $currentOptionValue[$newOptionKey]) {
+						return;
+					} else {
+						$optionNameOutput   = $optionName.".".$newOptionKey;
+					}
+					
+				}
+				
+			}
 			
 			if ($currentOptionValue != $newOptionValue) {
 				
 				// prompt for input
 				if (is_array($currentOptionValue)) {
-					$prompt  = "update the config option <desc>".$optionName."</desc> with the value from the package install?";
+					$prompt  = "update the config option <desc>".$optionNameOutput."</desc> with the value from the package install?";
 				} else {
-					$prompt  = "update the config option <desc>".$optionName." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
+					$prompt  = "update the config option <desc>".$optionNameOutput." (".$currentOptionValue.")</desc> with the value <desc>".$newOptionValue."</desc>?";
 				}$options = "Y/n";
 				$input   = Console::promptInput($prompt,$options,"Y");
 				
 				if ($input == "y") {
 					
-					// handle plug-in values
-					if (isset($optionValue["plugins"])) {
-						$optionValue = array_replace_recursive($currentOption, $optionValue);
-					}
-					
 					// update the config option
 					self::writeUpdateConfigOption($optionName,$optionValue);
-					Console::writeInfo("config option ".$optionName." updated...", false, true);
+					Console::writeInfo("config option ".$optionNameOutput." updated...", false, true);
 					
 				} else {
-					Console::writeWarning("config option <desc>".$optionName."</desc> not  updated...", false, true);
+					Console::writeWarning("config option <desc>".$optionNameOutput."</desc> not  updated...", false, true);
 				}
 				
 			}
