@@ -327,8 +327,8 @@ class Config {
 			
 			// standardize the values for comparison
 			$currentOption      = self::getOption($optionName);
-			$currentOptionValue = $currentOption;
-			$newOptionValue     = $optionValue;
+			$currentOptionValue = isset($currentOption["plugins"]) ? $currentOption["plugins"] : $currentOption;
+			$newOptionValue     = isset($optionValue["plugins"]) ? $optionValue["plugins"] : $optionValue;
 			
 			if ($currentOptionValue != $newOptionValue) {
 				
@@ -341,8 +341,16 @@ class Config {
 				$input   = Console::promptInput($prompt,$options,"Y");
 				
 				if ($input == "y") {
+					
+					// handle plug-in values
+					if (isset($optionValue["plugins"])) {
+						$optionValue = array_replace_recursive($currentOption, $optionValue);
+					}
+					
+					// update the config option
 					self::writeUpdateConfigOption($optionName,$optionValue);
 					Console::writeInfo("config option ".$optionName." updated...", false, true);
+					
 				} else {
 					Console::writeWarning("config option <desc>".$optionName."</desc> not  updated...", false, true);
 				}
