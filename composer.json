@@ -29,15 +29,15 @@
   },
   "require": {
     "php": ">=5.4",
-		"alchemy/zippy": "^0.3",
-		"kevinlebrun/colors.php": "^1.0",
+    "alchemy/zippy": "^0.3",
+    "kevinlebrun/colors.php": "^1.0",
     "michelf/php-markdown": "^1.6",
     "seld/jsonlint": "^1.0",
-		"shudrum/array-finder": "^1.0",
+    "shudrum/array-finder": "^1.0",
     "symfony/event-dispatcher": "^3.0",
     "symfony/filesystem": "^3.0",
     "symfony/finder": "^3.0",
     "symfony/process": "^3.1",
-		"symfony/yaml": "^3.0"
+    "symfony/yaml": "^3.0"
   }
 }
