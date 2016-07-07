@@ -168,10 +168,10 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		}
 
 		// make sure the pattern data is an array before merging the data
-		$patternStoreData["data"] = is_array($patternData) ? array_merge($patternDataBase, $patternData) : $patternDataBase;
+		$patternStoreData["data"] = is_array($patternData) ? array_replace_recursive($patternDataBase, $patternData) : $patternDataBase;
 
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_merge(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive((PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
 		PatternData::setOption($patternStoreKey, $patternStoreData);
 
 	}
