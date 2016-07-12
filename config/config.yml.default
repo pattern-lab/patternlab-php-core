@@ -42,4 +42,4 @@ sourceDir: "source"
 defaultPattern: "all"
 
 # show pattern info by default on the "view all" views
-defaultShowPatternInfo: true
+defaultShowPatternInfo: false
