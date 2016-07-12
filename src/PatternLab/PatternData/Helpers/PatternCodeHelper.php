@@ -85,9 +85,9 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				
 				if (isset($patternStoreData["patternRaw"])) {
 					
-					$header  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternHead, "data" => $data)) : "";
+					$header  = (!$this->exportClean) ? $patternLoader->render(array("pattern" => $patternHead, "data" => $data)) : "";
 					$code    = $patternLoader->render(array("pattern" => $patternStoreData["patternRaw"], "data" => $data));
-					$footer  = (!$this->exportClean) ? $stringLoader->render(array("string" => $patternFoot, "data" => $data)) : "";
+					$footer  = (!$this->exportClean) ? $patternLoader->render(array("pattern" => $patternFoot, "data" => $data)) : "";
 					
 					PatternData::setPatternOption($patternStoreKey,"header",$header);
 					PatternData::setPatternOption($patternStoreKey,"code",$code);
