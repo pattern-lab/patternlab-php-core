@@ -63,18 +63,28 @@ class ProcessSpawner {
 		// if there are processes to spawn do so
 		if (!empty($processes)) {
 			
+			// get the time out
+			$timeout = Config::getOption("timeout") ? (int)Config::getOption("timeout") : 30;
+			
 			// start the processes
 			foreach ($processes as $process) {
 				$process["process"]->start();
+				$process["process"]->setTimeout($timeout);
 			}
 			
 			// check on them and produce output
 			while (true) {
 				foreach ($processes as $process) {
-					if ($process["process"]->isRunning()) {
-						if (!$quiet && $process["output"]) {
-							print $process["process"]->getIncrementalOutput();
+					try {
+						if ($process["process"]->isRunning()) {
+							$process["process"]->checkTimeout();
+							if (!$quiet && $process["output"]) {
+								print $process["process"]->getIncrementalOutput();
+								print $process["process"]->getIncrementalErrorOutput();
+							}
 						}
+					} catch (\RuntimeException $e) {
+						Console::writeError("pattern lab processes automatically time out after ".$timeout." seconds...");
 					}
 				}
 				usleep(100000);
