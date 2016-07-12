@@ -113,6 +113,9 @@ class PatternData {
 
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
 		// seems a little silly to use symfony finder here. not really giving me any power
+		if (!is_dir(Config::getOption("patternSourceDir"))) {
+			Console::writeError("having patterns is important. please make sure you've installed a starterkit and/or that ".Console::getHumanReadablePath(Config::getOption("patternSourceDir"))." exists...");
+		}
 		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("patternSourceDir")), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 
