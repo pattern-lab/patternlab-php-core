@@ -39,29 +39,22 @@ class PatternInfoListItemsRule extends \PatternLab\PatternData\Rule {
 		// load default vars
 		$patternTypeDash = PatternData::getPatternTypeDash();
 		
-		// should this pattern get rendered?
-		$hidden          = ($name[0] == "_");
-		
 		// set-up the names, $name == foo.listitems.json
 		$pattern         = str_replace(".listitems.".$ext,"",$name); // foo
 		$patternDash     = $this->getPatternName($pattern,false);    // foo
 		$patternPartial  = $patternTypeDash."-".$patternDash;        // atoms-foo
 		
-		if (!$hidden) {
-			
-			$patternStoreData = array("category" => "pattern");
-			
-			$data = Data::getListItems("_patterns/".$pathName,$ext);
-			$patternStoreData["listItems"] = $data;
-			
-			// create a key for the data store
-			$patternStoreKey = $patternPartial;
-			
-			// if the pattern data store already exists make sure it is merged and overwrites this data
-			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
-			PatternData::setOption($patternStoreKey, $patternStoreData);
-			
-		}
+		$patternStoreData = array("category" => "pattern");
+		
+		$data = Data::getListItems("_patterns/".$pathName,$ext);
+		$patternStoreData["listItems"] = $data;
+		
+		// create a key for the data store
+		$patternStoreKey = $patternPartial;
+		
+		// if the pattern data store already exists make sure it is merged and overwrites this data
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	

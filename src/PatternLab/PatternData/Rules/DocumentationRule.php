@@ -47,54 +47,49 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$docDash    = $this->getPatternName(str_replace("_","",$doc),false); // colors
 		$docPartial = $patternTypeDash."-".$docDash;
 		
-		// if the pattern isn't hidden do stuff
-		if (!$hidden) {
-			
-			// default vars
-			$patternSourceDir = Config::getOption("patternSourceDir");
-			
-			// parse data
-			$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
-			list($yaml,$markdown) = Documentation::parse($text);
-			
-			// grab the title and unset it from the yaml so it doesn't get duped in the meta
-			if (isset($yaml["title"])) {
-				$title = $yaml["title"];
-				unset($yaml["title"]);
-			}
-			
-			// figure out if this is a pattern subtype
-			$patternSubtypeDoc = false;
-			if ($depth == 1) {
-				// go through all of the directories to see if this one matches our doc
-				foreach (glob($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR) as $dir) {
-					$dir = str_replace($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR,"",$dir);
-					if ($dir == $doc) {
-						$patternSubtypeDoc = true;
-						break;
-					}
+		// default vars
+		$patternSourceDir = Config::getOption("patternSourceDir");
+		
+		// parse data
+		$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
+		list($yaml,$markdown) = Documentation::parse($text);
+		
+		// grab the title and unset it from the yaml so it doesn't get duped in the meta
+		if (isset($yaml["title"])) {
+			$title = $yaml["title"];
+			unset($yaml["title"]);
+		}
+		
+		// figure out if this is a pattern subtype
+		$patternSubtypeDoc = false;
+		if ($depth == 1) {
+			// go through all of the directories to see if this one matches our doc
+			foreach (glob($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR) as $dir) {
+				$dir = str_replace($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR,"",$dir);
+				if ($dir == $doc) {
+					$patternSubtypeDoc = true;
+					break;
 				}
-				
 			}
-			
-			$category         = ($patternSubtypeDoc) ? "patternSubtype" : "pattern";
-			$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
-			
-			$patternStoreData = array("category"   => $category,
-									  "desc"       => $markdown,
-									  "descExists" => true,
-									  "meta"       => $yaml,
-									  "full"       => $doc);
-
-			if (isset($title)) {
-				$patternStoreData["nameClean"] = $title;
-			}
-			
-			// if the pattern data store already exists make sure this data overwrites it
-			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
-			PatternData::setOption($patternStoreKey, $patternStoreData);
 			
 		}
+		
+		$category         = ($patternSubtypeDoc) ? "patternSubtype" : "pattern";
+		$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
+		
+		$patternStoreData = array("category"   => $category,
+								  "desc"       => $markdown,
+								  "descExists" => true,
+								  "meta"       => $yaml,
+								  "full"       => $doc);
+
+		if (isset($title)) {
+			$patternStoreData["nameClean"] = $title;
+		}
+		
+		// if the pattern data store already exists make sure this data overwrites it
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	

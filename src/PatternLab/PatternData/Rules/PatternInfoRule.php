@@ -39,50 +39,43 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 		// load default vars
 		$patternTypeDash = PatternData::getPatternTypeDash();
 		
-		// should this pattern get rendered?
-		$hidden          = ($name[0] == "_");
-		
 		// set-up the names, $name == foo.json
 		$pattern         = str_replace(".".$ext,"",$name);        // foo
 		$patternDash     = $this->getPatternName($pattern,false); // foo
 		$patternPartial  = $patternTypeDash."-".$patternDash;     // atoms-foo
 		
-		if (!$hidden) {
+		$patternStoreData = array("category" => "pattern");
+		
+		$file = file_get_contents(Config::getOption("patternSourceDir")."/".$pathName);
+		
+		if ($ext == "json") {
+			$data = json_decode($file,true);
+			if ($jsonErrorMessage = JSON::hasError()) {
+				JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
+			}
+		} else {
 			
-			$patternStoreData = array("category" => "pattern");
-			
-			$file = file_get_contents(Config::getOption("patternSourceDir")."/".$pathName);
-			
-			if ($ext == "json") {
-				$data = json_decode($file,true);
-				if ($jsonErrorMessage = JSON::hasError()) {
-					JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
-				}
-			} else {
-				
-				try {
-					$data = YAML::parse($file);
-				} catch (ParseException $e) {
-					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
-				}
-				
-				// single line of text won't throw a YAML error. returns as string
-				if (gettype($data) == "string") {
-					$data = array();
-				}
-				
+			try {
+				$data = YAML::parse($file);
+			} catch (ParseException $e) {
+				printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
 			}
 			
-			$patternStoreData["data"] = $data;
-			
-			// create a key for the data store
-			$patternStoreKey = $patternPartial;
-			
-			// if the pattern data store already exists make sure it is merged and overwrites this data
-			$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
-			PatternData::setOption($patternStoreKey, $patternStoreData);
+			// single line of text won't throw a YAML error. returns as string
+			if (gettype($data) == "string") {
+				$data = array();
+			}
 			
 		}
+		
+		$patternStoreData["data"] = $data;
+		
+		// create a key for the data store
+		$patternStoreKey = $patternPartial;
+		
+		// if the pattern data store already exists make sure it is merged and overwrites this data
+		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+		PatternData::setOption($patternStoreKey, $patternStoreData);
 		
 	}
 	
