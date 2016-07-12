@@ -64,7 +64,7 @@ class ProcessSpawner {
 		if (!empty($processes)) {
 			
 			// get the time out
-			$timeout = Config::getOption("timeout") ? (int)Config::getOption("timeout") : 30;
+			$timeout = Config::getOption("timeout") ? (int)Config::getOption("timeout") : 3600;
 			
 			// start the processes
 			foreach ($processes as $process) {
