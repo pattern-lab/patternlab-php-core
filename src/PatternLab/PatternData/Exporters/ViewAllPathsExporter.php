@@ -18,9 +18,13 @@ use \PatternLab\Timer;
 
 class ViewAllPathsExporter extends \PatternLab\PatternData\Exporter {
 	
+	protected $styleGuideExcludes;
+	
 	public function __construct($options = array()) {
 		
 		parent::__construct($options);
+		
+		$this->styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 	}
 	
@@ -28,14 +32,13 @@ class ViewAllPathsExporter extends \PatternLab\PatternData\Exporter {
 		
 		// default vars
 		$viewAllPaths       = array();
-		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
 			
 			$patternType     = $patternTypeValues["patternType"];
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
-			if (!in_array($patternType,$styleGuideExcludes)) {
+			if (!in_array($patternType,$this->styleGuideExcludes)) {
 				
 				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
 					

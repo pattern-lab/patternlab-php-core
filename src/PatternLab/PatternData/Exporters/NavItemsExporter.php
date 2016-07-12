@@ -18,9 +18,15 @@ use \PatternLab\Timer;
 
 class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 	
+	protected $store;
+	protected $styleGuideExcludes;
+	
 	public function __construct($options = array()) {
 		
 		parent::__construct($options);
+		
+		$this->store = PatternData::get();
+		$this->styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		
 	}
 	
@@ -36,8 +42,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		$navItems["patternTypes"] = array();
 		
 		// iterate over the different categories and add them to the navigation
-		$store = PatternData::get();
-		foreach ($store as $patternStoreKey => $patternStoreData) {
+		foreach ($this->store as $patternStoreKey => $patternStoreData) {
 			
 			if ($patternStoreData["category"] == "patternType") {
 				
@@ -96,9 +101,6 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			
 		}
 		
-		// default vars
-		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
-		
 		// review each subtype. add a view all link or remove the subtype as necessary
 		foreach ($navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
 			
@@ -106,7 +108,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			$patternType     = $patternTypeValues["patternType"];
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
-			if (!in_array($patternType,$styleGuideExcludes)) {
+			if (!in_array($patternType,$this->styleGuideExcludes)) {
 				
 				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
 					

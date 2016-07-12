@@ -18,39 +18,42 @@ use \PatternLab\PatternData;
 use \PatternLab\Timer;
 
 class DataMergeExporter extends \PatternLab\PatternData\Exporter {
-
+	
+	protected $store;
+	
 	public function __construct($options = array()) {
-
+		
 		parent::__construct($options);
-
+		
+		$this->store = PatternData::get();
+		
 	}
-
+	
 	public function run() {
-
-		$store = PatternData::get();
-		foreach ($store as $patternStoreKey => $patternStoreData) {
-
+		
+		foreach ($this->store as $patternStoreKey => $patternStoreData) {
+			
 			if ($patternStoreData["category"] == "pattern") {
-
+				
 				if (isset($patternStoreData["data"]) || isset($patternStoreData["listItems"])) {
 					Data::initPattern($patternStoreKey);
 				}
-
+				
 				if (isset($patternStoreData["data"])) {
 					Data::setPatternData($patternStoreKey, $patternStoreData["data"]);
 				}
-
+				
 				if (isset($patternStoreData["listItems"])) {
 					Data::setPatternListItems($patternStoreKey, $patternStoreData["listItems"]);
 				}
-
+				
 			}
-
+			
 		}
-
+		
 		// walk across the data and change link.pattern-partial to real source
 		Data::compareReplaceListVarsInit();
-
+		
 	}
 
 }
