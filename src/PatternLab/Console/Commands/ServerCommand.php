@@ -58,12 +58,12 @@ class ServerCommand extends Command {
 			// set-up the base command
 			$command    = $this->pathPHP." -S ".$host." ".$coreDir."/server/router.php";
 			$commands   = array();
-			$commands[] = array("command" => $command, "cwd" => $publicDir, "timeout" => null, "idle" => 600);
+			$commands[] = array("command" => $command, "cwd" => $publicDir, "timeout" => null, "idle" => 1800);
 			
 			// get the watch command info
 			if (Console::findCommandOption("with-watch")) {
 				$watchCommand = new WatchCommand;
-				$commands[]   = array("command" => $watchCommand->build()." --no-procs", "timeout" => null, "idle" => 600);
+				$commands[]   = array("command" => $watchCommand->build()." --no-procs", "timeout" => null, "idle" => 1800);
 			}
 			
 			Console::writeInfo("server started on http://".$host." - use ctrl+c to exit...");

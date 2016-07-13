@@ -19,7 +19,9 @@ use \PatternLab\Console\Commands\WatchCommand;
 use \PatternLab\Console\ProcessSpawnerEvent;
 use \PatternLab\Dispatcher;
 use \PatternLab\Timer;
+use \Symfony\Component\Process\Exception\ProcessTimedOutException;
 use \Symfony\Component\Process\Process;
+
 
 class ProcessSpawner {
 	
@@ -63,13 +65,9 @@ class ProcessSpawner {
 		// if there are processes to spawn do so
 		if (!empty($processes)) {
 			
-			// get the time out
-			$timeout = Config::getOption("timeout") ? (int)Config::getOption("timeout") : 3600;
-			
 			// start the processes
 			foreach ($processes as $process) {
 				$process["process"]->start();
-				$process["process"]->setTimeout($timeout);
 			}
 			
 			// check on them and produce output
@@ -83,8 +81,12 @@ class ProcessSpawner {
 								print $process["process"]->getIncrementalErrorOutput();
 							}
 						}
-					} catch (\RuntimeException $e) {
-						Console::writeError("pattern lab processes automatically time out after ".$timeout." seconds...");
+					} catch (ProcessTimedOutException $e) {
+						if ($e->isGeneralTimeout()) {
+							Console::writeError("pattern lab processes should never time out. yours did...");
+						} else if ($e->isIdleTimeout()) {
+							Console::writeError("pattern lab processes automatically time out if their is no command line output in 30 minutes...");
+						}
 					}
 				}
 				usleep(100000);
@@ -110,7 +112,7 @@ class ProcessSpawner {
 			$cwd         = isset($commandOptions["cwd"])     ? $commandOptions["cwd"]     : null;
 			$env         = isset($commandOptions["env"])     ? $commandOptions["env"]     : null;
 			$input       = isset($commandOptions["input"])   ? $commandOptions["input"]   : null;
-			$timeout     = isset($commandOptions["timeout"]) ? $commandOptions["timeout"] : 60;
+			$timeout     = isset($commandOptions["timeout"]) ? $commandOptions["timeout"] : null;
 			$options     = isset($commandOptions["options"]) ? $commandOptions["options"] : array();
 			$idle        = isset($commandOptions["idle"])    ? $commandOptions["idle"]    : null;
 			$output      = isset($commandOptions["output"])  ? $commandOptions["output"]  : true;
