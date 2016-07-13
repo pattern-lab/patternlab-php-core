@@ -68,7 +68,7 @@ class Fetch {
 		//get the path to the GH repo and validate it
 		$tarballUrl = "https://github.com/".$org."/".$repo."/archive/".$tag.".tar.gz";
 		
-		Console::writeInfo("downloading the starterkit...");
+		Console::writeInfo("downloading the starterkit. this may take a few minutes...");
 		
 		// try to download the given package
 		if (!$package = @file_get_contents($tarballUrl)) {
@@ -177,7 +177,7 @@ class Fetch {
 		// set default vars
 		$fsOptions = array();
 		$emptyDir = true;
-		$validFiles = array("README",".gitkeep",".DS_Store","styleguide");
+		$validFiles = array("README",".gitkeep",".DS_Store","styleguide","patternlab-components");
 		
 		// see if the source directory is empty
 		if (is_dir($sourceDir)) {
