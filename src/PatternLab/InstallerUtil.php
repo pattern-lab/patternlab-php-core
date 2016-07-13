@@ -591,11 +591,6 @@ class InstallerUtil {
 		// initialize a bunch of stuff like config and console
 		self::init();
 		
-		// make sure user is prompted to install starterkit
-		if (!empty($installerInfo["suggestedStarterKits"])) {
-			self::promptStarterKitInstall($installerInfo["suggestedStarterKits"]);
-		}
-		
 		// reorder packages so the starterkit is first if it's being installed as a package
 		if (isset($installerInfo["packages"])) {
 			
@@ -631,6 +626,11 @@ class InstallerUtil {
 				
 			}
 			
+		}
+		
+		// make sure user is prompted to install starterkit
+		if (!empty($installerInfo["suggestedStarterKits"])) {
+			self::promptStarterKitInstall($installerInfo["suggestedStarterKits"]);
 		}
 		
 		// override any configs that have been set-up
