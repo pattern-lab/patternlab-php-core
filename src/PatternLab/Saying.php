@@ -90,7 +90,7 @@ class Saying {
 	public function say() {
 		
 		// set a color
-		$colors       = array("ok","options","info","warning","error");
+		$colors       = array("ok","options","info","warning");
 		$randomNumber = rand(0,count($colors)-1);
 		$color        = (isset($colors[$randomNumber])) ? $colors[$randomNumber] : "desc";
 		
