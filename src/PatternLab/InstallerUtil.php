@@ -468,7 +468,7 @@ class InstallerUtil {
 				// see if the directory is essentially empty
 				$files = scandir($path);
 				foreach ($files as $key => $file) {
-					$ignore = array("..",".",".gitkeep","README",".DS_Store");
+					$ignore = array("..",".",".gitkeep","README",".DS_Store","patternlab-components");
 					$file = explode("/",$file);
 					if (in_array($file[count($file)-1],$ignore)) {
 						unset($files[$key]);
