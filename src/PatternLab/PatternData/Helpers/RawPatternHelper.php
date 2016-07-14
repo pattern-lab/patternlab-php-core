@@ -41,7 +41,7 @@ class RawPatternHelper extends \PatternLab\PatternData\Helper {
 		// iterate to get raw data loaded into the PatternData Store
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if ($patternStoreData["category"] == "pattern") {
+			if (($patternStoreData["category"] == "pattern") && isset($patternStoreData["name"])) {
 				
 				// figure out the source path for the pattern to render
 				$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::getPatternOption($patternStoreData["original"],"pathName") : $patternStoreData["pathName"];
@@ -51,7 +51,7 @@ class RawPatternHelper extends \PatternLab\PatternData\Helper {
 				if (file_exists($path)) {
 					PatternData::setPatternOption($patternStoreKey,"patternRaw",file_get_contents($path));
 				} else {
-					Console::writeError($patternStoreData["partial"]." wasn't found for loading. the given path: ".$path);
+					Console::writeWarning($patternStoreData["partial"]." wasn't found for loading. the given path: ".$path);
 				}
 				
 			}
