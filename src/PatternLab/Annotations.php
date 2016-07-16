@@ -51,13 +51,9 @@ class Annotations {
 		// set-up the comments store
 		self::$store["comments"] = array();
 		
-		// iterate over all of the files in the annotations dir
+		// create the annotations dir if it doesn't exist
 		if (!is_dir($annotationsDir)) {
-			Console::writeWarning("<path>".Console::getHumanReadablePath($annotationsDir)."</path><warning> doesn't exist so you won't have annotations...");
 			mkdir($annotationsDir);
-		} else {
-			
-			
 		}
 		
 		// find the markdown-based annotations
