@@ -78,7 +78,10 @@ class ProcessSpawner {
 							$process["process"]->checkTimeout();
 							if (!$quiet && $process["output"]) {
 								print $process["process"]->getIncrementalOutput();
-								print $process["process"]->getIncrementalErrorOutput();
+								$cmd = $process["process"]->getCommandLine();
+								if (strpos($cmd,"router.php") != (strlen($cmd) - 10)) {
+									print $process["process"]->getIncrementalErrorOutput();
+								}
 							}
 						}
 					} catch (ProcessTimedOutException $e) {
