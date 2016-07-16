@@ -35,8 +35,6 @@ class Builder {
 	*/
 	public function __construct() {
 		
-		//$this->patternCSS   = array();
-		
 		// set-up the pattern engine
 		PatternEngine::init();
 		
@@ -422,23 +420,6 @@ class Builder {
 		
 		// note the end of the operation
 		$dispatcherInstance->dispatch("builder.generateViewAllPagesEnd");
-		
-	}
-	
-	/**
-	* Loads the CSS from source/css/ into CSS Rule Saver to be used for code view
-	* Will eventually get pushed elsewhere
-	*/
-	protected function initializeCSSRuleSaver() {
-		
-		$loader = new \SplClassLoader('CSSRuleSaver', __DIR__.'/../../lib');
-		$loader->register();
-		
-		$this->cssRuleSaver = new \CSSRuleSaver\CSSRuleSaver;
-		
-		foreach(glob(Config::getOption("sourceDir")."/css/*.css") as $filename) {
-			$this->cssRuleSaver->loadCSS($filename);
-		}
 		
 	}
 	
