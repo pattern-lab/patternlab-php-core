@@ -230,12 +230,6 @@ class Builder {
 					file_put_contents($patternPublicDir."/".$path."/".$path.".markup-only.html",$markup);
 					file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
 				}
-				/*
-				Not being used and should be moved to a plug-in
-				if (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) {
-					file_put_contents($patternPublicDir.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
-				}
-				*/
 				
 			}
 			
