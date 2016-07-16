@@ -174,7 +174,8 @@ class Console {
 		
 		if (!$path) {
 			$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
-			Console::writeError("please add the option `phpBin` with the path to PHP to <path>".$configPath."</path> to run this process...");
+			$examplePHP = (DIRECTORY_SEPARATOR === "/") ? "C:\wamp\bin\php\php5.5.12" : "/opt/local/lib/php54";
+			Console::writeError("can't find PHP. add the path to PHP by adding the option \"phpBin\" to <path>".$configPath."</path>. it should look like \"phpBin\": \"".$examplePHP."\"");
 		}
 		
 		return $path;
@@ -192,7 +193,7 @@ class Console {
 		
 		if (!$console) {
 			$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
-			Console::writeError("please add the option `phpScriptName` with the path to your console option (e.g. core/console) to <path>".$configPath."</path> to run this process...");
+			Console::writeError("please add the option `phpScriptName` with the path to your console option (e.g. core".DIRECTORY_SEPARATOR."console) to <path>".$configPath."</path> to run this process...");
 		}
 		
 		return Config::getOption("baseDir").$console;
@@ -479,7 +480,7 @@ class Console {
 	* @return {String}        cleaned up path
 	*/
 	public static function getHumanReadablePath($path) {
-		return str_replace(Config::getOption("baseDir"), "./", $path);
+		return str_replace(Config::getOption("baseDir"), ".".DIRECTORY_SEPARATOR, $path);
 	}
 	
 	/**
