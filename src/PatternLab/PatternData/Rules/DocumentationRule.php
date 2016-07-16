@@ -75,7 +75,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
 		
 		$patternStoreData = array("category"   => $category,
-								  "desc"       => $markdown,
+								  "desc"       => trim($markdown),
 								  "descExists" => true,
 								  "meta"       => $yaml,
 								  "full"       => $doc);
