@@ -96,10 +96,14 @@ class Fetch {
 		}
 		
 		// extract, if the zip is supposed to be unpacked do that (e.g. stripdir)
-		$zippy = Zippy::load();
-		$zippy->addStrategy(new UnpackFileStrategy());
-		$zippy->getAdapterFor('tar.gz')->open($tempFile)->extract($tempDirSK);
-
+		try {
+			$zippy = Zippy::load();
+			$zippy->addStrategy(new UnpackFileStrategy());
+			$zippy->getAdapterFor('tar.gz')->open($tempFile)->extract($tempDirSK);
+		} catch(\RuntimeException $e) {
+			Console::writeError("failed to extract the starterkit. easiest solution is to manually download it and copy <path>./dist</path to <path>./source/</path>...");
+		}
+		
 		if (!is_dir($tempDirDist)) {
 			// try without repo dir
 			$tempDirDist  = $tempDirSK.DIRECTORY_SEPARATOR."dist";
