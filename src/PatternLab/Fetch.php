@@ -24,24 +24,6 @@ use \Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class Fetch {
 	
 	/**
-	 * Fetch a package using Composer
-	 * @param  {String}    the path to the package to be downloaded
-	 *
-	 * @return {String}    the modified file contents
-	 */
-	public function fetchPackage($package = "") {
-		
-		if (empty($package)) {
-			Console::writeError("please provide a path for the package before trying to fetch it...");
-		}
-		
-		// run composer
-		$composerPath = Config::getOption("coreDir").DIRECTORY_SEPARATOR."bin/composer.phar";
-		passthru("php ".$composerPath." require ".$package);
-		
-	}
-	
-	/**
 	 * Fetch a package from GitHub
 	 * @param  {String}    the command option to provide the rule for
 	 * @param  {String}    the path to the package to be downloaded
