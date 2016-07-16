@@ -106,7 +106,7 @@ class Builder {
 		foreach ($exposedOptions as $exposedOption) {
 			$config[$exposedOption]     = Config::getOption($exposedOption);
 		}
-		$output     .= "var config = ".json_encode($config).";";
+		$output     .= "var config = ".json_encode($config).";\n";
 		
 		// load the ish Controls
 		$ishControls     = array();
@@ -118,24 +118,24 @@ class Builder {
 			}
 		}
 		$ishControls["ishControlsHide"] = $controlsToHide;
-		$output      .= "var ishControls = ".json_encode($ishControls).";";
+		$output      .= "var ishControls = ".json_encode($ishControls).";\n";
 		
 		// load and write out the items for the navigation
 		$niExporter   = new NavItemsExporter();
 		$navItems     = $niExporter->run();
-		$output      .= "var navItems = ".json_encode($navItems).";";
+		$output      .= "var navItems = ".json_encode($navItems).";\n";
 		
 		// load and write out the items for the pattern paths
 		$patternPaths = array();
 		$ppdExporter  = new PatternPathDestsExporter();
 		$patternPaths = $ppdExporter->run();
-		$output      .= "var patternPaths = ".json_encode($patternPaths).";";
+		$output      .= "var patternPaths = ".json_encode($patternPaths).";\n";
 		
 		// load and write out the items for the view all paths
 		$viewAllPaths = array();
 		$vapExporter  = new ViewAllPathsExporter();
 		$viewAllPaths = $vapExporter->run($navItems);
-		$output      .= "var viewAllPaths = ".json_encode($viewAllPaths).";";
+		$output      .= "var viewAllPaths = ".json_encode($viewAllPaths).";\n";
 		
 		// gather plugin package information
 		$packagesInfo = array();
