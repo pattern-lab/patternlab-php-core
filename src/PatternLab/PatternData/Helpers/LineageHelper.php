@@ -53,9 +53,10 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					foreach ($foundLineages as $lineage) {
 						
 						if (PatternData::getOption($lineage)) {
-							
-							$patternLineages[] = array("lineagePattern" => $lineage,
-													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html");
+
+              $path = PatternData::getPatternOption($lineage, "pathDash");
+              $patternLineages[] = array("lineagePattern" => $lineage,
+              			"lineagePath"    => "../../patterns/".$path."/".$path.".html");
 							
 						} else {
 							
