@@ -37,6 +37,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		$patternSubtypeSet        = false;
 		$patternType              = "";
 		$patternTypeDash          = "";
+		$suffixRendered           =	Config::getOption("outputFileSuffixes.rendered");
 		
 		$navItems                 = array();
 		$navItems["patternTypes"] = array();
@@ -82,7 +83,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 				if (isset($patternStoreData["hidden"]) && !$patternStoreData["hidden"]) {
 					
 					// set-up the info for the nav
-					$patternInfo = array("patternPath"    => $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html",
+					$patternInfo = array("patternPath"    => $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].$suffixRendered.".html",
 										 "patternSrcPath" => $patternStoreData["pathName"],
 										 "patternName"    => ucwords($patternStoreData["nameClean"]),
 										 "patternState"   => $patternStoreData["state"],

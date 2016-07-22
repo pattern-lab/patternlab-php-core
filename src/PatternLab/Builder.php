@@ -194,6 +194,9 @@ class Builder {
 		$patternPublicDir = !$exportFiles ? Config::getOption("patternPublicDir") : Config::getOption("patternExportDir");
 		$patternSourceDir = Config::getOption("patternSourceDir");
 		$patternExtension = Config::getOption("patternExtension");
+		$suffixRendered   =	Config::getOption("outputFileSuffixes.rendered");
+		$suffixRaw        = Config::getOption("outputFileSuffixes.rawTemplate");
+		$suffixMarkupOnly = Config::getOption("outputFileSuffixes.markupOnly");
 		
 		// make sure the export dir exists
 		if ($exportFiles && !is_dir($exportDir)) {
@@ -225,10 +228,10 @@ class Builder {
 				}
 				
 				// write out the various pattern files
-				file_put_contents($patternPublicDir."/".$path."/".$path.".html",$markupFull);
+				file_put_contents($patternPublicDir."/".$path."/".$path.$suffixRendered.".html",$markupFull);
 				if (!$exportFiles) {
-					file_put_contents($patternPublicDir."/".$path."/".$path.".markup-only.html",$markup);
-					file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+					file_put_contents($patternPublicDir."/".$path."/".$path.$suffixMarkupOnly.".html",$markup);
+					file_put_contents($patternPublicDir."/".$path."/".$path.$suffixRaw.".".$patternExtension,$markupEngine);
 				}
 				
 			}

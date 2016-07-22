@@ -37,6 +37,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		$foundLineages    = array();
 		$patternSourceDir = Config::getOption("patternSourceDir");
 		$patternExtension = Config::getOption("patternExtension");
+		$suffixRendered   =	Config::getOption("outputFileSuffixes.rendered");
 		
 		// check for the regular lineages in only normal patterns
 		$store = PatternData::get();
@@ -55,7 +56,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 						if (PatternData::getOption($lineage)) {
 							
 							$patternLineages[] = array("lineagePattern" => $lineage,
-													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html");
+													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].$suffixRendered.".html");
 							
 						} else {
 							
@@ -124,7 +125,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 										
 										$path = PatternData::getPatternOption($haystackKey,"pathDash");
 										$patternLineagesR[] = array("lineagePattern" => $haystackKey,
-																	"lineagePath"    => "../../patterns/".$path."/".$path.".html");
+																	"lineagePath"    => "../../patterns/".$path."/".$path.$suffixRendered.".html");
 																
 									}
 								

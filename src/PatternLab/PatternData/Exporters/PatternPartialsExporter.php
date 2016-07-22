@@ -44,6 +44,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		
 		// default vars
 		$patternPartials    = array();
+		$suffixRendered     =	Config::getOption("outputFileSuffixes.rendered");
 		
 		foreach ($this->store as $patternStoreKey => $patternStoreData) {
 			
@@ -53,7 +54,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					
 					$patternPartialData                            = array();
 					$patternPartialData["patternName"]             = $patternStoreData["nameClean"];
-					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
+					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].$suffixRendered.".html";
 					$patternPartialData["patternPartial"]          = $patternStoreData["partial"];
 					$patternPartialData["patternPartialCode"]      = $patternStoreData["code"];
 					$patternPartialData["patternState"]            = $patternStoreData["state"];
