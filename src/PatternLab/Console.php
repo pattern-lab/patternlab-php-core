@@ -17,6 +17,7 @@ use \Colors\Color;
 use \PatternLab\Console\Event as ConsoleEvent;
 use \PatternLab\Dispatcher;
 use \PatternLab\Timer;
+use \Symfony\Component\Process\PhpExecutableFinder;
 
 class Console {
 	
@@ -170,7 +171,9 @@ class Console {
 	*/
 	public static function getPathPHP() {
 		
-		$path = isset($_SERVER["_"]) ? $_SERVER["_"] : Config::getOption("phpBin");
+		$manualPHP = Config::getOption("phpBin");
+		$autoPHP   = new PhpExecutableFinder();
+		$path      = $manualPHP ? $manualPHP : $autoPHP->find();
 		
 		if (!$path) {
 			$configPath = Console::getHumanReadablePath(Config::getOption("configPath"));
