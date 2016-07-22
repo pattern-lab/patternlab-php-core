@@ -212,6 +212,11 @@ class Config {
 		self::$options["metaDir"]          = isset(self::$options["metaDir"])          ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["metaDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_meta/";
 		self::$options["annotationsDir"]   = isset(self::$options["annotationsDir"])   ? self::$options["sourceDir"].DIRECTORY_SEPARATOR.self::cleanDir(self::$options["annotationsDir"]) : self::$options["sourceDir"].DIRECTORY_SEPARATOR."_annotations/";
 		
+		// set-up outputFileSuffixes
+		self::$options["outputFileSuffixes"]["rendered"]    = isset(self::$options["outputFileSuffixes"]["rendered"])    ? self::$options["outputFileSuffixes"]["rendered"]    : '';
+		self::$options["outputFileSuffixes"]["rawTemplate"] = isset(self::$options["outputFileSuffixes"]["rawTemplate"]) ? self::$options["outputFileSuffixes"]["rawTemplate"] : '';
+		self::$options["outputFileSuffixes"]["markupOnly"]  = isset(self::$options["outputFileSuffixes"]["markupOnly"])  ? self::$options["outputFileSuffixes"]["markupOnly"]  : '.markup-only';
+		
 		// handle a pre-2.1.0 styleguideKitPath before saving it
 		if (isset(self::$options["styleguideKitPath"])) {
 			self::$options["styleguideKitPath"] = self::$options["baseDir"].self::cleanDir(self::getStyleguideKitPath(self::$options["styleguideKitPath"]));
