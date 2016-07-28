@@ -349,14 +349,15 @@ class InstallerUtil {
 				// iterate over the returned objects
 				foreach ($finder as $file) {
 					
-					$ext = $file->getExtension();
+					$ext      = $file->getExtension();
+					$pathName = $file->getPathname());
 					
 					if ($ext == "css") {
-						$componentTypes["stylesheets"][] = str_replace($sourceBase.$source,$destination,$file->getPathname());
+						$componentTypes["stylesheets"][] = str_replace(DIRECTORY_SEPARATOR,"/",str_replace($sourceBase.$source,$destination,$pathName));
 					} else if ($ext == "js") {
-						$componentTypes["javascripts"][] = str_replace($sourceBase.$source,$destination,$file->getPathname());
+						$componentTypes["javascripts"][] = str_replace(DIRECTORY_SEPARATOR,"/",str_replace($sourceBase.$source,$destination,$pathName));
 					} else if ($ext == $templateExtension) {
-						$componentTypes["templates"][]   = str_replace($sourceBase.$source,$destination,$file->getPathname());
+						$componentTypes["templates"][]   = str_replace(DIRECTORY_SEPARATOR,"/",str_replace($sourceBase.$source,$destination,$pathName));
 					}
 					
 				}
