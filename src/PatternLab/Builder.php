@@ -391,8 +391,8 @@ class Builder {
 					$patternData["patternPartial"] = "viewall-".$patternStoreData["nameDash"]."-all";
 					
 					// add the pattern lab specific mark-up
-					$partials["patternLabHead"] = $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $partials["cacheBuster"])));
-					$partials["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
+					$globalData["patternLabHead"] = $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $partials["cacheBuster"])));
+					$globalData["patternLabFoot"] = $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
 					$header      = $patternLoader->render(array("pattern" => $patternHead, "data" => $globalData));
