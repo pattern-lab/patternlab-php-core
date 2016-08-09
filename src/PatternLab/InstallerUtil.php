@@ -350,7 +350,7 @@ class InstallerUtil {
 				foreach ($finder as $file) {
 					
 					$ext      = $file->getExtension();
-					$pathName = $file->getPathname());
+					$pathName = $file->getPathname();
 					
 					if ($ext == "css") {
 						$componentTypes["stylesheets"][] = str_replace(DIRECTORY_SEPARATOR,"/",str_replace($sourceBase.$source,$destination,$pathName));
