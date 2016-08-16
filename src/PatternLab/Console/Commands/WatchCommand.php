@@ -65,10 +65,12 @@ class WatchCommand extends Command {
 				
 			} else {
 				
+				$idleTimeoutDuration = Config::getOption("idleTimeoutDuration") ? Config::getOption("idleTimeoutDuration") : 600;
+
 				// a vanilla --watch command needs to have a --no-procs version built
 				// so we don't get caught in while() loops. re-request the console command
 				$commands     = array();
-				$commands[]   = array("command" => $this->build()." --no-procs", "timeout" => null, "idle" => 600);
+				$commands[]   = array("command" => $this->build()." --no-procs", "timeout" => null, "idle" => $idleTimeoutDuration);
 				
 				Console::writeInfo("spawning the watch process...");
 				

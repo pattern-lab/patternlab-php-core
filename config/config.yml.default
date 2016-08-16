@@ -43,3 +43,6 @@ defaultPattern: "all"
 
 # show pattern info by default on the "view all" views
 defaultShowPatternInfo: false
+
+# set idle timeout duration. defaults to 600s if no value is specified
+idleTimeoutDuration: '600'
