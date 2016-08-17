@@ -82,6 +82,11 @@ class Config {
 	*/
 	protected static function getStyleguideKitPath($styleguideKitPath = "") {
 		
+		// Replace directory seperator in string system specific DIRECTORY_SEPERATOR
+		if (isset($styleguideKitPath[0])) {
+			$styleguideKitPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $styleguideKitPath);
+		} 
+		
 		$styleguideKitPathFinal = "";
 		if (isset($styleguideKitPath[0]) && ($styleguideKitPath[0] == DIRECTORY_SEPARATOR)) {
 			if (strpos($styleguideKitPath, DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR === 0)) {
