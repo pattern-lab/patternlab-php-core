@@ -47,26 +47,26 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 					// if this is a true pattern state, update patterns listed in reversed lineages
 					if ($patternStateDigit !== false && !empty($patternStoreData["lineagesR"])) {
 
-                        foreach ($patternStoreData["lineagesR"] as $patternCheckInfo) {
+						foreach ($patternStoreData["lineagesR"] as $patternCheckInfo) {
 
-                            $lineagePatternPartial = $patternCheckInfo["lineagePattern"];
+							$lineagePatternPartial = $patternCheckInfo["lineagePattern"];
 
-                            // if the found pattern's lineage is empty and the pattern state isn't the last (e.g. complete) add the pattern state
-                            // otherwise, if the pattern state is less than the one being checked update the pattern
-                            if ((PatternData::getPatternOption($lineagePatternPartial,"state") == "") && ($patternStateDigit != $patternStateLast)) {
+							// if the found pattern's lineage is empty and the pattern state isn't the last (e.g. complete) add the pattern state
+							// otherwise, if the pattern state is less than the one being checked update the pattern
+							if ((PatternData::getPatternOption($lineagePatternPartial,"state") == "") && ($patternStateDigit != $patternStateLast)) {
 
-                                PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
+								PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
 
-                            } else {
+							} else {
 
-                                $patternStateCheck = array_search(PatternData::getPatternOption($lineagePatternPartial,"state"), $patternStates);
-                                if ($patternStateDigit < $patternStateCheck) {
-                                    PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
-                                }
+								$patternStateCheck = array_search(PatternData::getPatternOption($lineagePatternPartial,"state"), $patternStates);
+								if ($patternStateDigit < $patternStateCheck) {
+									PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
+								}
 
-                            }
+							}
 
-                        }
+						}
 
 					}
 
