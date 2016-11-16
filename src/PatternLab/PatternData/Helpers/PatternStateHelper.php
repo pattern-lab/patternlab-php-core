@@ -44,37 +44,27 @@ class PatternStateHelper extends \PatternLab\PatternData\Helper {
 					
 					$patternStateDigit = array_search($patternState,$patternStates);
 					
-					// if this is a true pattern state update various patterns
-					if ($patternStateDigit !== false) {
+					// if this is a true pattern state, update patterns listed in reversed lineages
+					if ($patternStateDigit !== false && !empty($patternStoreData["lineagesR"])) {
 						
-						$storeTake2 = PatternData::get();
-						foreach ($storeTake2 as $patternStoreKey2 => $patternStoreData2) {
+						foreach ($patternStoreData["lineagesR"] as $patternCheckInfo) {
 							
-							if (($patternStoreData2["category"] == "pattern") && isset($patternStoreData2["lineagesR"])) {
+							$lineagePatternPartial = $patternCheckInfo["lineagePattern"];
+							
+							// if the found pattern's lineage is empty and the pattern state isn't the last (e.g. complete) add the pattern state
+							// otherwise, if the pattern state is less than the one being checked update the pattern
+							if ((PatternData::getPatternOption($lineagePatternPartial,"state") == "") && ($patternStateDigit != $patternStateLast)) {
 								
-								foreach ($patternStoreData2["lineagesR"] as $patternCheckInfo) {
-									
-									$lineagePatternPartial = $patternCheckInfo["lineagePattern"];
-									
-									// if the found pattern's lineage is empty and the pattern state isn't the last (e.g. complete) add the pattern state
-									// otherwise, if the pattern state is less than the one being checked update the pattern
-									if ((PatternData::getPatternOption($lineagePatternPartial,"state") == "") && ($patternStateDigit != $patternStateLast)) {
-										
-										PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
-										
-									} else {
-										
-										$patternStateCheck = array_search(PatternData::getPatternOption($lineagePatternPartial,"state"), $patternStates);
-										if ($patternStateDigit < $patternStateCheck) {
-											PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
-										}
-										
-									}
-									
+								PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
+								
+							} else {
+								
+								$patternStateCheck = array_search(PatternData::getPatternOption($lineagePatternPartial,"state"), $patternStates);
+								if ($patternStateDigit < $patternStateCheck) {
+									PatternData::setPatternOption($lineagePatternPartial,"state",$patternState);
 								}
 								
 							}
-							
 						}
 						
 					}
