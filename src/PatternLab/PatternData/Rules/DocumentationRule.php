@@ -16,6 +16,7 @@ use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\Parsers\Documentation;
 use \PatternLab\Timer;
+use \PatternLab\Data;
 
 class DocumentationRule extends \PatternLab\PatternData\Rule {
 	
@@ -49,7 +50,6 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		
 		// parse data
 		$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
-		list($yaml,$markdown) = Documentation::parse($text);
 		
 		// grab the title and unset it from the yaml so it doesn't get duped in the meta
 		if (isset($yaml["title"])) {
@@ -73,6 +73,20 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		
 		$category         = ($patternSubtypeDoc) ? "patternSubtype" : "pattern";
 		$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
+    
+		//Setup the Pattern Loader so we can pre-render template markup used in our markdown files, prior to being rendered in Markdown.
+		$patternEngineBasePath = \PatternLab\PatternEngine::getInstance()->getBasePath();
+		$patternLoaderClass    = $patternEngineBasePath."\Loaders\PatternLoader";
+		$patternLoader         = new $patternLoaderClass($options);
+    
+		//Setup the default pattern data.  
+		$data = Data::getPatternSpecificData($patternStoreKey);
+		
+		//Render the markdown content as a pattern, piping in the pattern-specific data from above.
+		$text                  = $patternLoader->render(array("pattern" => $text, "data" => $data));
+		
+		//Finally parse the resulting content as normal markup; continue as usual.
+		list($yaml,$markdown) = Documentation::parse($text);
 		
 		$patternStoreData = array("category"   => $category,
 								  "desc"       => trim($markdown),
