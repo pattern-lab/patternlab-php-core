@@ -53,6 +53,40 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					
 					foreach ($foundLineages as $lineage) {
 						
+						//Handle instances where we aren't or can't use the shorthand PL path reference in templates, specifically in Twig / D8 when we need to use Twig namespaces in our template paths.
+						if ($lineage[0] == '@'){
+
+							//Grab the template extension getting used so we can strip it off down below.
+							$patternExtension = Config::getOption("patternExtension");
+
+							//Store the length of our broken up path for reference below
+							$length = count($lineageParts);
+
+							//Strip off the @ sign at the beginning of our $lineage string.
+							$lineage = ltrim($lineage, '@');
+							//Break apart the full lineage path based on any slashes that may exist.
+							$lineageParts = explode('/', $lineage);
+
+							//Store the first part of the string up to the first slash "/"
+							$patternType = $lineageParts[0];
+
+							//Now grab the last part of the pattern key, based on the length of the path we previously exploded.
+							$patternName = $lineageParts[$length - 1];
+
+							//Remove any "_" from pattern Name.
+							$patternName = ltrim($patternName, '_');
+
+							//Remove any potential prefixed numbers or number + dash combos on our Pattern Name.
+							$patternName = preg_replace('/^[0-9\-]+/', '', $patternName);
+
+							//Strip off the pattern path extension (.twig, .mustache, etc)
+							$patternName = explode('.' . $patternExtension, $patternName);
+							$patternName = $patternName[0];
+
+							//Finally, re-assign $lineage to the default PL pattern key.
+							$lineage = $patternType . "-" . $patternName;
+						}
+						
 						if (PatternData::getOption($lineage)) {
 							
 							$patternLineages[] = array("lineagePattern" => $lineage,
