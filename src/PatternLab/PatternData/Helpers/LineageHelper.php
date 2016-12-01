@@ -53,6 +53,50 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					
 					foreach ($foundLineages as $lineage) {
 						
+						//Handle instances where we aren't or can't use the shorthand PL path reference in templates, specifically in Twig / D8 when we need to use Twig namespaces in our template paths.
+						if ($lineage[0] == '@'){
+
+							//Grab the template extension getting used so we can strip it off down below.
+							$patternExtension = Config::getOption("patternExtension");
+
+							//Strip off the @ sign at the beginning of our $lineage string.
+							$lineage = ltrim($lineage, '@');
+
+							//Break apart the full lineage path based on any slashes that may exist.
+							$lineageParts = explode('/', $lineage);
+
+							//Store the length of our broken up path for reference below
+							$length = count($lineageParts);
+
+							//Store the first part of the string up to the first slash "/"
+							$patternType = $lineageParts[0];
+
+							//Now grab the last part of the pattern key, based on the length of the path we previously exploded.
+							$patternName = $lineageParts[$length - 1];
+
+							//Remove any "_" from pattern Name.
+							$patternName = ltrim($patternName, '_');
+
+							//Remove any potential prefixed numbers or number + dash combos on our Pattern Name.
+							$patternName = preg_replace('/^[0-9\-]+/', '', $patternName);
+
+							//Flag any "_" hidden patterns so we skip over for now. 
+							if ($patternName[0] == '_'){
+								$hidden = true;
+							}
+
+							//Strip off the pattern path extension (.twig, .mustache, etc) if it exists.
+							$patternNameStripped = explode('.' . $patternExtension, $patternName);
+
+							// If the pattern name parsed had an extension, re-assign our Pattern Name to that.
+							if (count($patternNameStripped) > 1){
+								$patternName = $patternNameStripped[0];
+							}
+
+							//Finally, re-assign $lineage to the default PL pattern key.
+							$lineage = $patternType . "-" . $patternName;
+						}
+						
 						if (PatternData::getOption($lineage)) {
 							
 							$patternLineages[] = array("lineagePattern" => $lineage,
@@ -60,7 +104,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 							
 						} else {
 							
-							if (strpos($lineage, '/') === false) {
+							if (strpos($lineage, '/') === false && !$hidden) {
 								$fileName = $patternStoreData["pathName"].".".$patternExtension;
 								Console::writeWarning("you may have a typo in ".$fileName.". `".$lineage."` is not a valid pattern...");
 							}
