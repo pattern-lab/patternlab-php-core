@@ -291,9 +291,9 @@ class Builder {
 		$globalData["patternLabFoot"] = $stringLoader->render(array("string" => Template::getHTMLFoot(), "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 		$globalData["viewall"]        = true;
 		
-		$header                       = $patternLoader->render(array("pattern" => Template::getPatternHead(), "data" => $globalData));
+		$header                       = $patternLoader->render(array("pattern" => Template::getPatternHead(), "data" => $partials));
 		$code                         = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
-		$footer                       = $patternLoader->render(array("pattern" => Template::getPatternFoot(), "data" => $globalData));
+		$footer                       = $patternLoader->render(array("pattern" => Template::getPatternFoot(), "data" => $partials));
 		
 		$styleGuidePage               = $header.$code.$footer;
 		
@@ -362,9 +362,9 @@ class Builder {
 					$globalData["patternLabFoot"] = $stringLoader->render(array("string" => Template::getHTMLFoot(), "data" => array("cacheBuster" => $partials["cacheBuster"], "patternData" => json_encode($patternData))));
 					
 					// render the parts and join them
-					$header      = $patternLoader->render(array("pattern" => $patternHead, "data" => $globalData));
+					$header      = $patternLoader->render(array("pattern" => $patternHead, "data" => $partials));
 					$code        = $filesystemLoader->render(array("template" => "viewall", "data" => $partials));
-					$footer      = $patternLoader->render(array("pattern" => $patternFoot, "data" => $globalData));
+					$footer      = $patternLoader->render(array("pattern" => $patternFoot, "data" => $partials));
 					$viewAllPage = $header.$code.$footer;
 					
 					// if the pattern directory doesn't exist create it
