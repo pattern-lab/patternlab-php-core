@@ -95,6 +95,11 @@ class Fetch {
 			Console::writeError("the starterkit needs to contain a dist/ directory before it can be installed...");
 		}
 		
+		if (!is_file($tempComposerFile)) {
+			// try without repo dir
+			$tempComposerFile  = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
+		}
+		
 		// check for composer.json. if it exists use it for determining things. otherwise just mirror dist/ to source/
 		if (file_exists($tempComposerFile)) {
 			
