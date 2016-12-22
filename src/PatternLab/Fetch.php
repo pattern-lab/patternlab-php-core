@@ -108,7 +108,7 @@ class Fetch {
 			// see if it has a patternlab section that might define the files to move
 			if (isset($tempComposerJSON["extra"]) && isset($tempComposerJSON["extra"]["patternlab"])) {
 				Console::writeInfo("installing the starterkit...");
-				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist);
+				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist.DIRECTORY_SEPARATOR);
 				Console::writeInfo("installed the starterkit...");
 			} else {
 				$this->mirrorDist($sourceDir, $tempDirDist);
