@@ -289,6 +289,13 @@ class InstallerUtil {
 			
 		}
 		
+		if (isset($composerExtra["installScripts"])) {
+			foreach ($composerExtra["installScripts"] as $script) {
+				// scripts are relative to the dist directory
+				self::runInstallScript($pathDist, $script);
+			}
+		}
+		
 	}
 	
 	/**
@@ -766,6 +773,13 @@ class InstallerUtil {
 			
 		}
 		
+	}
+	
+	protected static function runInstallScript($path, $script) {
+		$script_filename = $path . DIRECTORY_SEPARATOR . $script;
+		if (file_exists($script_filename)) {
+			include($script_filename);
+		}
 	}
 	
 }
