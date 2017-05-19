@@ -125,7 +125,7 @@ class Data {
 			$pathName      = $file->getPathname();
 			$pathNameClean = str_replace($sourceDir."/","",$pathName);
 
-			if (!$hidden && (($ext == "json") || ($ext == "yaml"))) {
+			if (!$hidden && (($ext == "json") || ($ext == "yaml") || ($ext == "yml"))) {
 
 				if ($isListItems === false) {
 
@@ -137,7 +137,7 @@ class Data {
 							JSON::lastErrorMsg($pathNameClean,$jsonErrorMessage,$data);
 						}
 
-					} else if ($ext == "yaml") {
+					} else if (($ext == "yaml") || ($ext == "yml")) {
 
 						$file = file_get_contents($pathName);
 
