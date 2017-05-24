@@ -129,7 +129,8 @@ class Config {
 		self::$userConfigDirDash   = self::$options["baseDir"].self::$userConfigDirDash;
 		self::$userConfigDir       = (is_dir(self::$userConfigDirDash)) ? self::$userConfigDirDash : self::$userConfigDirClean;
 		self::$userConfigPath      = self::$userConfigDir.DIRECTORY_SEPARATOR.self::$userConfig;
-		self::$plConfigPath        = self::$options["baseDir"]."vendor/pattern-lab/core/".self::$plConfigPath;
+		// @todo Make folder name (i.e. `drupal-pattern-lab`) a variable
+		self::$plConfigPath        = self::$options["baseDir"]."vendor/drupal-pattern-lab/core/".self::$plConfigPath;
 		
 		// can't add __DIR__ above so adding here
 		if (!is_dir(self::$userConfigDir)) {
