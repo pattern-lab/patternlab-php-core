@@ -1,8 +1,8 @@
 {
-  "name":             "pattern-lab/core",
+  "name":             "drupal-pattern-lab/core",
   "description":      "The core functionality for Pattern Lab.",
   "keywords":         ["pattern lab", "styleguide", "style guide", "atomic", "atomic design"],
-  "homepage":         "http://patternlab.io",
+  "homepage":         "http://drupal-pattern-lab.github.io",
   "license":          "MIT",
   "authors": [
     {
@@ -18,9 +18,8 @@
     }
   ],
   "support": {
-    "issues":         "https://github.com/pattern-lab/patternlab-php-core/issues",
-    "wiki":           "http://patternlab.io/docs/",
-    "source":         "https://github.com/pattern-lab/patternlab-php-core/releases"
+    "issues":         "https://github.com/drupal-pattern-lab/patternlab-php-core/issues",
+    "source":         "https://github.com/drupal-pattern-lab/patternlab-php-core/releases"
   },
   "autoload": {
     "psr-0": {
