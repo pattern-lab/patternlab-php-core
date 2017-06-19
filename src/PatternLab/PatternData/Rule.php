@@ -104,6 +104,9 @@ class Rule {
 	protected function getPatternName($pattern, $clean = true) {
 		$patternBits = explode("-",$pattern,2);
 		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
+    // replace possible dots with dashes. pattern names cannot contain dots
+    // since they are used as id/class names in the styleguidekit.
+    $patternName = str_replace('.', '-', $patternName);
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
