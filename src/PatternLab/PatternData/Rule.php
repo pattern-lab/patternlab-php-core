@@ -103,7 +103,7 @@ class Rule {
 	*/
 	protected function getPatternName($pattern, $clean = true) {
 		$patternBits = explode("-",$pattern,2);
-		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
+		$patternName = (((int)$patternBits[0] != 0) || (preg_match('/^0+$/', $patternBits[0]) === 1)) ? $patternBits[1] : $pattern;
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
