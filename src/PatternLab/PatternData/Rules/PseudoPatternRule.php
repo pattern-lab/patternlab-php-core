@@ -79,11 +79,21 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 
 		// check the original pattern path. if it doesn't exist make a guess
 		$patternPathOrig     = PatternData::getPatternOption($patternBaseOrig,"pathName");      // 04-pages/00-homepage
-		$patternPathOrigDash = PatternData::getPatternOption($patternBaseOrig,"pathDash");      // 04-pages-00-homepage
+		$patternPathOrigDash = PatternData::getPatternOption($patternBaseOrig,"pathDash");      // 04-pages-00-homepage		
 		if (!$patternPathOrig) {
-			$patternPathOrigBits = explode("~",$pathName);
-			$patternPathOrig     = $patternPathOrigBits[0];                                     // 04-pages/00-homepage
-			$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);                   // 04-pages-00-homepage
+			
+			if (($patternBase . $ext) != $patternFull) {				
+				$patternPathOrig     = $path . DIRECTORY_SEPARATOR . $patternBaseDash;          // 04-pages/homepage
+				$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);               // 04-pages-homepage
+				
+				if ( ! file_exists(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$patternPathOrig.'.'.Config::getOption("patternExtension"))) {
+					$patternPathOrig = $path . DIRECTORY_SEPARATOR . '_' . $patternBaseDash;    // 04-pages/_homepage
+				}				
+			} else {				
+				$patternPathOrigBits = explode("~",$pathName);
+				$patternPathOrig     = $patternPathOrigBits[0];                                 // 04-pages/00-homepage
+				$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);               // 04-pages-00-homepage
+			}
 		}
 
 		// create a key for the data store
