@@ -29,7 +29,7 @@
   },
   "require": {
     "php": ">=5.4",
-    "alchemy/zippy": "^0.3",
+    "alchemy/zippy": "^0.4",
     "kevinlebrun/colors.php": "^1.0",
     "michelf/php-markdown": "^1.6",
     "seld/jsonlint": "^1.0",
