@@ -1,6 +1,6 @@
 {
-  "name":             "pattern-lab/core",
-  "description":      "The core functionality for Pattern Lab.",
+  "name":             "neclimdul/pattern-lab-core",
+  "description":      "Fork of pattern lab core functionality for tseting updated libraries.",
   "keywords":         ["pattern lab", "styleguide", "style guide", "atomic", "atomic design"],
   "homepage":         "http://patternlab.io",
   "license":          "MIT",
@@ -18,9 +18,9 @@
     }
   ],
   "support": {
-    "issues":         "https://github.com/pattern-lab/patternlab-php-core/issues",
+    "issues":         "https://github.com/neclimdul/patternlab-php-core/issues",
     "wiki":           "http://patternlab.io/docs/",
-    "source":         "https://github.com/pattern-lab/patternlab-php-core/releases"
+    "source":         "https://github.com/neclimdul/patternlab-php-core/releases"
   },
   "autoload": {
     "psr-0": {
