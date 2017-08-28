@@ -95,6 +95,7 @@ class Builder {
 
 			$finder = new Finder();
 			$base = __DIR__."/../../../"; /* [1] */
+			$kit_path = Config::getOption("styleguideKitPath");
 			$finder->files()->name("composer.json")->in($base)->contains('patternlab-styleguidekit')->sortByName(); /* [2] */
 
 			foreach ($finder as $file) {
