@@ -82,24 +82,23 @@ class Builder {
 			*  Handle missing index.html. Solves https://github.com/drupal-pattern-lab/patternlab-php-core/issues/14
 			*  Could also be used to re-add missing styleguidekit assets with a few edits?
 			*
-			*  1. @TODO: What would be a better way to find our base vendor directory from here?
-			*  2. Locate the current theme's styleguidekit assets via the patternlab-styleguidekit `type` in composer.json
-			*  3. @TODO: Figure out a better way to future-proof path resolution for styleguidekit `dist` folder
-			*  4. Recusirively copy files from styleguidekit to publicDir via https://stackoverflow.com/a/7775949
-			*  5. Make sure we only try to create new directories if they don't already exist
-			*  6. Only copy files if they are missing (vs changed, etc)
+			*  1. @TODO: Figure out a better way to future-proof path resolution for styleguidekit `dist` folder
+			*  2. Recusirively copy files from styleguidekit to publicDir via https://stackoverflow.com/a/7775949
+			*  3. Make sure we only try to create new directories if they don't already exist
+			*  4. Only copy files if they are missing (vs changed, etc)
 			*/
 		if (!file_exists(Config::getOption("publicDir")."/index.html")) {
 			$index = Console::getHumanReadablePath(Config::getOption("publicDir")).DIRECTORY_SEPARATOR."index.html";
-			Console::writeWarning($index . " is missing. No biggie. Grabbing a copy from your StyleguideKit...");
+			Console::writeWarning($index . " is missing. No biggie. Grabbing a fresh copy from your StyleguideKit...");
 
+			$baseDir = Config::getOption("baseDir") . '/vendor';
 			$finder = new Finder();
-			$base = __DIR__."/../../../"; /* [1] */
-			$kit_path = Config::getOption("styleguideKitPath");
-			$finder->files()->name("composer.json")->in($base)->contains('patternlab-styleguidekit')->sortByName(); /* [2] */
+
+			// Locate the current theme's styleguidekit assets via the patternlab-styleguidekit `type` in composer.json
+			$finder->files()->name("composer.json")->in($baseDir)->contains('patternlab-styleguidekit')->sortByName();
 
 			foreach ($finder as $file) {
-				$src = dirname($file->getRealPath()) . DIRECTORY_SEPARATOR . 'dist'; /* [3] */
+				$src = dirname($file->getRealPath()) . DIRECTORY_SEPARATOR . 'dist'; /* [1] */
 				$dest= Config::getOption("publicDir");
 
 				if (is_dir($src)){
@@ -108,16 +107,16 @@ class Builder {
 						mkdir($dest, 0755);
 	        }
 
-	        foreach ( /* [4] */
+	        foreach ( /* [2] */
 						$iterator = new \RecursiveIteratorIterator(
 							new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item
 					) {
 						if ($item->isDir()) {
-							if(!is_dir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) { /* [5] */
+							if(!is_dir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) { /* [3] */
 								mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
 							}
 						} else {
-							if(!file_exists($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) { /* [6] */
+							if(!file_exists($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) { /* [4] */
 								copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
 							}
 						}
