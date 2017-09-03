@@ -96,7 +96,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$localData = PatternData::getOption($docPartial)["data"];
 
 		if ($localData){
-			$data = array_replace_recursive($localData, $globalData);
+			$data = array_replace_recursive($globalData, $localData);
 		} else {
 			$data = $globalData;
 		}
