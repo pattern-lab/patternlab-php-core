@@ -31,9 +31,20 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$this->ignoreProp = "";
 		
 	}
-	
+
 	public function run($depth, $ext, $path, $pathName, $name) {
-		
+		// default vars
+		$patternSourceDir = Config::getOption("patternSourceDir");
+
+		// parse data
+		$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
+		list($yaml,$markdown) = Documentation::parse($text);
+
+		if (isset($yaml["patternType"])) {
+			$name = $yaml["patternType"];
+			unset($yaml["patternType"]);
+		}
+
 		// load default vars
 		$patternType        = PatternData::getPatternType();
 		$patternTypeDash    = PatternData::getPatternTypeDash();
@@ -43,14 +54,7 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$doc        = str_replace(".".$this->extProp,"",$name);              // 00-colors
 		$docDash    = $this->getPatternName(str_replace("_","",$doc),false); // colors
 		$docPartial = $patternTypeDash."-".$docDash;
-		
-		// default vars
-		$patternSourceDir = Config::getOption("patternSourceDir");
-		
-		// parse data
-		$text = file_get_contents($patternSourceDir.DIRECTORY_SEPARATOR.$pathName);
-		list($yaml,$markdown) = Documentation::parse($text);
-		
+
 		// grab the title and unset it from the yaml so it doesn't get duped in the meta
 		if (isset($yaml["title"])) {
 			$title = $yaml["title"];
@@ -68,9 +72,8 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 					break;
 				}
 			}
-			
 		}
-		
+
 		$category         = ($patternSubtypeDoc) ? "patternSubtype" : "pattern";
 		$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
 		
