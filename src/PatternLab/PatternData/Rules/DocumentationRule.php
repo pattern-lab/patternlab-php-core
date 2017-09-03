@@ -90,8 +90,16 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$patternLoader           = new $patternLoaderClass($options);
 
 
-		// Setup the default pattern data.
-		$data = Data::getPatternSpecificData($patternStoreKey);
+		// Combine local + global pattern data.
+		$data = array();
+		$globalData = Data::getPatternSpecificData($docPartial);
+		$localData = PatternData::getOption($docPartial)["data"];
+
+		if ($localData){
+			$data = array_replace_recursive($localData, $globalData);
+		} else {
+			$data = $globalData;
+		}
 
 		// Render the markdown content as a pattern, piping in the pattern-specific data from above.
 		$text = $patternLoader->render(array(
