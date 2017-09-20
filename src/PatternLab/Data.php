@@ -125,7 +125,7 @@ class Data {
 			$pathName      = $file->getPathname();
 			$pathNameClean = str_replace($sourceDir."/","",$pathName);
 
-			if (!$hidden && (($ext == "json") || ($ext == "yaml"))) {
+			if (!$hidden && (($ext == "json") || ($ext == "yml") || ($ext == "yaml"))) {
 
 				if ($isListItems === false) {
 
