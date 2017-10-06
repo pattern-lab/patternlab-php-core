@@ -43,18 +43,81 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"]))) {
+			// Check for lineages in patterns AND sub-patterns
+			if (($patternStoreData["category"] == "pattern" || $patternStoreData["category"] == "patternSubtype") && (!isset($patternStoreData["pseudo"]))) {
 				
 				$patternLineages = array();
 				$fileData        = isset($patternStoreData["patternRaw"]) ? $patternStoreData["patternRaw"] : "";
+
 				$foundLineages   = $this->findLineages($fileData);
 				
 				if (!empty($foundLineages)) {
 					
 					foreach ($foundLineages as $lineage) {
+					
+						/**
+						* Fix for Pattern Lab Lineages when using Twig Namespaces. 
+						* Converts the full file path to PL-friendly shorthand so 
+						* they are internally registered.
+						*
+						* 1.  Only handle instances where we aren't or can't use the 
+						*     shorthand PL path reference in templates, specifically 
+						*     in Twig / D8 when we need to use Twig namespaces in 
+						*     our template paths.
+						* 2.  Strip off the @ sign at the beginning of our $lineage string.
+						* 3.  Break apart the full lineage path based on any slashes that
+						*     may exist.
+						* 4.  Store the length of our broken up path for reference below
+						* 5.  Store the first part of the string up to the first slash "/"
+						* 6.  Now grab the last part of the pattern key, based on the length
+						*     of the path we previously exploded.
+						* 7.  Remove any "_" from pattern Name.
+						* 8.  Remove any potential prefixed numbers or number + dash 
+						*     combos on our Pattern Name.
+						* 9.  Strip off the pattern path extension (.twig, 
+						*     .mustache, etc) if it exists.
+						* 10. If the pattern name parsed had an extension, 
+						*     re-assign our Pattern Name to that.
+						* 11. Finally, re-assign $lineage to the default PL pattern key.
+						*/
+
+						if ($lineage[0] == '@') {                    /* [1] */
+							$lineage = ltrim($lineage, '@');           /* [2] */
+							$lineageParts = explode('/', $lineage);    /* [3] */
+							$length = count($lineageParts);            /* [4] */
+							$patternType = $lineageParts[0];           /* [5] */
+
+							$patternName = $lineageParts[$length - 1]; /* [6] */
+							$patternName = ltrim($patternName, '_');   /* [7] */
+							$patternName = preg_replace('/^[0-9\-]+/', '', 
+							$patternName); /* [8] */
+
+							$patternNameStripped = explode('.' . $patternExtension, $patternName); /* [9] */
+
+							if (count($patternNameStripped) > 1) { /* [10] */
+								$patternName = $patternNameStripped[0];
+							}
+							$lineage = $patternType . "-" . $patternName;	/* [11] */
+						}
+
+					
+						// If we're having trouble finding a pattern's lineage (ex. due to using Twig namespaces that don't match a pattern's parent directory), try finding a pattern with the same pattern name. Solves https://github.com/EvanLovely/plugin-twig-namespaces/issues/4
+						if (PatternData::getOption($lineage) == false){
+							// Strip off the original lineage's pattern type so we can compare the original pattern name to the new one if we find a potential match.
+							$origPatternName = list($before, $after) = explode('-', $lineage, 2)[1];
+							
+							//Loop through the patterns available and compare each pattern's patternName with the original lineage match that was found 
+							foreach ($store as $altPatternStoreKey => $nestedPatternStoreData) {
+								$altPatternName = list($before, $after) = explode('-', $altPatternStoreKey, 2)[1];
+								
+								// If we can't figure out the original pattern's lineage but found a match, use that instead.
+								if ($origPatternName == $altPatternName){
+									$lineage = $altPatternStoreKey;
+								}
+							}
+						}
 						
 						if (PatternData::getOption($lineage)) {
-							
 							$patternLineages[] = array("lineagePattern" => $lineage,
 													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].$suffixRendered.".html");
 							
@@ -64,18 +127,18 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 								$fileName = $patternStoreData["pathName"].".".$patternExtension;
 								Console::writeWarning("you may have a typo in ".$fileName.". `".$lineage."` is not a valid pattern...");
 							}
-							
+
 						}
-						
+
 					}
 					
 					// add the lineages to the PatternData::$store
 					PatternData::setPatternOption($patternStoreKey,"lineages",$patternLineages);
 					
 				}
-				
+
 			}
-			
+
 		}
 		
 		// handle all of those pseudo patterns
@@ -96,7 +159,7 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
-			if (($patternStoreData["category"] == "pattern") && (!isset($patternStoreData["pseudo"])) && isset($patternStoreData["partial"])) {
+			if (($patternStoreData["category"] == "pattern" || $patternStoreData["category"] == "patternSubtype") && (!isset($patternStoreData["pseudo"])) && isset($patternStoreData["partial"])) {
 				
 				$patternLineagesR = array();
 				
@@ -128,21 +191,21 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 																	"lineagePath"    => "../../patterns/".$path."/".$path.$suffixRendered.".html");
 																
 									}
-								
+
 								}
-							
+
 							}
-						
+
 						}
-						
+
 					}
-					
+
 				}
-				
+
 				PatternData::setPatternOption($patternStoreKey,"lineagesR",$patternLineagesR);
 				
 			}
-			
+
 		}
 		
 		// handle all of those pseudo patterns
