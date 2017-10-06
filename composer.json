@@ -18,9 +18,9 @@
     }
   ],
   "support": {
-    "issues":         "https://github.com/pattern-lab/patternlab-php-core/issues",
+    "issues":         "https://github.com/drupal-pattern-lab/patternlab-php-core/issues",
     "wiki":           "http://patternlab.io/docs/",
-    "source":         "https://github.com/pattern-lab/patternlab-php-core/releases"
+    "source":         "https://github.com/drupal-pattern-lab/patternlab-php-core/releases"
   },
   "autoload": {
     "psr-0": {

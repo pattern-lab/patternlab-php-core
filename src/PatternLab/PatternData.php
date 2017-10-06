@@ -116,14 +116,13 @@ class PatternData {
 		if (!is_dir(Config::getOption("patternSourceDir"))) {
 			Console::writeError("having patterns is important. please make sure you've installed a starterkit and/or that ".Console::getHumanReadablePath(Config::getOption("patternSourceDir"))." exists...");
 		}
-		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::getOption("patternSourceDir")), \RecursiveIteratorIterator::SELF_FIRST);
-		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
+
+		$patternSourceDir = Config::getOption("patternSourceDir");
+		$patternObjects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($patternSourceDir, \RecursiveDirectoryIterator::FOLLOW_SYMLINKS | \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
 
 		// sort the returned objects
 		$patternObjects = iterator_to_array($patternObjects);
 		ksort($patternObjects);
-
-		$patternSourceDir = Config::getOption("patternSourceDir");
 
 		foreach ($patternObjects as $name => $object) {
 
