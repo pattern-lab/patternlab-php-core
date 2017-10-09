@@ -5,16 +5,16 @@
   "homepage":         "http://patternlab.io",
   "license":          "MIT",
   "authors": [
-		{
-			"name": 				"Evan Lovely",
-			"homepage":			"http://evanlovely.com",
-			"role":					"Lead Developer"
-		},
-		{
-			"name": 				"Salem Ghoweri",
-			"homepage":			"https://github.com/sghoweri",
-			"role":					"Developer"
-		},
+   {
+      "name": 				"Evan Lovely",
+      "homepage":			"http://evanlovely.com",
+      "role":					"Lead Developer"
+    },
+    {
+      "name": 				"Salem Ghoweri",
+      "homepage":			"https://github.com/sghoweri",
+      "role":					"Developer"
+    },
     {
       "name":         "Dave Olsen",
       "email":        "dmolsen@gmail.com",
