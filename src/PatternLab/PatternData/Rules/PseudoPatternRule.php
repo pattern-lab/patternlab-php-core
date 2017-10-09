@@ -171,7 +171,14 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 		$patternStoreData["data"] = is_array($patternData) ? array_replace_recursive($patternDataBase, $patternData) : $patternDataBase;
 
 		// if the pattern data store already exists make sure it is merged and overwrites this data
-		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
+    if (PatternData::checkOption($patternStoreKey)) {
+      $existingData = PatternData::getOption($patternStoreKey);
+      if (array_key_exists('nameClean', $existingData)) {
+        // don't overwrite nameClean
+        unset($patternStoreData['nameClean']);
+      }
+      $patternStoreData = array_replace_recursive($existingData, $patternStoreData);
+    }
 		PatternData::setOption($patternStoreKey, $patternStoreData);
 
 	}
