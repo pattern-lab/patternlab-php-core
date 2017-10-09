@@ -245,6 +245,7 @@ class Config {
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");
+		self::setExposedOption("ishViewportRange");
 		self::setExposedOption("outputFileSuffixes");
 		self::setExposedOption("plugins");
 		
