@@ -83,7 +83,11 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		if (isset($title)) {
 			$patternStoreData["nameClean"] = $title;
 		}
-		
+
+    if (isset($yaml["state"])) {
+      $patternStoreData["state"] = $yaml["state"];
+    }
+
 		// if the pattern data store already exists make sure this data overwrites it
 		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
 		PatternData::setOption($patternStoreKey, $patternStoreData);
