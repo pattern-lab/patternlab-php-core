@@ -17,6 +17,11 @@ use \PatternLab\Config;
 use \PatternLab\PatternData;
 use \PatternLab\Timer;
 
+/**
+ * Class PatternStateHelper
+ * @package PatternLab\PatternData\Helpers
+ * @deprecated 3.0.0 It was for adding state to all patterns in the lineage of the pattern with state and that is no longer needed.
+ */
 class PatternStateHelper extends \PatternLab\PatternData\Helper {
 	
 	public function __construct($options = array()) {
