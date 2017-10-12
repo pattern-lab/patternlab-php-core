@@ -242,6 +242,7 @@ class Config {
 		self::setExposedOption("cacheBuster");
 		self::setExposedOption("defaultPattern");
 		self::setExposedOption("defaultShowPatternInfo");
+		self::setExposedOption("patternExtension");
 		self::setExposedOption("ishFontSize");
 		self::setExposedOption("ishMaximum");
 		self::setExposedOption("ishMinimum");
