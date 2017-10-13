@@ -47,8 +47,10 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		$suffixRendered     =	Config::getOption("outputFileSuffixes.rendered");
 		
 		foreach ($this->store as $patternStoreKey => $patternStoreData) {
-			
-			if (($patternStoreData["category"] == "pattern") && isset($patternStoreData["hidden"]) && (!$patternStoreData["hidden"]) && (!$patternStoreData["noviewall"]) && ($patternStoreData["depth"] > 1) && (!in_array($patternStoreData["type"],$this->styleGuideExcludes))) {
+
+      $canShow = isset($patternStoreData["hidden"]) && (!$patternStoreData["hidden"]) && (!$patternStoreData["noviewall"]);
+
+      if (($patternStoreData["category"] == "pattern") && $canShow && ($patternStoreData["depth"] > 1) && (!in_array($patternStoreData["type"],$this->styleGuideExcludes))) {
 				
 				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
@@ -102,7 +104,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					
 				}
 
-      } else if (($patternStoreData["category"] == "pattern") && (isset($patternStoreData["full"]) && ($type === $patternStoreData["full"] || $type === ""))) {
+      } else if (($patternStoreData["category"] == "pattern") && $canShow &&(isset($patternStoreData["full"]) && ($type === $patternStoreData["full"] || $type === ""))) {
         // This is for `patternType` docs. Given this structure:
         // - _patterns/
         //   - atoms/
