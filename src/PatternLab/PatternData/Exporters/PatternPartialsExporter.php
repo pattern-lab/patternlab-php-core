@@ -48,6 +48,16 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		
 		foreach ($this->store as $patternStoreKey => $patternStoreData) {
 
+      // Docs for patternTypes (i.e. `atoms.md`), don't have these rules and need them to pass below conditionals
+		  if (
+		      !isset($patternStoreData['depth'])
+          && !isset($patternStoreData['hidden'])
+          && !isset($patternStoreData['noviewall'])
+      ) {
+		    $patternStoreData["hidden"] = false;
+		    $patternStoreData["noviewall"] = false;
+		    $patternStoreData["depth"] = 0;
+      }
       $canShow = isset($patternStoreData["hidden"]) && (!$patternStoreData["hidden"]) && (!$patternStoreData["noviewall"]);
 
       if (($patternStoreData["category"] == "pattern") && $canShow && ($patternStoreData["depth"] > 1) && (!in_array($patternStoreData["type"],$this->styleGuideExcludes))) {
@@ -104,7 +114,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					
 				}
 
-      } else if (($patternStoreData["category"] == "pattern") && $canShow &&(isset($patternStoreData["full"]) && ($type === $patternStoreData["full"] || $type === ""))) {
+      } else if (($patternStoreData["category"] == "pattern") && $canShow && (isset($patternStoreData["full"]) && ($type === $patternStoreData["full"] || $type === ""))) {
         // This is for `patternType` docs. Given this structure:
         // - _patterns/
         //   - atoms/
