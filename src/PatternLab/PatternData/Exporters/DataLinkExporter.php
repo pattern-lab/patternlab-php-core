@@ -31,16 +31,33 @@ class DataLinkExporter extends \PatternLab\PatternData\Exporter {
 	public function run() {
 		
 		foreach ($this->store as $patternStoreKey => $patternStoreData) {
-			
-			if ($patternStoreData["category"] == "pattern") {
-				
-				if (isset($patternStoreData["pathDash"])) {
-					$value = "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";
-					Data::setOptionLink($patternStoreKey, $value);
-				}
-				
-			}
-			
+
+      switch ($patternStoreData["category"]) {
+        // atoms - view all
+        case "patternType":
+          if (isset($patternStoreData["pathDash"])) {
+            $value = "../../patterns/" . $patternStoreData["pathDash"] . "/index.html";
+            Data::setOptionLink("viewall-" . $patternStoreData["nameDash"] . "-all", $value);
+          }
+          break;
+
+        // atoms/forms - view all
+        case "patternSubtype":
+          if (isset($patternStoreData["pathDash"])) {
+            $value = "../../patterns/" . $patternStoreData["pathDash"] . "/index.html";
+            Data::setOptionLink($patternStoreData["partial"], $value);
+          }
+          break;
+
+        // atoms/forms/select.mustache
+        case "pattern":
+          if (isset($patternStoreData["pathDash"])) {
+            $value = "../../patterns/" . $patternStoreData["pathDash"] . "/" . $patternStoreData["pathDash"] . ".html";
+            Data::setOptionLink($patternStoreKey, $value);
+          }
+          break;
+      }
+
 		}
 		
 	}
