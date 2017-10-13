@@ -101,8 +101,25 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartials[] =  $patternPartialData;
 					
 				}
-				
-			}
+
+      } else if (($patternStoreData["category"] == "pattern") && (isset($patternStoreData["full"]) && ($type === $patternStoreData["full"]))) {
+        // This is for `patternType` docs. Given this structure:
+        // - _patterns/
+        //   - atoms/
+        //     - forms/
+        //   - atoms.md
+        // This will take the contents of `atoms.md` and place at top of "Atoms > View All"
+
+        $patternPartialData = array();
+        // Getting the name from md's `title: My Name` works here, as does the link, but it doesn't make sense to link to the view you are already on. Plus you can just do the title in the MD doc. Keeping here for now in case it's wanted later.
+        // $patternPartialData["patternName"] = isset($patternStoreData["nameClean"]) ? $patternStoreData["nameClean"] : '';
+        // $patternPartialData["patternLink"] = $patternStoreData["full"] . "/index.html";
+
+        $patternPartialData["patternSectionSubtype"] = true;
+        $patternPartialData["patternDesc"] = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
+
+        $patternPartials[] = $patternPartialData;
+      }
 			
 		}
 		
