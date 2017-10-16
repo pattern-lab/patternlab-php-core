@@ -124,7 +124,11 @@ class PatternData {
 		$patternObjects = iterator_to_array($patternObjects);
 		ksort($patternObjects);
 
-		foreach ($patternObjects as $name => $object) {
+		/**
+     * @var string $name
+     * @var \SplFileInfo $object
+     */
+    foreach ($patternObjects as $name => $object) {
 
 			$ext      = $object->getExtension();
 			$isDir    = $object->isDir();
@@ -181,19 +185,17 @@ class PatternData {
 		$dispatcherInstance->dispatch("patternData.lineageHelperEnd",$event);
 
 
-		// `PatternStateHelper` is deprecated. It was for adding state to all patterns in the lineage of the pattern with state and that is no longer needed. Commenting out use and deprecating class in case there's a use I haven't figured out.
-
 		// dispatch that the pattern state helper is about to start
-//		$event = new PatternDataEvent($options);
-//		$dispatcherInstance->dispatch("patternData.patternStateHelperStart",$event);
+		$event = new PatternDataEvent($options);
+		$dispatcherInstance->dispatch("patternData.patternStateHelperStart",$event);
 
 		// using the lineage info update the pattern states on PatternData::$store
-//		$patternStateHelper      = new PatternStateHelper();
-//		$patternStateHelper->run();
+		$patternStateHelper      = new PatternStateHelper();
+		$patternStateHelper->run();
 
 		// dispatch that the pattern state helper is ended
-//		$event = new PatternDataEvent($options);
-//		$dispatcherInstance->dispatch("patternData.patternStateHelperEnd",$event);
+		$event = new PatternDataEvent($options);
+		$dispatcherInstance->dispatch("patternData.patternStateHelperEnd",$event);
 
 		// set-up code pattern paths
 		$ppdExporter             = new PatternPathSrcExporter();
