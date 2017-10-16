@@ -114,7 +114,13 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					
 				}
 
-      } else if (($patternStoreData["category"] == "pattern") && $canShow && (isset($patternStoreData["full"]) && ($type === $patternStoreData["full"] || $type === ""))) {
+      } else if (
+          ($patternStoreData["category"] == "pattern")
+          && $canShow
+          && (isset($patternStoreData["full"])
+          && ($type === $patternStoreData["full"] || $type === ""))
+          && ($subtype === "")
+      ) {
         // This is for `patternType` docs. Given this structure:
         // - _patterns/
         //   - atoms/
