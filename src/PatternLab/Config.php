@@ -248,6 +248,8 @@ class Config {
 		self::setExposedOption("ishMinimum");
 		self::setExposedOption("ishViewportRange");
 		self::setExposedOption("outputFileSuffixes");
+		self::setExposedOption("patternStates");
+		self::setExposedOption("theme");
 		self::setExposedOption("plugins");
 		
 	}
