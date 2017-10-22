@@ -86,6 +86,8 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 			$patternPathOrigDash = str_replace($dirSep,"-",$patternPathOrig);                   // 04-pages-00-homepage
 		}
 
+		// Use the original pattern's order value by default if we can find it
+		$patternOrder = !empty(PatternData::getPatternOption($patternBaseOrig,"order")) ? PatternData::getPatternOption($patternBaseOrig,"order") : PatternData::getPatternOrder();
 		// create a key for the data store
 		$patternStoreKey     = $patternPartial;
 
@@ -103,6 +105,7 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 									"noviewall"    => $noviewall,
 									"depth"        => $depth,
 									"ext"          => $ext,
+									"order"        => $patternOrder,
 									"path"         => $path,
 									"pathName"     => $patternPath,
 									"pathDash"     => $patternPathDash,

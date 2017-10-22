@@ -34,6 +34,7 @@ class PatternData {
 	protected static $patternSubtypeDash  = "";
 	protected static $patternSubtypeSet   = false;
 	protected static $patternType         = "";
+	protected static $defaultPatternOrder = 0;
 	protected static $patternTypeClean    = "";
 	protected static $patternTypeDash     = "";
 	protected static $rules               = array();
@@ -232,6 +233,55 @@ class PatternData {
 
 	}
 
+
+	/**
+	* Compare two sections of data in order to calculate pattern ordering 
+	*/
+	public static function recursive_sort(array &$data) {
+		$has_key = FALSE;
+		foreach ($data as $value) {
+			if (isset($value['order'])) {
+				$has_key = TRUE;
+				break;
+			}
+		}
+	  
+		if ($has_key) {
+			usort($data, [__CLASS__, 'compareData']);
+		}
+	  
+		foreach ($data as $key => $value) {
+			if (is_array($value)) {
+				self::recursive_sort($data[$key]);
+			}
+		}
+		
+		return $data;
+	}
+	
+
+	/**
+	* Compare two sections of data in order to calculate pattern ordering 
+	*/
+	public static function compareData($a, $b) {
+		if (isset($a['order']) && isset($b['order'])){
+			return ($a['order'] < $b['order']) ? -1 : 1;
+		} else {
+			return 0;
+		}
+	}
+
+
+	/**
+	* Recursively sort the global patternData based on the key provided
+	* ex. $sortedData = PatternData::sortPatternData($data, 'order');
+	*/
+	public static function sortPatternData(array $data) {
+		$result = self::recursive_sort($data);
+		return $result;
+	}
+
+
 	/**
 	* Get the directory separator
 	*/
@@ -328,6 +378,18 @@ class PatternData {
 		return false;
 
 	}
+
+
+	/**
+	* Get the pattern order if it exists, otherwise return default
+	*/
+	public static function getPatternOrder() {
+		if (isset(self::$patternOrder)) {
+			return self::$patternOrder;
+		}
+		return self::$defaultPatternOrder;
+	}
+
 
 	/**
 	* Get the pattern type
@@ -543,6 +605,16 @@ class PatternData {
 		self::$patternType = $optionValue;
 
 	}
+
+
+	/**
+	* Set the pattern order value
+	* @param  {String}       the order value
+	*/
+	public static function setPatternOrder($optionValue) {
+		self::$patternOrder = $optionValue;
+	}
+
 
 	/**
 	* Set the pattern type clean

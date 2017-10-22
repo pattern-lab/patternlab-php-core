@@ -42,6 +42,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 		$patternTypeDash     = PatternData::getPatternTypeDash();
 		$dirSep              = PatternData::getDirSep();
 		$frontMeta           = PatternData::getFrontMeta();
+		$patternOrder        = PatternData::getPatternOrder();
 		
 		// should this pattern get rendered?
 		$hidden           = ($name[0] == "_");
@@ -83,6 +84,7 @@ class PatternRule extends \PatternLab\PatternData\Rule {
 								  "noviewall"        => $noviewall,
 								  "depth"            => $depth,
 								  "ext"              => $ext,
+								  "order"            => $patternOrder, // default pattern order
 								  "path"             => $path,
 								  "pathName"         => $patternPath,
 								  "pathDash"         => $patternPathDash,

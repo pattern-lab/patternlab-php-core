@@ -54,6 +54,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 													   "patternTypeUC"    => ucwords($patternStoreData["nameClean"]),
 													   "patternType"      => $patternStoreData["name"],
 													   "patternTypeDash"  => $patternStoreData["nameDash"],
+													   "order"            => $patternStoreData["order"],
 													   "patternTypeItems" => array(),
 													   "patternItems"     => array());
 				
@@ -71,6 +72,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 																				"patternSubtypeUC"    => ucwords($patternStoreData["nameClean"]),
 																				"patternSubtype"      => $patternStoreData["name"],
 																				"patternSubtypeDash"  => $patternStoreData["nameDash"],
+																				"order"               => $patternStoreData["order"],
 																				"patternSubtypeItems" => array());
 				
 				// starting a new set of pattern types. it might not have any pattern subtypes
@@ -87,6 +89,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 										 "patternSrcPath" => $patternStoreData["pathName"],
 										 "patternName"    => ucwords($patternStoreData["nameClean"]),
 										 "patternState"   => $patternStoreData["state"],
+										 "order"          => $patternStoreData["order"],
 										 "patternPartial" => $patternStoreData["partial"]);
 					
 					// add to the nav
@@ -157,6 +160,8 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 			
 		}
 		
+		$navItems = PatternData::sortPatternData($navItems);
+	
 		return $navItems;
 		
 	}
