@@ -43,9 +43,3 @@ defaultPattern: "all"
 
 # show pattern info by default on the "view all" views
 defaultShowPatternInfo: false
-
-# Set a range of viewport widths for S, M, & L buttons
-ishViewportRange:
-  s: [320, 500]
-  m: [500, 800]
-  l: [800, 1200]
