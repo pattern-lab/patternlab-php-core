@@ -233,55 +233,6 @@ class PatternData {
 
 	}
 
-
-	/**
-	* Compare two sections of data in order to calculate pattern ordering 
-	*/
-	public static function recursive_sort(array &$data) {
-		$has_key = FALSE;
-		foreach ($data as $value) {
-			if (isset($value['order'])) {
-				$has_key = TRUE;
-				break;
-			}
-		}
-	  
-		if ($has_key) {
-			usort($data, [__CLASS__, 'compareData']);
-		}
-	  
-		foreach ($data as $key => $value) {
-			if (is_array($value)) {
-				self::recursive_sort($data[$key]);
-			}
-		}
-		
-		return $data;
-	}
-	
-
-	/**
-	* Compare two sections of data in order to calculate pattern ordering 
-	*/
-	public static function compareData($a, $b) {
-		if (isset($a['order']) && isset($b['order'])){
-			return ($a['order'] < $b['order']) ? -1 : 1;
-		} else {
-			return 0;
-		}
-	}
-
-
-	/**
-	* Recursively sort the global patternData based on the key provided
-	* ex. $sortedData = PatternData::sortPatternData($data, 'order');
-	*/
-	public static function sortPatternData(array $data) {
-		$result = self::recursive_sort($data);
-		return $result;
-	}
-
-
 	/**
 	* Get the directory separator
 	*/
@@ -290,7 +241,7 @@ class PatternData {
 	}
 
 	/**
-	* GEt the front meta bits (hidden and noviewall)
+	* Get the front meta bits (hidden and noviewall)
 	*/
 	public static function getFrontMeta() {
 		return self::$frontMeta;
