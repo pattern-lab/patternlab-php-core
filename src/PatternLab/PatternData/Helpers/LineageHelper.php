@@ -107,7 +107,8 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 							
 							if (strpos($lineage, '/') === false) {
 								$fileName = $patternStoreData["pathName"].".".$patternExtension;
-								Console::writeWarning("you may have a typo in ".$fileName.". `".$lineage."` is not a valid pattern...");
+								// This doesn't work very consistently. @todo Improve error reporting when trying to include a Twig file that doesn't exist (b/c doing so simply outputs the path to the file you were trying to include, giving no error to user that include path had a typo)
+								// Console::writeWarning("you may have a typo in ".$fileName.". `".$lineage."` is not a valid pattern...");
 							}
 							
 						}
