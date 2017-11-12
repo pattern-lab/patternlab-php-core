@@ -15,6 +15,7 @@ namespace PatternLab;
 use \PatternLab\Config;
 use \PatternLab\Console;
 use \PatternLab\Timer;
+use \PatternLab\PatternData\Exporters\PatternPathSrcExporter;
 
 class Template {
 	
@@ -70,15 +71,19 @@ class Template {
 		$options                 = array();
 		$options["templatePath"] = $styleguideKitPath.DIRECTORY_SEPARATOR."views";
 		$options["partialsPath"] = $options["templatePath"].DIRECTORY_SEPARATOR."partials";
-		
 		self::$filesystemLoader  = new $filesystemLoaderClass($options);
 		
+		// add the stringLoader
 		$stringLoaderClass       = $patternEngineBasePath."\Loaders\StringLoader";
 		self::$stringLoader      = new $stringLoaderClass();
-		
-		// i can't remember why i chose to implement the pattern loader directly in classes
-		// i figure i had a good reason which is why it's not showing up here
-		
+
+		// add the patternLoader
+		$ppdExporter             = new PatternPathSrcExporter();
+		$patternPathSrc          = $ppdExporter->run();
+		$options                 = array();
+		$options["patternPaths"] = $patternPathSrc;
+		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
+		self::$patternLoader     = new $patternLoaderClass($options);
 	}
 	
 	/*
@@ -121,6 +126,13 @@ class Template {
 	 */
 	public static function getStringLoader() {
 		return self::$stringLoader;
+	}
+
+	/*
+	 * Get the PatternLoader
+	 */
+	public static function getPatternLoader() {
+		return self::$patternLoader;
 	}
 	
 }

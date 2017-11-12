@@ -298,15 +298,6 @@ class Builder {
 		// default var
 		$publicDir = Config::getOption("publicDir");
 
-		// load the pattern loader
-		$ppdExporter             = new PatternPathSrcExporter();
-		$patternPathSrc          = $ppdExporter->run();
-		$options                 = array();
-		$options["patternPaths"] = $patternPathSrc;
-		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
-		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
-		$patternLoader           = new $patternLoaderClass($options);
-
 		// check directories i need
 		if (!is_dir($publicDir."/styleguide/")) {
 			mkdir($publicDir."/styleguide/");
@@ -326,6 +317,7 @@ class Builder {
 		// add the pattern lab specific mark-up
 		$filesystemLoader             = Template::getFilesystemLoader();
 		$stringLoader                 = Template::getStringLoader();
+		$patternLoader    						= Template::getPatternLoader();
 
 		$globalData                   = Data::get();
 		$globalData["patternLabHead"] = $stringLoader->render(array("string" => Template::getHTMLHead(), "data" => array("cacheBuster" => $partials["cacheBuster"])));
@@ -364,16 +356,8 @@ class Builder {
 		$patternFoot      = Template::getPatternFoot();
 		$filesystemLoader = Template::getFilesystemLoader();
 		$stringLoader     = Template::getStringLoader();
+		$patternLoader    = Template::getPatternLoader();
 		$globalData       = Data::get();
-
-		// load the pattern loader
-		$ppdExporter             = new PatternPathSrcExporter();
-		$patternPathSrc          = $ppdExporter->run();
-		$options                 = array();
-		$options["patternPaths"] = $patternPathSrc;
-		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
-		$patternLoaderClass      = $patternEngineBasePath."\Loaders\PatternLoader";
-		$patternLoader           = new $patternLoaderClass($options);
 
 		// make sure view all is set
 		$globalData["viewall"] = true;
