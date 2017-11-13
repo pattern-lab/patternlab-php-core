@@ -11,7 +11,7 @@
 use \PatternLab\Config;
 
 // set-up the project base directory
-$baseDir = __DIR__."/../../";
+$baseDir = __DIR__."/../../../../";
 
 // auto-load classes
 if (file_exists($baseDir."vendor/autoload.php")) {
