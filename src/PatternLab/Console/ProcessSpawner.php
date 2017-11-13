@@ -88,7 +88,7 @@ class ProcessSpawner {
 						if ($e->isGeneralTimeout()) {
 							Console::writeError("pattern lab processes should never time out. yours did...");
 						} else if ($e->isIdleTimeout()) {
-							Console::writeError("pattern lab processes automatically time out if their is no command line output in 30 minutes...");
+							Console::writeError("pattern lab processes automatically time out if there is no command line output in 30 minutes...");
 						}
 					}
 				}
