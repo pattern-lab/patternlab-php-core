@@ -50,5 +50,6 @@
     "symfony/finder": "^3.0",
     "symfony/process": "^3.1",
     "symfony/yaml": "^3.0"
-  }
+  },
+  "bin": ["bin/console", "bin/router.php"]
 }

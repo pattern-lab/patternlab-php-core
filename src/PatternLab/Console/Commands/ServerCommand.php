@@ -56,7 +56,7 @@ class ServerCommand extends Command {
 			$quiet = Console::findCommandOption("quiet");
 			
 			// set-up the base command
-			$command    = $this->pathPHP." -S ".$host." ".$coreDir."/server/router.php";
+			$command    = $this->pathPHP." -S ".$host." ".$coreDir."/router.php";
 			$commands   = array();
 			$commands[] = array("command" => $command, "cwd" => $publicDir, "timeout" => null, "idle" => 1800);
 			
