@@ -82,6 +82,7 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$exportClean                      = (isset($options["exportClean"])) ? $options["exportClean"] : false;
 				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "isPattern" => true, "patternData" => json_encode($patternData)))) : "";
+				$data['patternPartial']           = $patternData['patternPartial'];
 				
 				if (isset($patternStoreData["patternRaw"])) {
 					
