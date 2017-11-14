@@ -120,55 +120,57 @@ class PseudoPatternRule extends \PatternLab\PatternData\Rule {
 			$patternStoreData["breadcrumb"]  = array("patternType" => $patternTypeClean, "patternSubtype" => $patternSubtypeClean);
 		}
 
-		$patternDataBase = array();
-		if (file_exists(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$patternBaseData)) {
-			$data = file_get_contents(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$patternBaseData);
+		$patternBaseData = array();
+		$patternBaseFilePath = Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR.$patternBaseData;
+
+		if (file_exists($patternBaseFilePath)) {
+			$patternBaseData = file_get_contents($patternBaseFilePath);
 			if ($ext == "json") {
-				$patternDataBase = json_decode($data,true);
+				$patternBaseData = json_decode($patternBaseData,true);
 				if ($jsonErrorMessage = JSON::hasError()) {
-					JSON::lastErrorMsg($patternBaseJSON,$jsonErrorMessage,$data);
+					JSON::lastErrorMsg($patternBaseFilePath,$jsonErrorMessage,$patternBaseData);
 				}
 			} else {
 
 				try {
-					$patternDataBase = YAML::parse($data);
+					$patternBaseData = YAML::parse($patternBaseData);
 				} catch (ParseException $e) {
-					printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+					printf("unable to parse ".$patternBaseFilePath.": %s..\n", $e->getMessage());
 				}
 
 				// single line of text won't throw a YAML error. returns as string
-				if (gettype($patternDataBase) == "string") {
-					$patternDataBase = array();
+				if (gettype($patternBaseData) == "string") {
+					$patternBaseData = array();
 				}
-
 			}
-
 		}
 
 		// get the data for the pseudo-pattern
-		$data = file_get_contents(Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$pathName);
+		$patternPsuedoFilePath = Config::getOption("patternSourceDir").DIRECTORY_SEPARATOR.$pathName;
+		$patternPsuedoData = file_get_contents($patternPsuedoFilePath);
+
 		if ($ext == "json") {
-			$patternData = json_decode($data,true);
+			$patternPsuedoData = json_decode($patternPsuedoData,true);
 			if ($jsonErrorMessage = JSON::hasError()) {
-				JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
+				JSON::lastErrorMsg($patternPsuedoFilePath,$jsonErrorMessage,$patternPsuedoData);
 			}
 		} else {
 
 			try {
-				$patternData = YAML::parse($data);
+				$patternPsuedoData = YAML::parse($patternPsuedoData);
 			} catch (ParseException $e) {
-				printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+				printf("unable to parse ".$patternPsuedoFilePath.": %s..\n", $e->getMessage());
 			}
 
 			// single line of text won't throw a YAML error. returns as string
-			if (gettype($patternData) == "string") {
-				$patternData = array();
+			if (gettype($patternPsuedoData) == "string") {
+				$patternPsuedoData = array();
 			}
 
 		}
 
 		// make sure the pattern data is an array before merging the data
-		$patternStoreData["data"] = is_array($patternData) ? array_replace_recursive($patternDataBase, $patternData) : $patternDataBase;
+		$patternStoreData["data"] = is_array($patternPsuedoData) ? array_replace_recursive($patternBaseData, $patternPsuedoData) : $patternBaseData;
 
 		// if the pattern data store already exists make sure it is merged and overwrites this data
     if (PatternData::checkOption($patternStoreKey)) {

@@ -46,19 +46,20 @@ class PatternInfoRule extends \PatternLab\PatternData\Rule {
 		
 		$patternStoreData = array("category" => "pattern");
 		
-		$file = file_get_contents(Config::getOption("patternSourceDir")."/".$pathName);
+		$filePath = Config::getOption("patternSourceDir")."/".$pathName;
+		$file = file_get_contents($filePath);
 		
 		if ($ext == "json") {
 			$data = json_decode($file,true);
 			if ($jsonErrorMessage = JSON::hasError()) {
-				JSON::lastErrorMsg($name,$jsonErrorMessage,$data);
+				JSON::lastErrorMsg($filePath,$jsonErrorMessage,$data);
 			}
 		} else {
 			
 			try {
 				$data = YAML::parse($file);
 			} catch (ParseException $e) {
-				printf("unable to parse ".$pathNameClean.": %s..\n", $e->getMessage());
+				printf("unable to parse ".$filePath.": %s..\n", $e->getMessage());
 			}
 			
 			// single line of text won't throw a YAML error. returns as string
