@@ -37,7 +37,8 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 		$patternTypeDash        = PatternData::getPatternTypeDash();
 		$patternTypeClean       = PatternData::getPatternTypeClean();
 		$dirSep                 = PatternData::getDirSep();
-		
+		$patternOrder           = PatternData::getPatternOrder();
+
 		// set-up the names
 		$patternSubtype         = $name;                                        // 02-blocks
 		$patternSubtypeDash     = $this->getPatternName($name,false);           // blocks
@@ -61,6 +62,7 @@ class PatternSubtypeRule extends \PatternLab\PatternData\Rule {
 										"breadcrumb" => array("patternType" => $patternTypeClean),
 										"depth"      => $depth,
 										"ext"        => $ext,
+										"order"      => $patternOrder,
 										"path"       => $path,
 										"pathName"   => $patternSubtypePath,
 										"pathDash"   => $patternSubtypePathDash,

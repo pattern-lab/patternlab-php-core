@@ -34,6 +34,7 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 		
 		// load default vars
 		$dirSep              = PatternData::getDirSep();
+		$patternOrder        = PatternData::getPatternOrder();
 		
 		// set-up the names
 		$patternType         = $name;                                        // 00-atoms
@@ -53,6 +54,7 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 							 "nameClean" => $patternTypeClean,
 							 "depth"     => $depth,
 							 "ext"       => $ext,
+							 "order"     => $patternOrder,
 							 "path"      => $path,
 							 "pathName"  => $patternTypePath,
 							 "pathDash"  => $patternTypePathDash,

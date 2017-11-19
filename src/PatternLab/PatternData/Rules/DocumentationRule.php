@@ -33,7 +33,6 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 	}
 	
 	public function run($depth, $ext, $path, $pathName, $name) {
-		
 		// load default vars
 		$patternType        = PatternData::getPatternType();
 		$patternTypeDash    = PatternData::getPatternTypeDash();
@@ -57,10 +56,19 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 			unset($yaml["title"]);
 		}
 		
-		// figure out if this is a pattern subtype
+		// figure out if this is a top level pattern type or pattern subtype
 		$patternSubtypeDoc = false;
-		if ($depth == 1) {
-			// go through all of the directories to see if this one matches our doc
+		$patternTypeDoc = false;
+		if ($depth == 0) {
+			foreach (glob($patternSourceDir.DIRECTORY_SEPARATOR.$patternType,GLOB_ONLYDIR) as $dir) {
+				$dir = str_replace($patternSourceDir.DIRECTORY_SEPARATOR,"",$dir);
+				if ($dir == $doc) {
+					$patternTypeDoc = true;
+					break;
+				}
+			}
+		} else if ($depth == 1){
+				// go through all of the directories to see if this one matches our doc
 			foreach (glob($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR."*",GLOB_ONLYDIR) as $dir) {
 				$dir = str_replace($patternSourceDir.DIRECTORY_SEPARATOR.$patternType.DIRECTORY_SEPARATOR,"",$dir);
 				if ($dir == $doc) {
@@ -68,12 +76,22 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 					break;
 				}
 			}
-			
 		}
 		
-		$category         = ($patternSubtypeDoc) ? "patternSubtype" : "pattern";
-		$patternStoreKey  = ($patternSubtypeDoc) ? $docPartial."-plsubtype" : $docPartial;
-		
+		$category = "pattern"; // By default, make the pattern type a "pattern"
+		$patternStoreKey = $docPartial;
+
+		// Update if patternType or subtype
+		if ($patternTypeDoc) {
+			$category = "patternType";
+			$patternStoreKey = $patternTypeDash."-pltype";
+			
+			// organisms-pltype
+		} else if ($patternSubtypeDoc){
+			$category = "patternSubtype";
+			$patternStoreKey = $docPartial."-plsubtype";
+		}
+
 		$patternStoreData = array("category"   => $category,
 								  "desc"       => trim($markdown),
 								  "descExists" => true,
@@ -100,6 +118,8 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
       }
     }
 
+
+		
 		// if the pattern data store already exists make sure this data overwrites it
 		$patternStoreData = (PatternData::checkOption($patternStoreKey)) ? array_replace_recursive(PatternData::getOption($patternStoreKey),$patternStoreData) : $patternStoreData;
 		PatternData::setOption($patternStoreKey, $patternStoreData);

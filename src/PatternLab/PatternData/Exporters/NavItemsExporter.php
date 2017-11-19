@@ -27,8 +27,21 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		
 		$this->store = PatternData::get();
 		$this->styleGuideExcludes = Config::getOption("styleGuideExcludes");
-		
 	}
+
+
+	// Sort navigation level based on the `order` key (if it exists)
+	private function sortNavByOrder($a, $b) {
+		if (!isset($a['order'])){
+			return 0;
+		} else if (!isset($b['order'])){
+			return 0;
+		} else if ($a['order'] == $b['order']){
+			return 0;
+		}
+		return ($a['order'] < $b['order']) ? -1 : 1;
+	}
+
 	
 	public function run() {
 		
@@ -46,7 +59,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 		foreach ($this->store as $patternStoreKey => $patternStoreData) {
 			
 			if ($patternStoreData["category"] == "patternType") {
-				
+
 				$bi = (count($navItems["patternTypes"]) == 0) ? 0 : $bi + 1;
 				
 				// add a new patternType to the nav
@@ -54,6 +67,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 													   "patternTypeUC"    => ucwords($patternStoreData["nameClean"]),
 													   "patternType"      => $patternStoreData["name"],
 													   "patternTypeDash"  => $patternStoreData["nameDash"],
+													   "order"            => $patternStoreData["order"],
 													   "patternTypeItems" => array(),
 													   "patternItems"     => array());
 				
@@ -71,6 +85,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 																				"patternSubtypeUC"    => ucwords($patternStoreData["nameClean"]),
 																				"patternSubtype"      => $patternStoreData["name"],
 																				"patternSubtypeDash"  => $patternStoreData["nameDash"],
+																				"order"               => $patternStoreData["order"],
 																				"patternSubtypeItems" => array());
 				
 				// starting a new set of pattern types. it might not have any pattern subtypes
@@ -87,6 +102,7 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 										 "patternSrcPath" => $patternStoreData["pathName"],
 										 "patternName"    => ucwords($patternStoreData["nameClean"]),
 										 "patternState"   => $patternStoreData["state"],
+										 "order"          => $patternStoreData["order"],
 										 "patternPartial" => $patternStoreData["partial"]);
 					
 					// add to the nav
@@ -95,11 +111,8 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 					} else {
 						$navItems["patternTypes"][$bi]["patternTypeItems"][$ni]["patternSubtypeItems"][] = $patternInfo;
 					}
-					
 				}
-				
 			}
-			
 		}
 		
 		// review each subtype. add a view all link or remove the subtype as necessary
@@ -154,11 +167,26 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 																					 "patternPartial" => "viewall-".$patternTypeDash."-all");
 				
 			}
-			
 		}
-		
+
+
+		// Sort the navItems by order property before returning final navigation (@TODO: look into possibly moving the sortNavByOrder function to a more global (ie. reusable) place)
+		foreach ($navItems as $navItem) {
+			// Sort top level patternTypes (ex. 01-atoms)
+			usort($navItems['patternTypes'], array( $this, 'sortNavByOrder' ) ); 
+			
+			foreach ($navItem as $patternTypeKey => $patternTypeValue) {
+				// Then sort patternTypeItems and/or patternItems depending on what exists (ex. Homepage or Buttons)
+				usort($navItems['patternTypes'][$patternTypeKey]['patternTypeItems'], array( $this, 'sortNavByOrder' ) ); 
+				usort($navItems['patternTypes'][$patternTypeKey]['patternItems'], array( $this, 'sortNavByOrder' ) );
+
+				// Finallly, finish sorting out the nested patternSubtypeItems (Primary Button, etc)
+				for($i = 0, $c = count($navItems['patternTypes'][$patternTypeKey]['patternTypeItems']); $i < $c; $i++){
+					usort($navItems['patternTypes'][$patternTypeKey]['patternTypeItems'][$i]['patternSubtypeItems'], array( $this, 'sortNavByOrder' ) );
+				}
+			}
+		}
+
 		return $navItems;
-		
 	}
-	
 }

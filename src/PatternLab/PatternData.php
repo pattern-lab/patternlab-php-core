@@ -34,6 +34,7 @@ class PatternData {
 	protected static $patternSubtypeDash  = "";
 	protected static $patternSubtypeSet   = false;
 	protected static $patternType         = "";
+	protected static $defaultPatternOrder = 0;
 	protected static $patternTypeClean    = "";
 	protected static $patternTypeDash     = "";
 	protected static $rules               = array();
@@ -240,7 +241,7 @@ class PatternData {
 	}
 
 	/**
-	* GEt the front meta bits (hidden and noviewall)
+	* Get the front meta bits (hidden and noviewall)
 	*/
 	public static function getFrontMeta() {
 		return self::$frontMeta;
@@ -328,6 +329,18 @@ class PatternData {
 		return false;
 
 	}
+
+
+	/**
+	* Get the pattern order if it exists, otherwise return default
+	*/
+	public static function getPatternOrder() {
+		if (isset(self::$patternOrder)) {
+			return self::$patternOrder;
+		}
+		return self::$defaultPatternOrder;
+	}
+
 
 	/**
 	* Get the pattern type
@@ -543,6 +556,16 @@ class PatternData {
 		self::$patternType = $optionValue;
 
 	}
+
+
+	/**
+	* Set the pattern order value
+	* @param  {String}       the order value
+	*/
+	public static function setPatternOrder($optionValue) {
+		self::$patternOrder = $optionValue;
+	}
+
 
 	/**
 	* Set the pattern type clean
