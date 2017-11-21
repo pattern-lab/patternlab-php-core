@@ -95,6 +95,11 @@ class Fetch {
 			Console::writeError("the starterkit needs to contain a dist/ directory before it can be installed...");
 		}
 		
+		if (!is_file($tempComposerFile)) {
+			// try without repo dir
+			$tempComposerFile  = $tempDirSK.DIRECTORY_SEPARATOR."composer.json";
+		}
+		
 		// check for composer.json. if it exists use it for determining things. otherwise just mirror dist/ to source/
 		if (file_exists($tempComposerFile)) {
 			
@@ -103,7 +108,7 @@ class Fetch {
 			// see if it has a patternlab section that might define the files to move
 			if (isset($tempComposerJSON["extra"]) && isset($tempComposerJSON["extra"]["patternlab"])) {
 				Console::writeInfo("installing the starterkit...");
-				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist);
+				InstallerUtil::parseComposerExtraList($tempComposerJSON["extra"]["patternlab"], $starterkit, $tempDirDist.DIRECTORY_SEPARATOR);
 				Console::writeInfo("installed the starterkit...");
 			} else {
 				$this->mirrorDist($sourceDir, $tempDirDist);
