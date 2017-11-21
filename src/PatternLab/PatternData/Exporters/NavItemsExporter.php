@@ -49,9 +49,19 @@ class NavItemsExporter extends \PatternLab\PatternData\Exporter {
 				
 				$bi = (count($navItems["patternTypes"]) == 0) ? 0 : $bi + 1;
 				
+				$patternTypeUC = $patternStoreData["nameClean"];
+				
+				// Strip pattern category prefixes which are optionally defined in config.yml.
+				$prefixes = Config::getOption("prefixes");
+				if (count($prefixes)) {
+					foreach ($prefixes as $prefix) {
+						$patternTypeUC = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $patternTypeUC);
+					}
+				}
+				
 				// add a new patternType to the nav
 				$navItems["patternTypes"][$bi] = array("patternTypeLC"    => strtolower($patternStoreData["nameClean"]),
-													   "patternTypeUC"    => ucwords($patternStoreData["nameClean"]),
+													   "patternTypeUC"    => ucwords($patternTypeUC),
 													   "patternType"      => $patternStoreData["name"],
 													   "patternTypeDash"  => $patternStoreData["nameDash"],
 													   "patternTypeItems" => array(),
