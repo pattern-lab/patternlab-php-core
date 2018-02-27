@@ -211,6 +211,16 @@ class Builder {
 
 		// write out the data
 		file_put_contents($dataDir."/patternlab-data.js",$output);
+		// Structuring all the same data that went into `patternlab-data.js` and putting it into `patternlab-data.json` too
+		$allPlData = array(
+			'config' => $config,
+			'ishControls' => $ishControls,
+			'navItems' => $navItems,
+			'patternPaths' => $patternPaths,
+			'viewAllPaths' => $viewAllPaths,
+			'plugins' => $packagesInfo,
+		);
+		file_put_contents($dataDir."/patternlab-data.json", json_encode($allPlData));
 
 		// note the end of the operation
 		$dispatcherInstance->dispatch("builder.generateIndexEnd");
