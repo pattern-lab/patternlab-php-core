@@ -40,8 +40,8 @@ class DocumentationRule extends \PatternLab\PatternData\Rule {
 		$dirSep             = PatternData::getDirSep();
 		
 		// set-up the names, $name == 00-colors.md
-		$doc        = str_replace(".".$this->extProp,"",$name);              // 00-colors
-		$docDash    = $this->getPatternName(str_replace("_","",$doc),false); // colors
+		$doc        = str_replace(".".$this->extProp,"",$name); // 00-colors
+		$docDash    = $this->getPatternName($doc);              // colors
 		$docPartial = $patternTypeDash."-".$docDash;
 		
 		// default vars
