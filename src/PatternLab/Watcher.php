@@ -321,7 +321,15 @@ class Watcher extends Builder {
 		Annotations::clear();
 		
 		$g = new Generator();
-		$g->generate($options);
+		try {
+			$g->generate($options);
+		} catch (\Exception $e) {
+			Console::writeWarning("Failed on update to ".$fileName);
+			Console::writeWarning($e->getMessage());
+		} catch (\Throwable $e) {
+			Console::writeWarning("Failed on update to ".$fileName);
+			Console::writeWarning($e->getMessage());
+		}
 		
 	}
 	
