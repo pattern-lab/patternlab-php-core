@@ -483,7 +483,15 @@ class InstallerUtil {
 			}
 			
 			if ($prompt) {
-				
+			    
+
+				$existing_paths_policy = Config::getOption("existingPathsPolicy");
+				if ($existing_paths_policy == 'merge') {
+					return false;
+				}
+				else if ($existing_paths_policy == 'replace') {
+					return true;
+				}
 				// prompt for input using the supplied query
 				$prompt  = "the path <path>".$humanReadablePath."</path> already exists. merge or replace with the contents of <path>".$packageName."</path> package?";
 				$options = "M/r";
